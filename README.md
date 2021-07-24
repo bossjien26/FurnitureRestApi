@@ -1,5 +1,4 @@
-# RestApi
-
+# FurnitureRestApi
 
 ## Database
 
