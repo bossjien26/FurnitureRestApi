@@ -1,3 +1,4 @@
+using System;
 using DbEntity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,9 +35,17 @@ namespace ResApi
                     });
             });
 
-            services.AddSession();
 
             services.AddControllers();
+
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             services.AddSwaggerGen(c =>
             {
