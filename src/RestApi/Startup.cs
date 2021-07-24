@@ -33,7 +33,10 @@ namespace ResApi
                     });
             });
 
+            services.AddSession();
+
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ResApi", Version = "v1" });
@@ -47,6 +50,7 @@ namespace ResApi
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
             );
+
             services.AddScoped<DbContextEntity>();
         }
 
@@ -64,6 +68,8 @@ namespace ResApi
                 // Call next middleware
                 await next.Invoke();
             });
+
+            app.UseSession();
 
             if (env.IsDevelopment())
             {
