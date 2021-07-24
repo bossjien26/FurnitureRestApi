@@ -2,6 +2,7 @@ using System;
 using DbEntity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,20 +32,22 @@ namespace ResApi
                         builder.SetIsOriginAllowed(_ => true);
                         builder.AllowAnyMethod();
                         builder.AllowAnyHeader();
-                        builder.AllowCredentials();               
+                        builder.AllowCredentials();
                     });
             });
+
+            services.AddSession();
 
 
             services.AddControllers();
 
             services.AddDistributedMemoryCache();
 
-            services.AddSession(options =>
+            services.Configure<CookiePolicyOptions>(options =>
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
+                //  opts.IdleTimeout = TimeSpan.FromSeconds(1);
+                options.CheckConsentNeeded = context => true; // consent required
+                options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
             services.AddSwaggerGen(c =>
@@ -61,14 +64,18 @@ namespace ResApi
                 .EnableDetailedErrors()
             );
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddScoped<DbContextEntity>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            
+
             app.UseCors();
+
+            app.UseSession();
 
             app.Use(async (context, next) =>
             {
@@ -79,7 +86,6 @@ namespace ResApi
                 await next.Invoke();
             });
 
-            app.UseSession();
 
             app.UseMiddleware<AuthenticationMiddleware>();
 
@@ -92,7 +98,7 @@ namespace ResApi
             // app.UseHttpsRedirection();
 
             app.UseRouting();
-            
+
             // app.UseAuthorization();
 
 
