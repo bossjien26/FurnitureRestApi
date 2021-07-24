@@ -9,18 +9,15 @@ namespace src.Middlewares
         private readonly RequestDelegate _next;
 
         public AuthenticationMiddleware(RequestDelegate next) => _next = next;
-
-        public Task Invoke(HttpContext httpContext)
+        public async Task Invoke(HttpContext httpContext)
         {
-            var path = httpContext.Request.Path;
-            if (path.HasValue && path.Value.StartsWith("/admin"))
+            if (httpContext.Session.GetString("username") == null)
             {
-                if (httpContext.Session.GetString("username") == null)
-                {
-                    httpContext.Response.Redirect("/login/index");
-                }
+                httpContext.Response.StatusCode = 400; //Bad Request                
+                await httpContext.Response.WriteAsync("Please Login");
+                return;
             }
-            return _next(httpContext);
+            await _next.Invoke(httpContext);
         }
     }
 
