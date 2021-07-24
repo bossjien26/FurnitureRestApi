@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +19,7 @@ namespace src.Middlewares
                 await _next.Invoke(httpContext);
                 return;
             }else{
-                if (httpContext.Session.GetString("username") == null)
+                if (httpContext.Session.Keys.Contains("session_key"))
                 {
                     httpContext.Response.StatusCode = 400; //Bad Request                
                     await httpContext.Response.WriteAsync("Please Login");
