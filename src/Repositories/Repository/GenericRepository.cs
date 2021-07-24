@@ -1,0 +1,100 @@
+using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using DbEntity;
+using Microsoft.EntityFrameworkCore;
+using src.Repositories.IRepository;
+
+namespace src.Repositories.Repository
+{
+    public class GenericRepository<T> :  IGenericRepository<T> where T : class
+    {
+        public readonly DbContextEntity _context;
+        
+        public readonly DbSet<T> _DbSet;
+
+        public GenericRepository(DbContextEntity context)
+        {
+            _context = context;
+            _DbSet = _context.Set<T>();
+        }
+
+        public async Task<T> GetById(Expression<Func<T, bool>> predicate){
+            return await _DbSet.FirstOrDefaultAsync(predicate);
+        }
+
+        public IQueryable<T> GetAll(){
+            return _DbSet.AsQueryable();
+        }
+
+        public EntityState DbSetState(T entity)
+        {
+            return _context.Entry(entity).State;
+        }
+
+        public async Task Insert(T entity){
+            _context.Add(entity);
+            await SaveChanges();
+        }
+
+        public void AsyncInsert(T entity)
+        {
+            _context.Entry(entity).State = EntityState.Added;
+            _context.AddAsync(entity);
+        }
+
+        public async Task MultipleInsert(T entity)
+        {
+            _context.AddRange(entity);
+            await SaveChanges();
+        }
+
+        public void AsyncMultipleInsert(T entity)
+        {
+            _context.AddRangeAsync(entity);
+        }
+
+        public async Task Update(T entity){
+            _context.Update(entity);
+            await SaveChanges();
+        }
+
+        public async Task MultipleUpdate(T entity){
+            _context.UpdateRange(entity);
+            await SaveChanges();
+        }
+
+        public async Task  Delete(T entity){
+            _context.Entry(entity).State = EntityState.Deleted;
+            _context.Remove(entity);
+            await SaveChanges();
+        }
+
+        public async Task MultipleDelete(T entity){
+            _context.RemoveRange(entity);
+            await SaveChanges();
+        }
+
+        public void AddTracked(T entity)
+        {
+            _context.Entry(entity).State = EntityState.Added;
+        }
+
+        public void ModifyTracked(T entity)
+        {
+            _context.Entry(entity).State = EntityState.Modified;
+        }
+ 
+        public void DeleteTracked(T entity)
+        {
+            _context.Entry(entity).State = EntityState.Deleted;
+        }
+
+
+        public async Task SaveChanges()
+        {
+            await _context.SaveChangesAsync();
+        }
+    }
+}
