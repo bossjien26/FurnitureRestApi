@@ -53,6 +53,7 @@ dotnet test
 ### This is the route table for Api Example:
 
 | VERB | URL | DESCRIPTION |
+| ------------- | ------------- | ------------- |
 | GET | api/ControllerRoute/MethodRoute | Retrieves stock items |
 | GET | api/ControllerRoute/MethodRoute/Id | Retrieves a stock item by id |
 | POST| api/ControllerRoute/MethodRoute | Create a new stock item |
