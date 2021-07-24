@@ -36,7 +36,7 @@ namespace RestApi.Controllers
                 HttpContext.Session.SetString(sessionKey, "Peter");
                 return Ok(new RegistrationResponse()
                 {
-                    Status = false,
+                    Status = true,
                     Data = "Welcome"
                 });
             }
