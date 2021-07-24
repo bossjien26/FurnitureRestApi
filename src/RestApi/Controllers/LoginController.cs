@@ -24,6 +24,7 @@ namespace RestApi.Controllers
             _context = context;
         }
 
+        //TODO:need refactor and create a class from setting session
         [HttpPost]
         [Route("process")]
         public IActionResult Process(LoginInfo loginInfo)

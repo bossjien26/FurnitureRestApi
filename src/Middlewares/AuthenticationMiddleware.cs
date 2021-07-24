@@ -12,6 +12,7 @@ namespace src.Middlewares
 
         public AuthenticationMiddleware(RequestDelegate next) => _next = next;
 
+        //TODO:need refactor
         public async Task Invoke(HttpContext httpContext)
         {
             var path = httpContext.Request.Path;
