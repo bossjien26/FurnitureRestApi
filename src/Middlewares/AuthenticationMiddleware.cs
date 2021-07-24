@@ -11,6 +11,7 @@ namespace src.Middlewares
         private readonly RequestDelegate _next;
 
         public AuthenticationMiddleware(RequestDelegate next) => _next = next;
+
         public async Task Invoke(HttpContext httpContext)
         {
             var path = httpContext.Request.Path;
