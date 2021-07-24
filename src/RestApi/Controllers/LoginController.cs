@@ -1,6 +1,7 @@
 using DbEntity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ResApi.src.Models.Response;
 using src.Services.IService;
 using src.Services.Service;
 
@@ -27,11 +28,19 @@ namespace RestApi.Controllers
             if (!string.IsNullOrWhiteSpace(mail) && !string.IsNullOrWhiteSpace(password))
             {
                 HttpContext.Session.SetString("username", mail);
-                return Ok("Welcome");
+                return Ok(new RegistrationResponse()
+                {
+                    Status = false,
+                    Data = "Welcome"
+                });
             }
             else
             {
-                return Ok("Invalid");
+                return Ok(new RegistrationResponse()
+                {
+                    Status = false,
+                    Data = "Invalid"
+                });
             }
         }
     }
