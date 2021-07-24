@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using src.Middlewares;
 
 namespace ResApi
 {
@@ -70,6 +71,8 @@ namespace ResApi
             });
 
             app.UseSession();
+
+            app.UseMiddleware<AuthenticationMiddleware>();
 
             if (env.IsDevelopment())
             {
