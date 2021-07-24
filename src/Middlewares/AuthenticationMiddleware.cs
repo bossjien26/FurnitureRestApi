@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -11,11 +12,18 @@ namespace src.Middlewares
         public AuthenticationMiddleware(RequestDelegate next) => _next = next;
         public async Task Invoke(HttpContext httpContext)
         {
-            if (httpContext.Session.GetString("username") == null)
+            var path = httpContext.Request.Path;
+            if (path.Value == "/api/login/process")
             {
-                httpContext.Response.StatusCode = 400; //Bad Request                
-                await httpContext.Response.WriteAsync("Please Login");
+                await _next.Invoke(httpContext);
                 return;
+            }else{
+                if (httpContext.Session.GetString("username") == null)
+                {
+                    httpContext.Response.StatusCode = 400; //Bad Request                
+                    await httpContext.Response.WriteAsync("Please Login");
+                    return;
+                }
             }
             await _next.Invoke(httpContext);
         }
