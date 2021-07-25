@@ -5,6 +5,7 @@ using System.Linq;
 using src.Services.Service;
 using src.Services.IService;
 using ResApi.src.Models.Response;
+using Microsoft.Extensions.Logging;
 
 namespace ResApi.src.Controllers
 {
@@ -13,16 +14,22 @@ namespace ResApi.src.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserInfoService _repository;
+        
         private DbContextEntity _context;
 
-        public UserController(DbContextEntity context)
+        private readonly ILogger<UserController> _logger;
+
+        public UserController(DbContextEntity context,ILogger<UserController> logger)
         {
             _repository = new UserInfoService(context);
             _context = context;
+              _logger = logger;
         }
+
         [HttpGet]
         public IActionResult Index()
         {
+            _logger.LogInformation("Log message in the Index() method");
             return Ok(_repository.GetAllUser().ToList());
         }
 
@@ -44,7 +51,7 @@ namespace ResApi.src.Controllers
         [Route("UpdateUser")]
         public IActionResult UpdateUser(User user)
         {
-            if(_repository.FindUser(user.Id).Result == null)
+            if (_repository.FindUser(user.Id).Result == null)
             {
                 return Ok(new RegistrationResponse()
                 {
@@ -52,7 +59,7 @@ namespace ResApi.src.Controllers
                     Data = "Not Find"
                 });
             }
-            
+
             _repository.Update(user);
             return Ok(new RegistrationResponse()
             {

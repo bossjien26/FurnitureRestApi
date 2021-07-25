@@ -7,7 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using NLog.Extensions.Logging;
 using src.Middlewares;
 
 namespace ResApi
@@ -34,6 +36,16 @@ namespace ResApi
                         builder.AllowAnyHeader();
                         builder.AllowCredentials();
                     });
+            });
+
+            // services.AddScoped<RequestHelper>();
+
+            services.AddLogging(loggingBuilder =>
+            {
+                // configure Logging with NLog
+                loggingBuilder.ClearProviders();
+                loggingBuilder.SetMinimumLevel(LogLevel.Trace);
+                loggingBuilder.AddNLog("nlog.config");
             });
 
             services.AddSession();
