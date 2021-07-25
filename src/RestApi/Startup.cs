@@ -1,5 +1,6 @@
 using System;
 using DbEntity;
+using Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -18,14 +19,19 @@ namespace ResApi
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration _configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            var appSettings = _configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
+
+            services.AddSingleton(appSettings);
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
@@ -47,7 +53,6 @@ namespace ResApi
                 loggingBuilder.SetMinimumLevel(LogLevel.Trace);
                 loggingBuilder.AddNLog("nlog.config");
                 loggingBuilder.AddDebug();
-                // loggingBuilder.Add
                 loggingBuilder.AddConsole();
             });
 
@@ -60,7 +65,6 @@ namespace ResApi
 
             services.Configure<CookiePolicyOptions>(options =>
             {
-                //  opts.IdleTimeout = TimeSpan.FromSeconds(1);
                 options.CheckConsentNeeded = context => true; // consent required
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
@@ -72,8 +76,8 @@ namespace ResApi
 
             services.AddDbContext<DbContextEntity>(options =>
                 options.UseMySql(
-                    Configuration.GetConnectionString("DefaultConnection"),
-                    ServerVersion.AutoDetect(Configuration.GetConnectionString("DefaultConnection"))
+                    appSettings.ConnectionStrings.DefaultConnection,
+                    ServerVersion.AutoDetect(appSettings.ConnectionStrings.DefaultConnection)
                 )
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
@@ -115,7 +119,6 @@ namespace ResApi
             app.UseRouting();
 
             // app.UseAuthorization();
-
 
             app.UseEndpoints(endpoints =>
             {
