@@ -23,7 +23,7 @@ namespace ResApi.src.Controllers
         {
             _repository = new UserInfoService(context);
             _context = context;
-              _logger = logger;
+            _logger = logger;
         }
 
         [HttpGet]
