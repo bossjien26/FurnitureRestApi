@@ -46,6 +46,9 @@ namespace ResApi
                 loggingBuilder.ClearProviders();
                 loggingBuilder.SetMinimumLevel(LogLevel.Trace);
                 loggingBuilder.AddNLog("nlog.config");
+                loggingBuilder.AddDebug();
+                // loggingBuilder.Add
+                loggingBuilder.AddConsole();
             });
 
             services.AddSession();
