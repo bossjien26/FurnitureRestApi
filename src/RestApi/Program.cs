@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 
 namespace ResApi
 {
@@ -18,11 +14,14 @@ namespace ResApi
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureLogging(logging =>
+                .ConfigureLogging((hostContext, logging) =>
                 {
+                    logging.SetMinimumLevel(LogLevel.Trace);
                     logging.ClearProviders(); // removes all providers from LoggerFactory
+                    logging.AddDebug();
                     logging.AddConsole();
                     logging.AddTraceSource("Information, ActivityTracing"); // Add Trace listener provider
+                    logging.AddNLog($"nlog.{hostContext.HostingEnvironment.EnvironmentName}.config");
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
