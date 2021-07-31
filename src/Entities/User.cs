@@ -15,9 +15,9 @@ namespace src.Entities
 
         public string Password { get; set; }
 
+        [Column(TypeName = "VARCHAR")]
         public string Name { get; set; }
 
         public string EnglishName { get; set; }
-
     }
 }
