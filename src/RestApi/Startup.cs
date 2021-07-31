@@ -1,4 +1,4 @@
-using System;
+using System.Linq;
 using DbEntity;
 using Helpers;
 using Microsoft.AspNetCore.Builder;
@@ -8,9 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using NLog.Extensions.Logging;
 using src.Middlewares;
 
 namespace ResApi
@@ -80,6 +78,7 @@ namespace ResApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var appSettings = _configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
 
             app.UseCors();
 
@@ -88,7 +87,7 @@ namespace ResApi
             app.Use(async (context, next) =>
             {
                 // Add Header
-                context.Response.Headers["Access-Control-Allow-Origin"] = "*";
+                context.Response.Headers[appSettings.HeaderSettings.Response.FirstOrDefault().Title] = appSettings.HeaderSettings.Response.FirstOrDefault().Content;
 
                 // Call next middleware
                 await next.Invoke();
