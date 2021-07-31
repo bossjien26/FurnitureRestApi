@@ -45,4 +45,4 @@ src/Migrations/*
 
 #git file#
 #########
-#.gitignore
+.gitignore

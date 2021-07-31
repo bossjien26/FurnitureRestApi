@@ -46,4 +46,4 @@ logs/*
 
 #git file#
 #########
-#.gitignore
+.gitignore
