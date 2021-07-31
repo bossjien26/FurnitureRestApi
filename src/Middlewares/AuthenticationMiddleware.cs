@@ -21,7 +21,7 @@ namespace src.Middlewares
                 await _next.Invoke(httpContext);
                 return;
             }else{
-                if (httpContext.Session.Keys.Contains("session_key"))
+                if (httpContext.Session.GetString("session_key") != null)
                 {
                     httpContext.Response.StatusCode = 400; //Bad Request                
                     await httpContext.Response.WriteAsync("Please Login");

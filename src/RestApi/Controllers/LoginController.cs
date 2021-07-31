@@ -29,11 +29,10 @@ namespace RestApi.Controllers
         [Route("process")]
         public IActionResult Process(LoginInfo loginInfo)
         {
-
             if (!string.IsNullOrWhiteSpace(loginInfo.Mail) &&
              !string.IsNullOrWhiteSpace(loginInfo.Password))
             {
-                HttpContext.Session.SetString(sessionKey, "Peter");
+                HttpContext.Session.SetString(sessionKey, "Visitor");
                 return Ok(new RegistrationResponse()
                 {
                     Status = true,
