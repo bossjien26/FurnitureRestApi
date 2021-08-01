@@ -1,7 +1,11 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using DbEntity;
-using Microsoft.AspNetCore.Http;
+using Helpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using ResApi.src.Models;
 using ResApi.src.Models.Response;
 using src.Services.IService;
@@ -16,27 +20,26 @@ namespace RestApi.Controllers
         private readonly IUserInfoService _repository;
         private DbContextEntity _context;
 
-        private string sessionKey = "session_key";
+        private readonly AppSettings _appSettings;
 
-        public LoginController(DbContextEntity context)
+        public LoginController(DbContextEntity context,AppSettings appsetting)
         {
             _repository = new UserInfoService(context);
             _context = context;
+            _appSettings = appsetting;
         }
 
-        //TODO:need refactor and create a class from setting session
         [HttpPost]
-        [Route("process")]
-        public IActionResult Process(LoginInfo loginInfo)
+        [Route("login")]
+        public IActionResult login(LoginInfo loginInfo)
         {
             if (!string.IsNullOrWhiteSpace(loginInfo.Mail) &&
              !string.IsNullOrWhiteSpace(loginInfo.Password))
             {
-                HttpContext.Session.SetString(sessionKey, "Visitor");
                 return Ok(new RegistrationResponse()
                 {
                     Status = true,
-                    Data = "Welcome"
+                    Data = generateJwtToken(loginInfo)
                 });
             }
             else
@@ -47,6 +50,21 @@ namespace RestApi.Controllers
                     Data = "Invalid"
                 });
             }
+        }
+
+        private string generateJwtToken(LoginInfo loginInfo)
+        {
+            // generate token that is valid for 7 days
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.JwtSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] { new Claim("id", loginInfo.Id.ToString()) }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }
