@@ -1,6 +1,9 @@
+using System;
 using System.Linq;
+using System.Text;
 using DbEntity;
 using Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using src.Middlewares;
 
@@ -44,7 +49,6 @@ namespace ResApi
 
             // services.AddScoped<RequestHelper>();
 
-            services.AddSession();
 
             services.AddControllers();
 
@@ -72,6 +76,33 @@ namespace ResApi
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.AddAuthentication(options =>
+            {
+                //Authentication middleware configuration
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                //Mainly jwt token parameter setting
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    //Token issuer
+                    ValidIssuer = appSettings.JwtSettings.Issuer,
+                    //To whom
+                    ValidAudience = appSettings.JwtSettings.ValidAudience,
+                    //To encrypt the key here, you need to reference Microsoft.IdentityModel.Tokens
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.JwtSettings.Secret)),
+                    ValidateIssuerSigningKey = true,
+                    //Whether to verify the validity period of Token, use the current time to compare with NotBefore and Expires in Token Claims
+                    ValidateLifetime = true,
+                    //Allowed server time offset
+                    ClockSkew = TimeSpan.Zero
+
+                };
+            });
+
+            IdentityModelEventSource.ShowPII = true;
+
             services.AddScoped<DbContextEntity>();
         }
 
@@ -82,7 +113,6 @@ namespace ResApi
 
             app.UseCors();
 
-            app.UseSession();
 
             app.Use(async (context, next) =>
             {
@@ -94,7 +124,7 @@ namespace ResApi
             });
 
 
-            app.UseMiddleware<AuthenticationMiddleware>();
+            // app.UseMiddleware<AuthenticationMiddleware>();
 
             if (env.IsDevelopment())
             {
@@ -102,11 +132,17 @@ namespace ResApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("swagger/v1/swagger.json", "ResApi v1"));
             }
+            
+            // app.UseCookiePolicy();
+            
             // app.UseHttpsRedirection();
 
-            app.UseRouting();
-
+            
             // app.UseAuthorization();
+            
+            app.UseMiddleware<AuthenticationMiddleware>();
+
+            app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
