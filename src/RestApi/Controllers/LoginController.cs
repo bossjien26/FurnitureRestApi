@@ -6,6 +6,7 @@ using DbEntity;
 using Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Middlewares;
 using ResApi.src.Models;
 using ResApi.src.Models.Response;
 using src.Services.IService;
@@ -22,13 +23,14 @@ namespace RestApi.Controllers
 
         private readonly AppSettings _appSettings;
 
-        public LoginController(DbContextEntity context,AppSettings appsetting)
+        public LoginController(DbContextEntity context, AppSettings appsetting)
         {
             _repository = new UserInfoService(context);
             _context = context;
             _appSettings = appsetting;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("login")]
         public IActionResult login(LoginInfo loginInfo)
