@@ -39,7 +39,6 @@ namespace ResApi.src.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            _logger.LogInformation("Log message in the Index() method");
             return Ok(_repository.GetAllUser().ToList());
         }
 
@@ -96,12 +95,14 @@ namespace ResApi.src.Controllers
         {
             // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.JwtSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", loginInfo.Id.ToString()) }),
                 Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appSettings.JwtSettings.Secret)),
+                    SecurityAlgorithms.HmacSha256Signature
+                )
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
