@@ -55,8 +55,6 @@ namespace ResApi.src.Controllers
             return Ok(user);
         }
 
-
-        //TODO:Category will return null
         [HttpPut]
         [Authorize]
         [Route("UpdateUser")]
@@ -91,9 +89,13 @@ namespace ResApi.src.Controllers
             });
         }
 
+        /// <summary>
+        /// generate token that is valid for 7 days
+        /// </summary>
+        /// <param name="loginInfo"></param>
+        /// <returns></returns>
         private string generateJwtToken(AuthenticateRequest loginInfo)
         {
-            // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
