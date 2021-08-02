@@ -111,6 +111,8 @@ namespace ResApi
         {
             var appSettings = _configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
 
+            app.UseRouting();
+
             app.UseCors();
 
 
@@ -136,13 +138,10 @@ namespace ResApi
             // app.UseCookiePolicy();
             
             // app.UseHttpsRedirection();
-
-            
-            // app.UseAuthorization();
-            
             app.UseMiddleware<AuthenticationMiddleware>();
+            
 
-            app.UseRouting();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

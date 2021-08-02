@@ -26,25 +26,9 @@ namespace src.Middlewares
         {
             var token = httpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var path = httpContext.Request.Path;
-
-            if (path.Value == "/api/login/login")
-            {
-                await _next.Invoke(httpContext);
-                return;
-            }
-            else
-            {
-                attachUserToContext(httpContext, context, token, appSettings,logger);
-                var user = (User)httpContext.Items["User"];
-                if (user == null)
-                {
-                    httpContext.Response.StatusCode = 400;
-                    await httpContext.Response.WriteAsync("Please Login");
-                    return;
-                }
-                await _next.Invoke(httpContext);
-                return;
-            }
+            attachUserToContext(httpContext, context, token, appSettings, logger);
+            await _next.Invoke(httpContext);
+            return;
         }
 
         private void attachUserToContext(HttpContext httpContext, DbContextEntity context, string token,

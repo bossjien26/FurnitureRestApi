@@ -6,6 +6,7 @@ using src.Services.Service;
 using src.Services.IService;
 using ResApi.src.Models.Response;
 using Microsoft.Extensions.Logging;
+using Middlewares;
 
 namespace ResApi.src.Controllers
 {
@@ -26,6 +27,7 @@ namespace ResApi.src.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Index()
         {
@@ -33,6 +35,7 @@ namespace ResApi.src.Controllers
             return Ok(_repository.GetAllUser().ToList());
         }
 
+        [Authorize]
         [HttpGet]
         [Route("InsertUser")]
         public IActionResult InsertUser()
@@ -48,6 +51,7 @@ namespace ResApi.src.Controllers
 
         //TODO:Category will return null
         [HttpPut]
+        [Authorize]
         [Route("UpdateUser")]
         public IActionResult UpdateUser(User user)
         {
