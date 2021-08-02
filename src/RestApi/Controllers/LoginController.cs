@@ -35,23 +35,11 @@ namespace RestApi.Controllers
         [Route("login")]
         public IActionResult login(LoginInfo loginInfo)
         {
-            if (!string.IsNullOrWhiteSpace(loginInfo.Mail) &&
-             !string.IsNullOrWhiteSpace(loginInfo.Password))
+            return Ok(new RegistrationResponse()
             {
-                return Ok(new RegistrationResponse()
-                {
-                    Status = true,
-                    Data = generateJwtToken(loginInfo)
-                });
-            }
-            else
-            {
-                return Ok(new RegistrationResponse()
-                {
-                    Status = false,
-                    Data = "Invalid"
-                });
-            }
+                Status = true,
+                Data = generateJwtToken(loginInfo)
+            });
         }
 
         private string generateJwtToken(LoginInfo loginInfo)
