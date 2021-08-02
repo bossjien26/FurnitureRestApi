@@ -83,7 +83,7 @@ namespace ResApi.src.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("authenticate")]
-        public IActionResult Authenticate(LoginInfo loginInfo)
+        public IActionResult Authenticate(AuthenticateRequest loginInfo)
         {
             return Ok(new RegistrationResponse()
             {
@@ -92,7 +92,7 @@ namespace ResApi.src.Controllers
             });
         }
 
-        private string generateJwtToken(LoginInfo loginInfo)
+        private string generateJwtToken(AuthenticateRequest loginInfo)
         {
             // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
