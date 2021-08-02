@@ -7,6 +7,13 @@ using src.Services.IService;
 using ResApi.src.Models.Response;
 using Microsoft.Extensions.Logging;
 using Middlewares;
+using ResApi.src.Models;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Security.Claims;
+using System;
+using Helpers;
 
 namespace ResApi.src.Controllers
 {
@@ -15,16 +22,17 @@ namespace ResApi.src.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserInfoService _repository;
-        
-        private DbContextEntity _context;
 
         private readonly ILogger<UserController> _logger;
 
-        public UserController(DbContextEntity context,ILogger<UserController> logger)
+        private readonly AppSettings _appSettings;
+
+        public UserController(DbContextEntity context, ILogger<UserController> logger,
+         AppSettings appsetting)
         {
             _repository = new UserInfoService(context);
-            _context = context;
             _logger = logger;
+            _appSettings = appsetting;
         }
 
         [Authorize]
@@ -70,6 +78,33 @@ namespace ResApi.src.Controllers
                 Status = true,
                 Data = "Update"
             });
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("authenticate")]
+        public IActionResult Authenticate(LoginInfo loginInfo)
+        {
+            return Ok(new RegistrationResponse()
+            {
+                Status = true,
+                Data = generateJwtToken(loginInfo)
+            });
+        }
+
+        private string generateJwtToken(LoginInfo loginInfo)
+        {
+            // generate token that is valid for 7 days
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.JwtSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] { new Claim("id", loginInfo.Id.ToString()) }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }
