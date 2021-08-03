@@ -80,12 +80,12 @@ namespace ResApi.src.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("authenticate")]
-        public IActionResult Authenticate(AuthenticateRequest loginInfo)
+        public IActionResult Authenticate(AuthenticateRequest authenticateRequest)
         {
             return Ok(new RegistrationResponse()
             {
                 Status = true,
-                Data = generateJwtToken(loginInfo)
+                Data = generateJwtToken(authenticateRequest)
             });
         }
 
@@ -99,7 +99,10 @@ namespace ResApi.src.Controllers
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", loginInfo.Id.ToString()) }),
+                Subject = new ClaimsIdentity(new[] { 
+                    new Claim("mail", loginInfo.Mail.ToString()),
+                    new Claim("password", loginInfo.Password.ToString()),
+                    }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appSettings.JwtSettings.Secret)),
