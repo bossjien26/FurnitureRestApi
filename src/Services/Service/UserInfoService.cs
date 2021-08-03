@@ -35,5 +35,11 @@ namespace src.Services.Service
         {
             return  await _repository.GetById(c => c.Id == userId);
         }
+
+        public User GetVerifyUser(string mail,string password)
+        {
+            return _repository.GetAll().Where(user => user.Mail == mail 
+            && user.Password == password).Take(1).FirstOrDefault();
+        }
     }
 }

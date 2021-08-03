@@ -15,5 +15,7 @@ namespace src.Services.IService
         IEnumerable<User> GetAllUser();
 
         Task<User> FindUser(int userId);
+
+        User GetVerifyUser(string mail,string password);
     }
 }
