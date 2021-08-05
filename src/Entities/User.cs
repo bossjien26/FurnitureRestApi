@@ -26,5 +26,9 @@ namespace Entities
         public DateTime Create { get; set; } = DateTime.Now;
 
         public bool IsDelete { get; set; }
+
+        public virtual UserDetail UserDetail { get; set; }
+
+        public virtual Cart Cart { get; set; }
     }
 }
