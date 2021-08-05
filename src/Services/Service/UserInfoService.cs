@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DbEntity;
-using src.Entities;
+using Entities;
 using src.Repositories.IRepository;
 using src.Repositories.Repository;
 using src.Services.IService;

@@ -1,4 +1,4 @@
-using src.Entities;
+using Entities;
 
 namespace src.Repositories.IRepository
 {

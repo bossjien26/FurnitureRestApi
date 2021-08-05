@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using src.Entities;
+using Entities;
 
 namespace DbEntity
 {

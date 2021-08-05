@@ -1,6 +1,6 @@
 using DbEntity;
 using Microsoft.AspNetCore.Mvc;
-using src.Entities;
+using Entities;
 using System.Linq;
 using src.Services.Service;
 using src.Services.IService;

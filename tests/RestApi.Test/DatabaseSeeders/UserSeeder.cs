@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Bogus;
 using Bogus.Extensions;
-using src.Entities;
+using Entities;
 
 namespace RestApi.Test.DatabaseSeeders
 {
