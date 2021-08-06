@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Enum;
 
 namespace Entities
 {
@@ -16,9 +17,7 @@ namespace Entities
 
         public int Quantity { get; set; }
 
-        [Column(TypeName = "Char")]
-        [StringLength(15)]
-        public string Attribute { get; set; }
+        public byte Attribute { get; set; } = (byte)CartAttribute.Shopping;
 
         public int Price { get; set; }
 
