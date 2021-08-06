@@ -16,16 +16,17 @@ namespace Entities
 
         public string Password { get; set; }
 
-        [Column(TypeName = "VARCHAR")]
+        [Column(TypeName = "Varchar")]
+        [StringLength(256)]
         public string Name { get; set; }
 
-        public string Verify { get; set; }
+        public bool IsVerify { get; set; } = false;
 
-        public string Access { get; set; }
+        public int Access { get; set; } = 1;
 
         public DateTime Create { get; set; } = DateTime.Now;
 
-        public bool IsDelete { get; set; }
+        public bool IsDelete { get; set; } = false;
 
         public virtual UserDetail UserDetail { get; set; }
 

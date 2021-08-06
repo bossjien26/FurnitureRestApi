@@ -13,11 +13,13 @@ namespace Entities
         [Key]
         public int Id { get; set; }
 
+        [Column(TypeName = "Varchar")]
+        [StringLength(256)]
         public string Name { get; set; }
 
         public DateTime CreateAt { get; set; } = DateTime.Now;
 
-        public bool IsDelete { get; set; }
+        public bool IsDelete { get; set; } = false;
 
         public virtual SpecificationContent SpecificationContent { get; set; }
 

@@ -15,13 +15,17 @@ namespace Entities
         [ForeignKey("User")]
         public int UserId { get; set; }
 
+        [Column(TypeName = "Varchar")]
+        [StringLength(256)]
         public string Country { get; set; }
 
+        [Column(TypeName = "Varchar")]
+        [StringLength(256)]
         public string City { get; set; }
-        
-        public string Street { get; set; }
 
-        public string CrashCard { get; set; }
+        [Column(TypeName = "Varchar")]
+        [StringLength(256)]
+        public string Street { get; set; }
 
         public DateTime UpdateAt { get; set; } = DateTime.Now;
 

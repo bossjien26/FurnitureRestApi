@@ -11,6 +11,8 @@ namespace Entities
         [Key]
         public int Id { get; set; }
 
+        [Column(TypeName = "Varchar")]
+        [StringLength(256)]
         public string Name { get; set; }
 
         public int Quantity { get; set; }
@@ -23,9 +25,9 @@ namespace Entities
 
         public DateTime CreateAt { get; set; } = DateTime.Now;
 
-        public bool IsDisplay { get; set; }
+        public bool IsDisplay { get; set; } = true;
 
-        public bool IsDelete { get; set; }
+        public bool IsDelete { get; set; } = false;
 
         public virtual ICollection<ProductCategory> ProductCategories { get; set; }
 
