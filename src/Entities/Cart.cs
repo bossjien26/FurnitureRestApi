@@ -17,7 +17,7 @@ namespace Entities
 
         public int Quantity { get; set; }
 
-        public byte Attribute { get; set; } = (byte)CartAttribute.Shopping;
+        public byte Attribute { get; set; }
 
         public int Price { get; set; }
 
