@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Enum;
 using Microsoft.EntityFrameworkCore;
 
 namespace Entities
@@ -22,7 +23,7 @@ namespace Entities
 
         public bool IsVerify { get; set; } = false;
 
-        public byte Role { get; set; } = 1;
+        public byte Role { get; set; } = (byte)UserRole.Customer;
 
         public DateTime Create { get; set; } = DateTime.Now;
 
