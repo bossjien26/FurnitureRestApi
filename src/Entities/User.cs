@@ -22,7 +22,7 @@ namespace Entities
 
         public bool IsVerify { get; set; } = false;
 
-        public int Access { get; set; } = 1;
+        public byte Role { get; set; } = 1;
 
         public DateTime Create { get; set; } = DateTime.Now;
 
