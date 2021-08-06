@@ -12,4 +12,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../Enum/Enum.csproj" />
+  </ItemGroup>
 </Project>
