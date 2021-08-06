@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Enum;
 
 namespace Entities
 {
@@ -14,7 +15,7 @@ namespace Entities
         [ForeignKey("User")]
         public int UserId { get; set; }
 
-        public byte Status { get; set; }
+        public byte Status { get; set; } = (int)OrderStatus.Processing;
 
         [Column(TypeName = "Varchar")]
         [StringLength(150)]
