@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "src\Entities\En
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories", "src\Repositories\Repositories.csproj", "{7D13BDE8-5844-4DC0-A0F0-3F048235A37E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResApi", "src\RestApi\ResApi.csproj", "{A50DECA1-875E-40C1-8E7D-0603D37B23D6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestApi", "src\RestApi\RestApi.csproj", "{A50DECA1-875E-40C1-8E7D-0603D37B23D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "src\Services\Services.csproj", "{2D1BD6A9-43AA-4502-917D-FCA34C302FFE}"
 EndProject

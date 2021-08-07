@@ -16,7 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using src.Middlewares;
 
-namespace ResApi
+namespace RestApi
 {
     public class Startup
     {
@@ -62,7 +62,7 @@ namespace ResApi
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ResApi", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "RestApi", Version = "v1" });
             });
 
             services.AddDbContext<DbContextEntity>(options =>
@@ -132,7 +132,7 @@ namespace ResApi
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("swagger/v1/swagger.json", "ResApi v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("swagger/v1/swagger.json", "RestApi v1"));
             }
             
             // app.UseCookiePolicy();

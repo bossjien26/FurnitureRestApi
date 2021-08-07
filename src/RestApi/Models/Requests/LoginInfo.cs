@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ResApi.src.Models
+namespace RestApi.src.Models
 {
     public class AuthenticateRequest
     {

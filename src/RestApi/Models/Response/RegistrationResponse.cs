@@ -1,4 +1,4 @@
-namespace ResApi.src.Models.Response
+namespace RestApi.src.Models.Response
 {
     public class RegistrationResponse : AutResultModel
     {

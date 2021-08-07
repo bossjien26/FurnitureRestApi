@@ -4,10 +4,10 @@ using Entities;
 using System.Linq;
 using src.Services.Service;
 using src.Services.IService;
-using ResApi.src.Models.Response;
+using RestApi.src.Models.Response;
 using Microsoft.Extensions.Logging;
 using Middlewares;
-using ResApi.src.Models;
+using RestApi.src.Models;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -15,7 +15,7 @@ using System.Security.Claims;
 using System;
 using Helpers;
 
-namespace ResApi.src.Controllers
+namespace RestApi.src.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

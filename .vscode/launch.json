@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/RestApi/bin/Debug/net5.0/ResApi.dll",
+            "program": "${workspaceFolder}/src/RestApi/bin/Debug/net5.0/RestApi.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/RestApi",
             "stopAtEntry": false,

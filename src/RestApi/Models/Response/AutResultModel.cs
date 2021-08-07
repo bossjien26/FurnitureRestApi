@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ResApi.src.Models
+namespace RestApi.src.Models
 {
     public class AutResultModel
     {
