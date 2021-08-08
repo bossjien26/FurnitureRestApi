@@ -8,6 +8,14 @@
 docker compose up -d db
 ```
 
+### How to setting allow connect in mysql
+
+```mysql
+CREATE USER 'User Account'@'Docker Database Ip' IDENTIFIED BY 'Password';
+GRANT ALL PRIVILEGES ON *.* TO 'User Account'@'Docker Database Ip' WITH GRANT OPTION;
+Flush Privileges; 
+```
+
 ### Database connection strings
 Modify the `ConnectionStrings` in `DefaultConnection` at the following file
 
