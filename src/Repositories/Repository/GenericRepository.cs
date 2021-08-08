@@ -67,8 +67,15 @@ namespace src.Repositories.Repository
 
         public async Task Update(T entity)
         {
-            _context.Update(entity);
-            await SaveChanges();
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+            else
+            {
+                _context.Update(entity);
+                await SaveChanges();
+            }
         }
 
         public async Task MultipleUpdate(T entity)
