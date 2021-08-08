@@ -1,4 +1,7 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using RestApi.Test.DatabaseSeeders;
 using src.Repositories.IRepository;
@@ -21,6 +24,61 @@ namespace RestApi.Test.Repositories
             await _repository.Insert(testData);
             var User = await _repository.GetById(x => x.Id == testData.Id);
             Assert.NotNull(User);
+        }
+
+        [Test]
+        async public Task ShouldGetAll()
+        {
+            await _repository.InsertMany(UserSeeder.ManyUser(5,5));
+            var users = await _repository.GetAll().Take(5).ToListAsync();
+            Assert.NotNull(users);
+            Assert.AreEqual(5,users.Count);
+        }
+
+        [Test]
+        public void ShouldCreateError()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(() => _repository.Insert(null));
+        }
+
+        [Test]
+        public void ShouldInsert()
+        {
+            var data = UserSeeder.Seedone();
+            Assert.DoesNotThrowAsync(() => _repository.Insert(data));
+            Assert.AreNotEqual(0 , data.Id);
+        }
+
+        [Test]
+        public void ShouldDeleteError()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(() => _repository.Delete(null));
+        }
+
+        [Test]
+        public async Task ShouldDelete()
+        {
+            var testData = UserSeeder.Seedone();
+            await _repository.Insert(testData);
+
+            Assert.DoesNotThrowAsync(() => _repository.Delete(testData));
+            Assert.IsNull(await _repository.GetById(x => x.Id == testData.Id));
+        }
+
+        [Test]
+        public void ShouldUpdateError()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(() => _repository.Update(null));
+        }
+
+        [Test]
+        public async Task ShouldUpdate()
+        {
+            var testData = UserSeeder.Seedone();
+            await _repository.Insert(testData);
+
+            testData.IsDelete = true;
+            Assert.DoesNotThrowAsync(() => _repository.Update(testData));
         }
     }
 }
