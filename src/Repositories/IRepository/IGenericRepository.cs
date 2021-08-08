@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ namespace src.Repositories.IRepository
         IQueryable<T> GetAll();
         
         Task Insert(T entity);
+
+        Task InsertMany(List<T> entity);
         
         Task MultipleInsert(T entity);
         
