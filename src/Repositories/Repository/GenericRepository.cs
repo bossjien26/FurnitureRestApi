@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -8,10 +9,10 @@ using src.Repositories.IRepository;
 
 namespace src.Repositories.Repository
 {
-    public class GenericRepository<T> :  IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         public readonly DbContextEntity _context;
-        
+
         public readonly DbSet<T> _DbSet;
 
         public GenericRepository(DbContextEntity context)
@@ -20,11 +21,13 @@ namespace src.Repositories.Repository
             _DbSet = _context.Set<T>();
         }
 
-        public async Task<T> GetById(Expression<Func<T, bool>> predicate){
+        public async Task<T> GetById(Expression<Func<T, bool>> predicate)
+        {
             return await _DbSet.FirstOrDefaultAsync(predicate);
         }
 
-        public IQueryable<T> GetAll(){
+        public IQueryable<T> GetAll()
+        {
             return _DbSet.AsQueryable();
         }
 
@@ -33,8 +36,15 @@ namespace src.Repositories.Repository
             return _context.Entry(entity).State;
         }
 
-        public async Task Insert(T entity){
+        public async Task Insert(T entity)
+        {
             _context.Add(entity);
+            await SaveChanges();
+        }
+
+        public async Task InsertMany(List<T> entity)
+        {
+            await _DbSet.AddRangeAsync(entity);
             await SaveChanges();
         }
 
@@ -55,23 +65,34 @@ namespace src.Repositories.Repository
             _context.AddRangeAsync(entity);
         }
 
-        public async Task Update(T entity){
+        public async Task Update(T entity)
+        {
             _context.Update(entity);
             await SaveChanges();
         }
 
-        public async Task MultipleUpdate(T entity){
+        public async Task MultipleUpdate(T entity)
+        {
             _context.UpdateRange(entity);
             await SaveChanges();
         }
 
-        public async Task  Delete(T entity){
-            _context.Entry(entity).State = EntityState.Deleted;
-            _context.Remove(entity);
-            await SaveChanges();
+        public async Task Delete(T entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+            else
+            {
+                _context.Entry(entity).State = EntityState.Deleted;
+                _context.Remove(entity);
+                await SaveChanges();
+            }
         }
 
-        public async Task MultipleDelete(T entity){
+        public async Task MultipleDelete(T entity)
+        {
             _context.RemoveRange(entity);
             await SaveChanges();
         }
@@ -85,7 +106,7 @@ namespace src.Repositories.Repository
         {
             _context.Entry(entity).State = EntityState.Modified;
         }
- 
+
         public void DeleteTracked(T entity)
         {
             _context.Entry(entity).State = EntityState.Deleted;
