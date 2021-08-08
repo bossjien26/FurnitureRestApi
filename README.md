@@ -62,8 +62,8 @@ dotnet test Directory/Test.csproj
 ```
 
 ```sh
-#filter the test method
-dotnet test --filter Method
+#filter the test method name
+dotnet test Directory/Test.csproj --filter MethodName
 ```
 
 ### This is the route table for Api Example:
