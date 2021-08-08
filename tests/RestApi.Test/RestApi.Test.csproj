@@ -19,5 +19,6 @@
     <ProjectReference Include="..\..\src\Entities\Entities.csproj" />
     <ProjectReference Include="..\..\src\Repositories\Repositories.csproj" />
     <ProjectReference Include="..\..\src\Services\Services.csproj" />
+    <ProjectReference Include="..\..\src\Enum\Enum.csproj" />
   </ItemGroup>
 </Project>
