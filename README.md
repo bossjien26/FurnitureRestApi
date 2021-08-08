@@ -48,14 +48,22 @@ dotnet watch test
 
 [Example Url](https://docs.microsoft.com/en-us/dotnet/core/testing/selective-unit-tests?pivots=mstest)
 
-```sh
-#filter the test method
-dotnet test --filter Method
-```
 
 ```sh
 #run all tests
 dotnet test
+```
+
+### How to test project
+
+```sh
+#run project
+dotnet test Directory/Test.csproj
+```
+
+```sh
+#filter the test method
+dotnet test --filter Method
 ```
 
 ### This is the route table for Api Example:
