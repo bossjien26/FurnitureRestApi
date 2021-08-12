@@ -18,8 +18,6 @@ namespace Entities
 
         public byte Attribute { get; set; }
 
-        public int Price { get; set; }
-
         public DateTime CreateAt { get; set; } = DateTime.Now;
 
         public virtual Product Product { get; set; }
