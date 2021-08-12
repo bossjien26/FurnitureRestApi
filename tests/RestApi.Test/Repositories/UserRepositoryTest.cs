@@ -20,7 +20,7 @@ namespace RestApi.Test.Repositories
         [Test]
         async public Task ShouldGet()
         {
-            var testData = UserSeeder.Seedone();
+            var testData = UserSeeder.SeedOne();
             await _repository.Insert(testData);
             var User = await _repository.GetById(x => x.Id == testData.Id);
             Assert.NotNull(User);
@@ -44,7 +44,7 @@ namespace RestApi.Test.Repositories
         [Test]
         public void ShouldInsert()
         {
-            var data = UserSeeder.Seedone();
+            var data = UserSeeder.SeedOne();
             Assert.DoesNotThrowAsync(() => _repository.Insert(data));
             Assert.AreNotEqual(0 , data.Id);
         }
@@ -58,7 +58,7 @@ namespace RestApi.Test.Repositories
         [Test]
         public async Task ShouldDelete()
         {
-            var testData = UserSeeder.Seedone();
+            var testData = UserSeeder.SeedOne();
             await _repository.Insert(testData);
 
             Assert.DoesNotThrowAsync(() => _repository.Delete(testData));
@@ -74,7 +74,7 @@ namespace RestApi.Test.Repositories
         [Test]
         public async Task ShouldUpdate()
         {
-            var testData = UserSeeder.Seedone();
+            var testData = UserSeeder.SeedOne();
             await _repository.Insert(testData);
 
             testData.IsDelete = true;

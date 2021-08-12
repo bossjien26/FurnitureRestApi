@@ -9,7 +9,7 @@ namespace RestApi.Test.DatabaseSeeders
 {
     public class UserSeeder
     {
-        public static User Seedone() => SetUser().Generate();
+        public static User SeedOne() => SetUser().Generate();
 
         public static List<User> ManyUser(int min , int max) => 
                 SetUser().GenerateBetween(min,max);
