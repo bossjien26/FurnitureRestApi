@@ -13,9 +13,9 @@ namespace RestApi.Test.Repositories
     {
         private readonly IProductRepository _repository;
 
-        public ProductRepositoryTest() => 
+        public ProductRepositoryTest() =>
             _repository = new ProductRepository(_context);
-    
+
         [Test]
         async public Task ShouldGet()
         {
@@ -28,10 +28,10 @@ namespace RestApi.Test.Repositories
         [Test]
         async public Task ShouldGetAll()
         {
-            await _repository.InsertMany(ProductSeeder.SeedMany(5,5));
+            await _repository.InsertMany(ProductSeeder.SeedMany(5, 5));
             var products = await _repository.GetAll().Take(5).ToListAsync();
             Assert.IsNotNull(products);
-            Assert.AreEqual(5,products.Count);
+            Assert.AreEqual(5, products.Count);
         }
 
         [Test]
@@ -56,6 +56,7 @@ namespace RestApi.Test.Repositories
             Assert.ThrowsAsync<ArgumentNullException>(() => _repository.Delete(null));
         }
 
+        [Test]
         public async Task ShouldUpdate()
         {
             var testData = ProductSeeder.SeedOne();
