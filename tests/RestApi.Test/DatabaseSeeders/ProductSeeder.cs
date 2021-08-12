@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Bogus;
 using Bogus.Extensions;
 using Entities;
+using Enum;
 
 namespace RestApi.Test.DatabaseSeeders
 {
@@ -23,10 +24,47 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.Sequence, (f) => f.Random.Number(10))
                 .RuleFor(c => c.RelateAt, (f) => DateTime.Now)
                 .RuleFor(c => c.ProductCategories, (f) => SetProductCategory().Generate(1))
-                .RuleFor(c => c.ProductSpecifications, (f) => SetProductSpecification().Generate(1));
+                .RuleFor(c => c.ProductSpecifications, (f) => SetProductSpecification().Generate(1))
+                .RuleFor(c => c.Carts , SetCart().Generate(1));
         }
 
-        public static Faker<ProductSpecification> SetProductSpecification()
+        private static Faker<Cart> SetCart()
+        {
+            return new Faker<Cart>()
+                .RuleFor(c => c.Id , (f) => 0)
+                .RuleFor(c => c.ProductId , (f) => f.Random.Number(10))
+                .RuleFor(c => c.UserId , (f) => f.Random.Number(10))
+                .RuleFor(c => c.Quantity , (f) => f.Random.Number(10))
+                .RuleFor(c => c.Attribute , (f) => (byte)CartAttribute.Shopping)
+                .RuleFor(c => c.User , (f) => SetUser());
+        }
+
+        private static Faker<User> SetUser()
+        {
+            return new Faker<User>()
+                .RuleFor(c => c.Id , (f) => 0)
+                .RuleFor(c => c.Mail , (f) => f.Random.AlphaNumeric(10))
+                .RuleFor(c => c.Password , (f) => f.Random.AlphaNumeric(10))
+                .RuleFor(c => c.Name , (f) => f.Random.AlphaNumeric(10))
+                .RuleFor(c => c.Role , (f) => (byte)UserRole.Customer)
+                .RuleFor(c => c.IsVerify , (f) => false)
+                .RuleFor(c => c.Create , (f) => DateTime.Now)
+                .RuleFor(c => c.IsDelete , (f) => false)
+                .RuleFor(c => c.UserDetail , (f) => SetUserDetail());
+        }
+        
+        private static Faker<UserDetail> SetUserDetail()
+        {
+            return new Faker<UserDetail>()
+                .RuleFor(c => c.Id , (f) => 0)
+                .RuleFor(c => c.UserId , (f) => f.Random.Number(10))
+                .RuleFor(c => c.Country , (f) => f.Random.AlphaNumeric(10))
+                .RuleFor(c => c.City , (f) => f.Random.AlphaNumeric(10))
+                .RuleFor(c => c.Street , (f) => f.Random.AlphaNumeric(10))
+                .RuleFor(c => c.UpdateAt , (f) => DateTime.Now);
+        }
+
+        private static Faker<ProductSpecification> SetProductSpecification()
         {
             return new Faker<ProductSpecification>()
                 .RuleFor(c => c.Id, (f) => 0)
@@ -35,7 +73,7 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.Specification, (f) => SetSpecification());
         }
 
-        public static Faker<Specification> SetSpecification()
+        private static Faker<Specification> SetSpecification()
         {
             return new Faker<Specification>()
                 .RuleFor(c => c.Id, (f) => 0)
@@ -43,7 +81,7 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.SpecificationContent, SetSpecificationContent());
         }
 
-        public static Faker<SpecificationContent> SetSpecificationContent()
+        private static Faker<SpecificationContent> SetSpecificationContent()
         {
             return new Faker<SpecificationContent>()
                 .RuleFor(c => c.Id, (f) => 0)
@@ -51,7 +89,7 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.SpecificationId, (f) => f.Random.Number(10));
         }
 
-        public static Faker<ProductCategory> SetProductCategory()
+        private static Faker<ProductCategory> SetProductCategory()
         {
             return new Faker<ProductCategory>()
                 .RuleFor(c => c.Id, (f) => 0)
@@ -60,7 +98,7 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.Category, (f) => SetCategory());
         }
 
-        public static Faker<Category> SetCategory()
+        private static Faker<Category> SetCategory()
         {
             return new Faker<Category>()
                 .RuleFor(c => c.Id, (f) => 0)
