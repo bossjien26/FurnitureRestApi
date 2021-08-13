@@ -6,7 +6,7 @@ using Entities;
 
 namespace src.Services.IService
 {
-    public interface IUserInfoService
+    public interface IUserService
     {
         void Insert(User instance);
 
@@ -14,7 +14,7 @@ namespace src.Services.IService
 
         IEnumerable<User> GetAllUser();
 
-        Task<User> FindUser(int userId);
+        Task<User> GetById(int userId);
 
         User GetVerifyUser(string mail,string password);
     }

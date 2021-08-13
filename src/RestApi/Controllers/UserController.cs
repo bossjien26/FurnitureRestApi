@@ -21,7 +21,7 @@ namespace RestApi.src.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUserInfoService _repository;
+        private readonly IUserService _repository;
 
         private readonly ILogger<UserController> _logger;
 
@@ -30,7 +30,7 @@ namespace RestApi.src.Controllers
         public UserController(DbContextEntity context, ILogger<UserController> logger,
          AppSettings appsetting)
         {
-            _repository = new UserInfoService(context);
+            _repository = new UserService(context);
             _logger = logger;
             _appSettings = appsetting;
         }
@@ -60,7 +60,7 @@ namespace RestApi.src.Controllers
         [Route("UpdateUser")]
         public IActionResult UpdateUser(User user)
         {
-            if (_repository.FindUser(user.Id).Result == null)
+            if (_repository.GetById(user.Id).Result == null)
             {
                 return Ok(new RegistrationResponse()
                 {

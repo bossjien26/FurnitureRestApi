@@ -43,7 +43,7 @@ namespace src.Middlewares
             {
                 var jwtToken = GetVerifyTokenType(appSettings, token);
                 // attach user to context on successful jwt validation
-                httpContext.Items["User"] = new UserInfoService(context).
+                httpContext.Items["User"] = new UserService(context).
                 GetVerifyUser(jwtToken.Mail, jwtToken.Password);
             }
             catch (Exception exception)

@@ -10,11 +10,11 @@ using src.Services.IService;
 
 namespace src.Services.Service
 {
-    public class UserInfoService : IUserInfoService
+    public class UserService : IUserService
     {
         private IUserRepository _repository;
 
-        public UserInfoService(DbContextEntity dbContextEntity)
+        public UserService(DbContextEntity dbContextEntity)
         {
             _repository = new UserRepository(dbContextEntity);
         }
@@ -23,7 +23,7 @@ namespace src.Services.Service
 
         public void Update(User instance) => _repository.Update(instance);
 
-        public UserInfoService(IUserRepository genericRepository) 
+        public UserService(IUserRepository genericRepository) 
                 => _repository = genericRepository;
 
         public IEnumerable<User> GetAllUser()
@@ -31,7 +31,7 @@ namespace src.Services.Service
             return _repository.GetAll();
         }
 
-        public async Task<User> FindUser(int userId)
+        public async Task<User> GetById(int userId)
         {
             return  await _repository.GetById(c => c.Id == userId);
         }
