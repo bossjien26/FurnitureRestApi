@@ -36,32 +36,7 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.UserId , (f) => f.Random.Number(10))
                 .RuleFor(c => c.Quantity , (f) => f.Random.Number(10))
                 .RuleFor(c => c.Attribute , (f) => (byte)CartAttribute.Shopping)
-                .RuleFor(c => c.User , (f) => SetUser());
-        }
-
-        private static Faker<User> SetUser()
-        {
-            return new Faker<User>()
-                .RuleFor(c => c.Id , (f) => 0)
-                .RuleFor(c => c.Mail , (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.Password , (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.Name , (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.Role , (f) => (byte)UserRole.Customer)
-                .RuleFor(c => c.IsVerify , (f) => false)
-                .RuleFor(c => c.Create , (f) => DateTime.Now)
-                .RuleFor(c => c.IsDelete , (f) => false)
-                .RuleFor(c => c.UserDetail , (f) => SetUserDetail());
-        }
-        
-        private static Faker<UserDetail> SetUserDetail()
-        {
-            return new Faker<UserDetail>()
-                .RuleFor(c => c.Id , (f) => 0)
-                .RuleFor(c => c.UserId , (f) => f.Random.Number(10))
-                .RuleFor(c => c.Country , (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.City , (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.Street , (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.UpdateAt , (f) => DateTime.Now);
+                .RuleFor(c => c.User , (f) => UserSeeder.SeedOne());
         }
 
         private static Faker<ProductSpecification> SetProductSpecification()

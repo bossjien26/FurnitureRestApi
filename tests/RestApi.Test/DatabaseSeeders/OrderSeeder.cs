@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Bogus;
 using Bogus.Extensions;
@@ -24,7 +23,7 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.Receiver, (f) => f.Random.AlphaNumeric(10))
                 .RuleFor(c => c.ReceiverMail, (f) => f.Random.AlphaNumeric(10))
                 .RuleFor(c => c.Payer, (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.User, (f) => SetUser())
+                .RuleFor(c => c.User, (f) => UserSeeder.SeedOne())
                 .RuleFor(c => c.OrderProducts, (f) => SetOrderProduct().Generate(5))
                 .RuleFor(c => c.OrderPay, (f) => SetOrderPay());
         }
@@ -45,31 +44,6 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.ProductName, (f) => f.Random.AlphaNumeric(10))
                 .RuleFor(c => c.Quality, (f) => f.Random.Number(10))
                 .RuleFor(c => c.Specification, (f) => f.Random.AlphaNumeric(10));
-        }
-
-        private static Faker<User> SetUser()
-        {
-            return new Faker<User>()
-                .RuleFor(c => c.Id, (f) => 0)
-                .RuleFor(c => c.Mail, (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.Password, (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.Name, (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.Role, (f) => (byte)UserRole.Customer)
-                .RuleFor(c => c.IsVerify, (f) => false)
-                .RuleFor(c => c.Create, (f) => DateTime.Now)
-                .RuleFor(c => c.IsDelete, (f) => false)
-                .RuleFor(c => c.UserDetail, (f) => SetUserDetail());
-        }
-
-        private static Faker<UserDetail> SetUserDetail()
-        {
-            return new Faker<UserDetail>()
-                .RuleFor(c => c.Id, (f) => 0)
-                .RuleFor(c => c.UserId, (f) => f.Random.Number(10))
-                .RuleFor(c => c.Country, (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.City, (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.Street, (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.UpdateAt, (f) => DateTime.Now);
         }
     }
 }
