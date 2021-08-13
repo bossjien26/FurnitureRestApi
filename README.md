@@ -21,8 +21,6 @@ Modify the `ConnectionStrings` in `DefaultConnection` at the following file
 
 >src/RestApi/appsettings.json
 
-
-TODO:Update Entity and Repository directory need combine
 ### Add Migration
 ```sh
 #switch to src/Repositories
