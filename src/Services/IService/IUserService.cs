@@ -8,7 +8,7 @@ namespace src.Services.IService
 {
     public interface IUserService
     {
-        void Insert(User instance);
+        Task Insert(User instance);
 
         void Update(User instance);
 

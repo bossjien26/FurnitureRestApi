@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,7 +18,7 @@ namespace src.Services.Service
             _repository = new UserRepository(dbContextEntity);
         }
 
-        public void Insert(User instance) => _repository.Insert(instance);
+        public async Task Insert(User instance) => await _repository.Insert(instance);
 
         public void Update(User instance) => _repository.Update(instance);
 
