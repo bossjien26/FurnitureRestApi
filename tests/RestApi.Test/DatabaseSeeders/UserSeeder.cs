@@ -11,7 +11,7 @@ namespace RestApi.Test.DatabaseSeeders
     {
         public static User SeedOne() => SetUser().Generate();
 
-        public static List<User> ManyUser(int min , int max) => 
+        public static List<User> SeedMany(int min , int max) => 
                 SetUser().GenerateBetween(min,max);
 
         private static Faker<User> SetUser()

@@ -31,6 +31,13 @@ namespace src.Services.Service
             return _repository.GetAll();
         }
 
+        public IEnumerable<User> GetMany(int index, int size)
+        {
+            return _repository.GetAll()
+                .Skip((index-1)*size)
+                .Take(size);
+        }
+
         public async Task<User> GetById(int userId)
         {
             return  await _repository.GetById(c => c.Id == userId);
