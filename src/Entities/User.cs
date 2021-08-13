@@ -25,6 +25,8 @@ namespace Entities
 
         public byte Role { get; set; } = (byte)UserRole.Customer;
 
+        public string Token { get; set; }
+
         public DateTime Create { get; set; } = DateTime.Now;
 
         public bool IsDelete { get; set; } = false;
