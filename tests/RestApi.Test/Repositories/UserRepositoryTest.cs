@@ -29,7 +29,7 @@ namespace RestApi.Test.Repositories
         [Test]
         async public Task ShouldGetAll()
         {
-            await _repository.InsertMany(UserSeeder.ManyUser(5,5));
+            await _repository.InsertMany(UserSeeder.SeedMany(5,5));
             var users = await _repository.GetAll().Take(5).ToListAsync();
             Assert.NotNull(users);
             Assert.AreEqual(5,users.Count);
