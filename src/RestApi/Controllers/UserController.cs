@@ -37,9 +37,10 @@ namespace RestApi.src.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult Index()
+        [Route("ShowUsers")]
+        public IActionResult ShowUser()
         {
-            return Ok(_repository.GetAllUser().ToList());
+            return Ok(_repository.GetMany(0,10).ToList());
         }
 
         [Authorize]
