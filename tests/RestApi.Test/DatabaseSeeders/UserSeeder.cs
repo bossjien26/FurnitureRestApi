@@ -24,7 +24,7 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.Role , (f) => (byte)UserRole.Customer)
                 .RuleFor(c => c.IsVerify , (f) => false)
                 .RuleFor(c => c.Token , (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.Create , (f) => DateTime.Now)
+                .RuleFor(c => c.CreateAt , (f) => DateTime.Now)
                 .RuleFor(c => c.IsDelete , (f) => false)
                 .RuleFor(c => c.UserDetail , (f) => SetUserDetail());
         }

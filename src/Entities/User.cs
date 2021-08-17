@@ -27,7 +27,7 @@ namespace Entities
 
         public string Token { get; set; }
 
-        public DateTime Create { get; set; } = DateTime.Now;
+        public DateTime CreateAt { get; set; } = DateTime.Now;
 
         public bool IsDelete { get; set; } = false;
 
