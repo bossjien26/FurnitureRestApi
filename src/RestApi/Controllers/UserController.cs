@@ -40,7 +40,7 @@ namespace RestApi.src.Controllers
         [Route("ShowUsers")]
         public IActionResult ShowUser()
         {
-            return Ok(_repository.GetMany(0,10).ToList());
+            return Ok(_repository.GetMany(5,10).ToList());
         }
 
         [Authorize]
