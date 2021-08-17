@@ -83,6 +83,14 @@ namespace RestApi.src.Controllers
         [Route("authenticate")]
         public IActionResult Authenticate(AuthenticateRequest authenticateRequest)
         {
+            if (_repository.GetVerifyUser(authenticateRequest.Mail,authenticateRequest.Password)==null)
+            {
+                return Ok(new RegistrationResponse()
+                {
+                    Status = false,
+                    Data = "Not Find"
+                });
+            }
             return Ok(new RegistrationResponse()
             {
                 Status = true,
