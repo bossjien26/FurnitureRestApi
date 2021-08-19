@@ -14,6 +14,7 @@ using System.Text;
 using System.Security.Claims;
 using System;
 using Helpers;
+using System.Threading.Tasks;
 
 namespace RestApi.src.Controllers
 {
@@ -40,19 +41,23 @@ namespace RestApi.src.Controllers
         [Route("ShowUsers")]
         public IActionResult ShowUser()
         {
-            return Ok(_repository.GetMany(5,10).ToList());
+            return Ok(_repository.GetMany(1, 10).ToList());
         }
 
         [Authorize]
         [HttpGet]
         [Route("InsertUser")]
-        public IActionResult InsertUser()
+        public async Task<IActionResult> InsertUser(User user)
         {
-            var user = new User()
+            if (user == null)
             {
-                Mail = "bbbbb"
-            };
-            _repository.Insert(user);
+                return Ok(new RegistrationResponse()
+                {
+                    Status = false,
+                    Data = "Not Find"
+                });
+            }
+            await _repository.Insert(user);
             return Ok(user);
         }
 
@@ -61,7 +66,7 @@ namespace RestApi.src.Controllers
         [Route("UpdateUser")]
         public IActionResult UpdateUser(User user)
         {
-            if (_repository.GetById(user.Id).Result == null)
+            if (user == null || _repository.GetById(user.Id).Result == null)
             {
                 return Ok(new RegistrationResponse()
                 {
@@ -83,7 +88,7 @@ namespace RestApi.src.Controllers
         [Route("authenticate")]
         public IActionResult Authenticate(AuthenticateRequest authenticateRequest)
         {
-            if (_repository.GetVerifyUser(authenticateRequest.Mail,authenticateRequest.Password)==null)
+            if (_repository.GetVerifyUser(authenticateRequest.Mail, authenticateRequest.Password) == null)
             {
                 return Ok(new RegistrationResponse()
                 {
@@ -108,7 +113,7 @@ namespace RestApi.src.Controllers
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { 
+                Subject = new ClaimsIdentity(new[] {
                     new Claim("mail", loginInfo.Mail.ToString()),
                     new Claim("password", loginInfo.Password.ToString()),
                     }),
