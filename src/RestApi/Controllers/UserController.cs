@@ -15,6 +15,7 @@ using System.Security.Claims;
 using System;
 using Helpers;
 using System.Threading.Tasks;
+using Middlewares.Authentication;
 
 namespace RestApi.src.Controllers
 {
