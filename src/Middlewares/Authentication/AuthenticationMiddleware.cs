@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using src.Services.Service;
 
-namespace src.Middlewares
+namespace Middlewares.Authentication
 {
     public class AuthenticationMiddleware
     {
@@ -100,14 +100,5 @@ namespace src.Middlewares
         {
             return builder.UseMiddleware<AuthenticationMiddleware>();
         }
-    }
-
-    public class JwtToken
-    {
-        public string Mail { get; set; }
-
-        public string Password { get; set; }
-
-        public string Token { get; set; }
     }
 }
