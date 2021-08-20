@@ -16,6 +16,7 @@ using System;
 using Helpers;
 using System.Threading.Tasks;
 using Middlewares.Authentication;
+using Enum;
 
 namespace RestApi.src.Controllers
 {
@@ -37,7 +38,7 @@ namespace RestApi.src.Controllers
             _appSettings = appsetting;
         }
 
-        [Authorize]
+        [Authorize(Role.SuperAdmin)]
         [HttpGet]
         [Route("ShowUsers")]
         public IActionResult ShowUser()
