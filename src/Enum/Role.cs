@@ -1,6 +1,6 @@
 namespace Enum
 {
-    public enum UserRole : int
+    public enum Role : int
     {
         SuperAdmin = 1,
         Admin = 2,
