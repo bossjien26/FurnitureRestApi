@@ -35,7 +35,7 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.ProductId , (f) => f.Random.Number(10))
                 .RuleFor(c => c.UserId , (f) => f.Random.Number(10))
                 .RuleFor(c => c.Quantity , (f) => f.Random.Number(10))
-                .RuleFor(c => c.Attribute , (f) => (byte)CartAttribute.Shopping)
+                .RuleFor(c => c.Attribute , (f) => CartAttribute.Shopping)
                 .RuleFor(c => c.User , (f) => UserSeeder.SeedOne());
         }
 

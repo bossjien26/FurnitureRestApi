@@ -15,7 +15,7 @@ namespace Entities
         [ForeignKey("User")]
         public int UserId { get; set; }
 
-        public byte Status { get; set; } = (byte)OrderStatus.Processing;
+        public OrderStatus Status { get; set; } = OrderStatus.Processing;
 
         [Column(TypeName = "Varchar")]
         [StringLength(150)]

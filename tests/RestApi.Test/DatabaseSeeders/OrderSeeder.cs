@@ -32,7 +32,7 @@ namespace RestApi.Test.DatabaseSeeders
         {
             return new Faker<OrderPay>()
                 .RuleFor(c => c.Id, (f) => 0)
-                .RuleFor(c => c.Terms, (f) => (byte)PaymentTerms.Bank);
+                .RuleFor(c => c.Terms, (f) => PaymentTerms.Bank);
         }
 
         private static Faker<OrderProduct> SetOrderProduct()

@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using Enum;
 
 namespace Entities
 {
@@ -16,7 +17,7 @@ namespace Entities
 
         public int Quantity { get; set; }
 
-        public byte Attribute { get; set; }
+        public CartAttribute Attribute { get; set; }
 
         public DateTime CreateAt { get; set; } = DateTime.Now;
 

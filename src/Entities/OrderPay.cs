@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Enum;
 
 namespace Entities
 {
@@ -12,7 +13,7 @@ namespace Entities
         [ForeignKey("Order")]
         public int OrderId { get; set; }
 
-        public byte Terms { get; set; }
+        public PaymentTerms Terms { get; set; }
 
         public bool IsPaid { get; set; } = false;
 

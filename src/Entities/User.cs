@@ -23,7 +23,7 @@ namespace Entities
 
         public bool IsVerify { get; set; } = false;
 
-        public byte Role { get; set; } = (byte)Enum.Role.Customer;
+        public Role Role { get; set; } = Enum.Role.Customer;
 
         public string Token { get; set; }
 
