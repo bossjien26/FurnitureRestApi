@@ -38,7 +38,7 @@ namespace RestApi.src.Controllers
             _appSettings = appsetting;
         }
 
-        [Authorize(Role.SuperAdmin)]
+        [Authorize(Role.SuperAdmin,Role.Customer,Role.Admin,Role.Staff)]
         [HttpGet]
         [Route("ShowUsers")]
         public IActionResult ShowUser()
