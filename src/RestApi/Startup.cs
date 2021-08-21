@@ -132,14 +132,20 @@ namespace RestApi
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("swagger/v1/swagger.json", "RestApi v1"));
+                app.UseSwaggerUI(
+                    c =>
+                    {
+                        c.SwaggerEndpoint("/swagger/v1/swagger.json", "RestApi v1");
+                        c.RoutePrefix = string.Empty;
+                    }
+                );
             }
-            
+
             // app.UseCookiePolicy();
-            
+
             // app.UseHttpsRedirection();
             app.UseMiddleware<AuthenticationMiddleware>();
-            
+
 
             app.UseAuthorization();
 
