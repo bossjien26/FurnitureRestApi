@@ -19,5 +19,7 @@ namespace src.Services.IService
         Task<User> GetById(int userId);
 
         User GetVerifyUser(string mail,string password);
+
+        User SearchUserMail(string mail);
     }
 }

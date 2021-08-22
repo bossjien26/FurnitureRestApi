@@ -47,5 +47,10 @@ namespace src.Services.Service
             return _repository.GetAll().Where(user => user.Mail == mail 
             && user.Password == password).Take(1).FirstOrDefault();
         }
+
+        public User SearchUserMail(string mail)
+        {
+            return _repository.GetAll().Where(User => User.Mail == mail).Take(1).FirstOrDefault();
+        }
     }
 }
