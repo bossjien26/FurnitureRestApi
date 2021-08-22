@@ -93,5 +93,17 @@ namespace RestApi.Test.Services
                 new UserService(_repoMock.Object).GetVerifyUser(mail,password)
             );
         }
+
+        [Test]
+        public void ShouldSearchUserMail()
+        {
+            var mail = "example@mail.com";
+            _repoMock.Setup(c => c.GetById(x => x.Mail == mail))
+                .Returns(Task.FromResult(_entityMock.Object));
+            
+            Assert.DoesNotThrow(() =>
+                new UserService(_repoMock.Object).SearchUserMail(mail)
+            );
+        }
     }
 }
