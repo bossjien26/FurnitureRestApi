@@ -25,8 +25,6 @@ namespace Entities
 
         public Role Role { get; set; } = Enum.Role.Customer;
 
-        public string Token { get; set; }
-
         public DateTime CreateAt { get; set; } = DateTime.Now;
 
         public bool IsDelete { get; set; } = false;
