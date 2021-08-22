@@ -34,7 +34,7 @@ namespace RestApi.Test.Controllers
         public void ShouldGenerateJwtToken()
         {
             //Arrange &  Act
-            var authenticateRequest = new AuthenticateRequest(){Mail = "adf",Password = "fsd"};
+            var authenticateRequest = new Authenticate(){Mail = "adf",Password = "fsd"};
             //Assert
             var result = _controller.Authenticate(authenticateRequest);
             Assert.IsInstanceOf<OkObjectResult>(result);
