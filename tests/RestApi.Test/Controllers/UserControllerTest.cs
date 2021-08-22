@@ -1,12 +1,11 @@
-using System;
 using System.Threading.Tasks;
 using Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using RestApi.Models.Requests;
 using RestApi.src.Controllers;
-using RestApi.src.Models;
 using RestApi.Test.DatabaseSeeders;
 using RestApi.Test.Repositories;
 using src.Repositories.IRepository;

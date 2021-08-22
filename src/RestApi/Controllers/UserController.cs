@@ -7,7 +7,6 @@ using src.Services.IService;
 using RestApi.src.Models.Response;
 using Microsoft.Extensions.Logging;
 using Middlewares;
-using RestApi.src.Models;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -17,6 +16,7 @@ using Helpers;
 using System.Threading.Tasks;
 using Middlewares.Authentication;
 using Enum;
+using RestApi.Models.Requests;
 
 namespace RestApi.src.Controllers
 {
