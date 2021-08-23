@@ -48,7 +48,9 @@ namespace RestApi
             });
 
             // services.AddScoped<RequestHelper>();
-
+            services.AddSingleton<SmtpMailConfig>(appSettings.SmtpMailConfig);
+            
+            services.AddSingleton<MailHelper>();
 
             services.AddControllers();
 

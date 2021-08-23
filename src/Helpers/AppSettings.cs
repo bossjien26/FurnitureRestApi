@@ -7,5 +7,7 @@ namespace Helpers
         public HeaderSetting HeaderSettings { get; set; }
 
         public JwtSettings JwtSettings { get; set; }
+
+        public SmtpMailConfig SmtpMailConfig { get; set; }
     }
 }
