@@ -37,13 +37,13 @@ namespace RestApi.src.Controllers
         private readonly IUserDetailService _userDetailService;
 
         public UserController(DbContextEntity context, ILogger<UserController> logger,
-         AppSettings appsetting, MailHelper mailHelper, UserDetailService userDetailService)
+         AppSettings appsetting, MailHelper mailHelper)
         {
             _repository = new UserService(context);
+            _userDetailService = new UserDetailService(context);
             _logger = logger;
             _appSettings = appsetting;
             _mailHelper = mailHelper;
-            _userDetailService = userDetailService;
         }
 
         [Authorize(Role.SuperAdmin, Role.Customer, Role.Admin, Role.Staff)]
