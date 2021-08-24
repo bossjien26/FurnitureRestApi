@@ -6,7 +6,7 @@ namespace Helpers
 
         public string Password { get; set; }
 
-        public int Post { get; set; }
+        public int Port { get; set; }
 
         public string Server { get; set; }
 
