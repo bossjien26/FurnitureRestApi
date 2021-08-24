@@ -107,22 +107,35 @@ namespace RestApi.src.Controllers
                 });
             }
 
-            await CreateUserDetail(registration,await CreateUser(registration));
-            
-            _mailHelper.SendMail(new Mailer()
+            await CreateUserDetail(registration, await CreateUser(registration));
+
+            SendRegisterMail(registration);
+            return Ok(new RegistrationResponse()
             {
-                MailTo = registration.Mail,
-                NameTo = registration.Name,
-                Subject = "test",
-                Content = "verify mail"
-            });
-            return Ok(new RegistrationResponse(){
                 Status = true,
                 Data = "Register Success"
             });
         }
 
-        private async Task CreateUserDetail(Registration registration,User user)
+        private void SendRegisterMail(Registration registration)
+        {
+            try
+            {
+                _mailHelper.SendMail(new Mailer()
+                {
+                    MailTo = registration.Mail,
+                    NameTo = registration.Name,
+                    Subject = "test",
+                    Content = "verify mail"
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+            }
+        }
+
+        private async Task CreateUserDetail(Registration registration, User user)
         {
             await _userDetailService.Insert(
                 new UserDetail()
