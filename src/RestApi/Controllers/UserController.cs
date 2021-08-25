@@ -98,7 +98,7 @@ namespace RestApi.src.Controllers
         [Route("registration")]
         public async Task<IActionResult> Registration(Registration registration)
         {
-            if (!CheckRegisterMailIsUse(registration.Mail))
+            if (CheckRegisterMailIsUse(registration.Mail))
             {
                 return Ok(new RegistrationResponse()
                 {
