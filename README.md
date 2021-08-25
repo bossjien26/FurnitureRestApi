@@ -33,6 +33,38 @@ dotnet ef migrations add InitialCreate --context DbContextEntity --startup-proje
 dotnet ef database update --context DbContextEntity --startup-project ../RestApi
 ```
 
+## Project
+
+### How run the project
+
+```sh
+#switch to src/RestApi
+dotnet run
+```
+
+### How build project
+
+```sh
+#switch to root
+dotnet build
+```
+
+### How clean build outputs
+
+```sh
+#switch to root
+dotnet clean
+```
+
+### How restore dependencies specified
+
+```sh
+#switch to root
+dotnet restore
+```
+
+### 
+
 ## Test
 
 ### How reload test
