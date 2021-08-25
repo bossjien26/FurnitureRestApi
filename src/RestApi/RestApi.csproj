@@ -35,5 +35,9 @@
   <ItemGroup>
     <Content Update="nlog.config" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
-  
+
+  <PropertyGroup>
+    <DefaultItemExcludes>.git\**;$(DefaultItemExcludes)</DefaultItemExcludes>
+  </PropertyGroup>
+
 </Project>
