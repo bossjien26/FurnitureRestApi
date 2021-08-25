@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace RestApi.src.Models
+namespace RestApi.Models.Requests
 {
-    public class AuthenticateRequest
+    public class Authenticate
     {
         public int Id { get; set; }
 

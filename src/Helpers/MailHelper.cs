@@ -33,6 +33,8 @@ namespace Helpers
         public void SendMail(Mailer mailer)
         {
             var smtpClient = new SmtpClient();
+            smtpClient.Connect(_smtpMailConfig.Server, _smtpMailConfig.Port, _smtpMailConfig.EnableSsl);
+            smtpClient.Authenticate(_smtpMailConfig.Account, _smtpMailConfig.Password);
             smtpClient.Send(MailMessage(mailer));
             smtpClient.Disconnect(true);
         }
