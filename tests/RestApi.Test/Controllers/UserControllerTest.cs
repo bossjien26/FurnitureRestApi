@@ -4,12 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using Repositories.IRepository;
 using RestApi.Models.Requests;
 using RestApi.src.Controllers;
 using RestApi.Test.DatabaseSeeders;
 using RestApi.Test.Repositories;
+using Services.Service;
 using src.Repositories.IRepository;
 using src.Repositories.Repository;
+using src.Services.Service;
 
 namespace RestApi.Test.Controllers
 {
@@ -20,20 +23,24 @@ namespace RestApi.Test.Controllers
 
         private readonly IUserRepository _repository;
 
+        private readonly IUserDetailRepository _userDetailService;
+
         public UserControllerTest()
         {
             _controller = new UserController(
                 _context,
                 new Mock<ILogger<UserController>>().Object,
-                new Mock<AppSettings>().Object);
-            _repository = new UserRepository(_context);
+                new Mock<AppSettings>().Object,
+                new Mock<MailHelper>(new Mock<SmtpMailConfig>().Object,
+                 new Mock<ILogger<MailHelper>>().Object).Object);
+                _repository = new UserRepository(_context);
         }
 
         [Test]
         public void ShouldGenerateJwtToken()
         {
             //Arrange &  Act
-            var authenticateRequest = new Authenticate(){Mail = "adf",Password = "fsd"};
+            var authenticateRequest = new Authenticate() { Mail = "adf", Password = "fsd" };
             //Assert
             var result = _controller.Authenticate(authenticateRequest);
             Assert.IsInstanceOf<OkObjectResult>(result);
@@ -86,6 +93,23 @@ namespace RestApi.Test.Controllers
 
             //Act
             var result = await _controller.InsertUser(testData);
+
+            //Assert
+            Assert.IsInstanceOf<OkObjectResult>(result);
+        }
+
+        [Test]
+        public async Task ShouldRegistration()
+        {
+            //Arrange
+            var testData = new Registration(){
+                Name = "Name",
+                Mail = "Mail",
+                Password = "Password"
+            };
+
+            //Act
+            var result = await _controller.Registration(testData);
 
             //Assert
             Assert.IsInstanceOf<OkObjectResult>(result);
