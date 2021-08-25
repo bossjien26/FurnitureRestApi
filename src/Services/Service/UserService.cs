@@ -45,12 +45,12 @@ namespace src.Services.Service
         public User GetVerifyUser(string mail,string password)
         {
             return _repository.GetAll().Where(user => user.Mail == mail 
-            && user.Password == password).Take(1).FirstOrDefault();
+            && user.Password == password).OrderByDescending(x => x.Id).Take(1).FirstOrDefault();
         }
 
         public User SearchUserMail(string mail)
         {
-            return _repository.GetAll().Where(User => User.Mail == mail).Take(1).FirstOrDefault();
+            return _repository.GetAll().Where(User => User.Mail == mail).Take(1).OrderByDescending(x => x.Id).FirstOrDefault();
         }
     }
 }
