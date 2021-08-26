@@ -9,9 +9,7 @@ using RestApi.Models.Requests;
 using RestApi.src.Controllers;
 using RestApi.Test.DatabaseSeeders;
 using RestApi.Test.Repositories;
-using Services.Service;
-using src.Repositories.Repository;
-using src.Services.Service;
+using Repositories.Repository;
 
 namespace RestApi.Test.Controllers
 {

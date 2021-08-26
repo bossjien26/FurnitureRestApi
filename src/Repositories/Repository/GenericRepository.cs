@@ -7,7 +7,7 @@ using DbEntity;
 using Microsoft.EntityFrameworkCore;
 using Repositories.IRepository;
 
-namespace src.Repositories.Repository
+namespace Repositories.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {

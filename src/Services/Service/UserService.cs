@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using DbEntity;
 using Entities;
 using Repositories.IRepository;
-using src.Repositories.Repository;
+using Repositories.Repository;
 using src.Services.IService;
 
 namespace src.Services.Service
