@@ -18,6 +18,9 @@ namespace Services.Service
             _repository = new UserDetailRepository(dbContextEntity);
         }
 
+        public UserDetailService(IUserDetailRepository genericRepository)
+                => _repository = genericRepository;
+
         public async Task Insert(UserDetail instance) => await _repository.Insert(instance);
     }
 }
