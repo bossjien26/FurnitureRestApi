@@ -1,10 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Entities;
 
-namespace src.Services.IService
+namespace Services.IService
 {
     public interface IUserService
     {

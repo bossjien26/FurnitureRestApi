@@ -2,8 +2,8 @@ using DbEntity;
 using Microsoft.AspNetCore.Mvc;
 using Entities;
 using System.Linq;
-using src.Services.Service;
-using src.Services.IService;
+using Services.Service;
+using Services.IService;
 using RestApi.src.Models.Response;
 using Microsoft.Extensions.Logging;
 using Middlewares;
@@ -17,8 +17,6 @@ using System.Threading.Tasks;
 using Middlewares.Authentication;
 using Enum;
 using RestApi.Models.Requests;
-using Services.IService;
-using Services.Service;
 
 namespace RestApi.src.Controllers
 {
