@@ -10,7 +10,6 @@ using RestApi.src.Controllers;
 using RestApi.Test.DatabaseSeeders;
 using RestApi.Test.Repositories;
 using Services.Service;
-using src.Repositories.IRepository;
 using src.Repositories.Repository;
 using src.Services.Service;
 

@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using Repositories.IRepository;
 using RestApi.Test.DatabaseSeeders;
-using src.Repositories.IRepository;
 using src.Repositories.Repository;
 
 namespace RestApi.Test.Repositories

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DbEntity;
 using Entities;
-using src.Repositories.IRepository;
+using Repositories.IRepository;
 using src.Repositories.Repository;
 using src.Services.IService;
 

@@ -1,6 +1,6 @@
 using DbEntity;
 using Entities;
-using src.Repositories.IRepository;
+using Repositories.IRepository;
 
 namespace src.Repositories.Repository
 {

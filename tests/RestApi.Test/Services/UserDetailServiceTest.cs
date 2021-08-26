@@ -4,7 +4,6 @@ using Moq;
 using NUnit.Framework;
 using Repositories.IRepository;
 using Services.Service;
-using src.Repositories.IRepository;
 using src.Services.Service;
 
 namespace RestApi.Test.Services

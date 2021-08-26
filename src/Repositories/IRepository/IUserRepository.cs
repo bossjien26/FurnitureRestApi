@@ -1,6 +1,6 @@
 using Entities;
 
-namespace src.Repositories.IRepository
+namespace Repositories.IRepository
 {
     public interface IUserRepository  : IGenericRepository<User>
     {
