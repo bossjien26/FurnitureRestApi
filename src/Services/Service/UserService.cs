@@ -18,12 +18,12 @@ namespace src.Services.Service
             _repository = new UserRepository(dbContextEntity);
         }
 
+        public UserService(IUserRepository genericRepository)
+                => _repository = genericRepository;
+
         public async Task Insert(User instance) => await _repository.Insert(instance);
 
         public void Update(User instance) => _repository.Update(instance);
-
-        public UserService(IUserRepository genericRepository) 
-                => _repository = genericRepository;
 
         public IEnumerable<User> GetAllUser()
         {
@@ -33,18 +33,18 @@ namespace src.Services.Service
         public IEnumerable<User> GetMany(int index, int size)
         {
             return _repository.GetAll()
-                .Skip((index-1)*size)
+                .Skip((index - 1) * size)
                 .Take(size);
         }
 
         public async Task<User> GetById(int userId)
         {
-            return  await _repository.GetById(c => c.Id == userId);
+            return await _repository.GetById(c => c.Id == userId);
         }
 
-        public User GetVerifyUser(string mail,string password)
+        public User GetVerifyUser(string mail, string password)
         {
-            return _repository.GetAll().Where(user => user.Mail == mail 
+            return _repository.GetAll().Where(user => user.Mail == mail
             && user.Password == password).OrderByDescending(x => x.Id).Take(1).FirstOrDefault();
         }
 
