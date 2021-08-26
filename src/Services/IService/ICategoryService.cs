@@ -5,6 +5,6 @@ namespace Services.IService
 {
     public interface ICategoryService
     {
-        Task Insert(Category category);
+        Task Insert(Category instance);
     }
 }

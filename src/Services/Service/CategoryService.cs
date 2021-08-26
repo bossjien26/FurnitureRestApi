@@ -19,7 +19,7 @@ namespace Services.Service
         public CategoryService(ICategoryRepository genericRepository)
             => _repository = genericRepository;
 
-        public async Task Insert(Category category)
-            => await _repository.Insert(category);
+        public async Task Insert(Category instance)
+            => await _repository.Insert(instance);
     }
 }
