@@ -8,6 +8,8 @@ namespace Repositories.Repository
     public class UserDetailRepository : GenericRepository<UserDetail> , IUserDetailRepository
     {
         public UserDetailRepository(DbContextEntity context):base(context)
-        {}
+        {
+            
+        }
     }
 }
