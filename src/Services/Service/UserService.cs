@@ -5,9 +5,9 @@ using DbEntity;
 using Entities;
 using Repositories.IRepository;
 using Repositories.Repository;
-using src.Services.IService;
+using Services.IService;
 
-namespace src.Services.Service
+namespace Services.Service
 {
     public class UserService : IUserService
     {
