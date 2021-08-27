@@ -20,8 +20,6 @@ namespace RestApi.Test.Controllers
 
         private readonly IUserRepository _repository;
 
-        private readonly IUserDetailRepository _userDetailService;
-
         public UserControllerTest()
         {
             _controller = new UserController(
