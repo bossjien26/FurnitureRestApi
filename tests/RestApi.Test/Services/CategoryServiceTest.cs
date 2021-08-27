@@ -26,5 +26,15 @@ namespace RestApi.Test.Services
             Assert.DoesNotThrowAsync(()
                 => new CategoryService(_repoMock.Object).Insert(_entityMock.Object));
         }
+
+        [Test]
+        public async Task ShouldGetById()
+        {
+            _repoMock.Setup(r => r.Get(x => x.Id == 1)).Returns(Task.FromResult(_entityMock.Object));
+
+            var result = await new CategoryService(_repoMock.Object).GetById(1);
+
+            Assert.IsInstanceOf<Category>(result);
+        }
     }
 }
