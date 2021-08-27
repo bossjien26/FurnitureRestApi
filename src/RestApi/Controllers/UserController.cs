@@ -52,29 +52,12 @@ namespace RestApi.src.Controllers
             return Ok(_repository.GetMany(1, 10).ToList());
         }
 
-        [Authorize]
-        [HttpGet]
-        [Route("InsertUser")]
-        public async Task<IActionResult> InsertUser(User user)
-        {
-            if (user == null)
-            {
-                return Ok(new RegistrationResponse()
-                {
-                    Status = false,
-                    Data = "Not Find"
-                });
-            }
-            await _repository.Insert(user);
-            return Ok(user);
-        }
-
         [HttpPut]
         [Authorize]
         [Route("UpdateUser")]
         public IActionResult UpdateUser(User user)
         {
-            if (user == null || _repository.GetById(user.Id).Result == null)
+            if (_repository.GetById(user.Id).Result == null)
             {
                 return Ok(new RegistrationResponse()
                 {

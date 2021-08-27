@@ -28,7 +28,7 @@ namespace RestApi.Test.Controllers
                 new Mock<AppSettings>().Object,
                 new Mock<MailHelper>(new Mock<SmtpMailConfig>().Object,
                  new Mock<ILogger<MailHelper>>().Object).Object);
-                _repository = new UserRepository(_context);
+            _repository = new UserRepository(_context);
         }
 
         [Test]
@@ -50,14 +50,6 @@ namespace RestApi.Test.Controllers
         }
 
         [Test]
-        public void ShouldUpdateUserIsNull()
-        {
-            //Arrange & Act & Assert
-            var result = _controller.UpdateUser(null);
-            Assert.IsInstanceOf<OkObjectResult>(result);
-        }
-
-        [Test]
         public async Task ShouldUpdateUser()
         {
             //Arrange
@@ -69,14 +61,6 @@ namespace RestApi.Test.Controllers
             var result = _controller.UpdateUser(testData);
 
             //Assert
-            Assert.IsInstanceOf<OkObjectResult>(result);
-        }
-
-        [Test]
-        public async Task ShouldInsertUserIsNUll()
-        {
-            //Arrange & Act & Assert
-            var result = await _controller.InsertUser(null);
             Assert.IsInstanceOf<OkObjectResult>(result);
         }
 
@@ -97,7 +81,8 @@ namespace RestApi.Test.Controllers
         public async Task ShouldRegistration()
         {
             //Arrange
-            var testData = new Registration(){
+            var testData = new Registration()
+            {
                 Name = "Name",
                 Mail = "Mail",
                 Password = "Password"
