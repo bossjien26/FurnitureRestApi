@@ -39,7 +39,7 @@ namespace Services.Service
 
         public async Task<User> GetById(int userId)
         {
-            return await _repository.GetById(c => c.Id == userId);
+            return await _repository.Get(c => c.Id == userId);
         }
 
         public User GetVerifyUser(string mail, string password)

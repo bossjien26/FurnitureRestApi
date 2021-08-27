@@ -28,7 +28,7 @@ namespace RestApi.Test.Services
         async public Task ShouldGetById()
         {
             // Arrange
-            _repoMock.Setup(r => r.GetById(x => x.Id == 1))
+            _repoMock.Setup(r => r.Get(x => x.Id == 1))
                 .Returns(Task.FromResult(_entityMock.Object));
 
             // Act
@@ -71,7 +71,7 @@ namespace RestApi.Test.Services
             //Arrange
             //Act
             //Asset
-            _repoMock.Setup(c => c.GetById(x => x.Name == "jan"))
+            _repoMock.Setup(c => c.Get(x => x.Name == "jan"))
                 .Returns(Task.FromResult(_entityMock.Object));
             
             _entityMock.Object.Name = "test";
@@ -86,7 +86,7 @@ namespace RestApi.Test.Services
         {
             var mail = "example@mail.com";
             var password = "abc";
-            _repoMock.Setup(c => c.GetById(x => x.Mail == mail
+            _repoMock.Setup(c => c.Get(x => x.Mail == mail
                 && x.Password == password)).Returns(Task.FromResult(_entityMock.Object));
 
             Assert.DoesNotThrow(() =>
@@ -98,7 +98,7 @@ namespace RestApi.Test.Services
         public void ShouldSearchUserMail()
         {
             var mail = "example@mail.com";
-            _repoMock.Setup(c => c.GetById(x => x.Mail == mail))
+            _repoMock.Setup(c => c.Get(x => x.Mail == mail))
                 .Returns(Task.FromResult(_entityMock.Object));
             
             Assert.DoesNotThrow(() =>

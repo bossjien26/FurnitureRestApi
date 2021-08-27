@@ -21,7 +21,7 @@ namespace RestApi.Test.Repositories
         {
             var seeder = ProductSeeder.SeedOne();
             await _repository.Insert(seeder);
-            var product = _repository.GetById(c => c.Id == seeder.Id);
+            var product = _repository.Get(c => c.Id == seeder.Id);
             Assert.IsNotNull(product);
         }
 
@@ -47,7 +47,7 @@ namespace RestApi.Test.Repositories
             await _repository.Insert(testData);
 
             Assert.DoesNotThrowAsync(() => _repository.Delete(testData));
-            Assert.IsNull(await _repository.GetById(x => x.Id == testData.Id));
+            Assert.IsNull(await _repository.Get(x => x.Id == testData.Id));
         }
 
         [Test]
