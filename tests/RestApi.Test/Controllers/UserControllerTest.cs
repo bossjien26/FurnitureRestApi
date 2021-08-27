@@ -65,19 +65,6 @@ namespace RestApi.Test.Controllers
         }
 
         [Test]
-        public async Task ShouldInsertUser()
-        {
-            //Arrange
-            var testData = UserSeeder.SeedOne();
-
-            //Act
-            var result = await _controller.InsertUser(testData);
-
-            //Assert
-            Assert.IsInstanceOf<OkObjectResult>(result);
-        }
-
-        [Test]
         public async Task ShouldRegistration()
         {
             //Arrange
