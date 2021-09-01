@@ -33,6 +33,9 @@ dotnet ef migrations add InitialCreate --context DbContextEntity --startup-proje
 dotnet ef database update --context DbContextEntity --startup-project ../RestApi
 ```
 
+## User Visual Studio
+> Choice open `RestApi.sln` in root
+
 ## Project
 
 ### How run the project
