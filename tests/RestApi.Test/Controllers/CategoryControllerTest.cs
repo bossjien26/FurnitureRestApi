@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using Repositories.IRepository;
 using Repositories.Repository;
 using RestApi.Controllers;
+using RestApi.Models.Requests;
 using RestApi.Test.Repositories;
 
 namespace RestApi.Test.Controllers
@@ -29,7 +29,7 @@ namespace RestApi.Test.Controllers
         [Test]
         public async Task ShouldInsertCategory()
         {
-            var result = await _controller.Insert(new Models.Requests.Category(){
+            var result = await _controller.Insert(new RequestCategory(){
                 Name = "123",
                 ChildrenId = 0,
                 IsDisplay = false
