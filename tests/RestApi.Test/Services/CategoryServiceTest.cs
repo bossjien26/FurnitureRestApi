@@ -1,8 +1,11 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Entities;
 using Moq;
 using NUnit.Framework;
 using Repositories.IRepository;
+using RestApi.Test.DatabaseSeeders;
 using Services.Service;
 
 namespace RestApi.Test.Services
@@ -35,6 +38,18 @@ namespace RestApi.Test.Services
             var result = await new CategoryService(_repoMock.Object).GetById(1);
 
             Assert.IsInstanceOf<Category>(result);
+        }
+
+        [Test]
+        public void ShouldGetMany()
+        {
+            _repoMock.Setup(r => r.GetAll()).Returns(CategorySeeder.SeedMany(10,15).AsQueryable());
+
+            var result = new CategoryService(_repoMock.Object).GetMany(1,5).ToList();
+
+            //Assert
+            Assert.IsInstanceOf<List<Category>>(result);
+            Assert.AreEqual(5,result.Count);
         }
     }
 }
