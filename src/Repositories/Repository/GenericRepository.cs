@@ -21,7 +21,7 @@ namespace Repositories.Repository
             _DbSet = _context.Set<T>();
         }
 
-        public async Task<T> GetById(Expression<Func<T, bool>> predicate)
+        public async Task<T> Get(Expression<Func<T, bool>> predicate)
         {
             return await _DbSet.FirstOrDefaultAsync(predicate);
         }

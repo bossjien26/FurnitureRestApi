@@ -9,17 +9,17 @@ using RestApi.Test.DatabaseSeeders;
 
 namespace RestApi.Test.Repositories
 {
-    public class OrderRepositoryTest : BaseRepositoryTest
+    public class CategoryRepositoryTest : BaseRepositoryTest
     {
-        private readonly IOrderRepository _repository;
+        private readonly ICategoryRepository _repository;
 
-        public OrderRepositoryTest() =>
-        _repository = new OrderRepository(_context);
+        public CategoryRepositoryTest() =>
+        _repository = new CategoryRepository(_context);
 
         [Test]
         async public Task ShouldGet()
         {
-            var seeder = OrderSeeder.SeedOne();
+            var seeder = CategorySeeder.SeedOne();
             await _repository.Insert(seeder);
             var product = _repository.Get(c => c.Id == seeder.Id);
             Assert.IsNotNull(product);
@@ -28,7 +28,7 @@ namespace RestApi.Test.Repositories
         [Test]
         async public Task ShouldGetAll()
         {
-            await _repository.InsertMany(OrderSeeder.SeedMany(5, 5));
+            await _repository.InsertMany(CategorySeeder.SeedMany(5, 5));
             var products = await _repository.GetAll().Take(5).ToListAsync();
             Assert.IsNotNull(products);
             Assert.AreEqual(5, products.Count);
@@ -43,7 +43,7 @@ namespace RestApi.Test.Repositories
         [Test]
         public async Task ShouldDelete()
         {
-            var testData = OrderSeeder.SeedOne();
+            var testData = CategorySeeder.SeedOne();
             await _repository.Insert(testData);
 
             Assert.DoesNotThrowAsync(() => _repository.Delete(testData));
@@ -59,10 +59,10 @@ namespace RestApi.Test.Repositories
         [Test]
         public async Task ShouldUpdate()
         {
-            var testData = OrderSeeder.SeedOne();
+            var testData = CategorySeeder.SeedOne();
             await _repository.Insert(testData);
 
-            testData.Street = "Taiwain";
+            testData.Name = "Taiwain";
             Assert.DoesNotThrowAsync(() => _repository.Update(testData));
         }
 
