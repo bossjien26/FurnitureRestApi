@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DbEntity;
 using Entities;
@@ -25,6 +27,13 @@ namespace Services.Service
         public async Task<Category> GetById(int Id)
         {
             return await _repository.Get(x => x.Id == Id);
+        }
+
+        public IEnumerable<Category> GetMany(int index, int size)
+        {
+            return _repository.GetAll()
+                .Skip((index - 1) * size)
+                .Take(size);
         }
     }
 }
