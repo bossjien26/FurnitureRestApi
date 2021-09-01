@@ -1,9 +1,11 @@
+using System.Linq;
 using System.Threading.Tasks;
 using DbEntity;
 using Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Middlewares.Authentication;
+using RestApi.Models.Requests;
 using RestApi.src.Models;
 using Services.IService;
 using Services.Service;
@@ -28,9 +30,9 @@ namespace RestApi.Controllers
         [Authorize(Role.SuperAdmin, Role.Admin)]
         [Route("Insert")]
         [HttpPost]
-        public async Task<IActionResult> Insert(Models.Requests.Category category)
+        public async Task<IActionResult> Insert(RequestCategory requestsCategory)
         {
-            if (await _repository.GetById(category.ChildrenId) == null && category.ChildrenId != 0)
+            if (await _repository.GetById(requestsCategory.ChildrenId) == null && requestsCategory.ChildrenId != 0)
             {
                 return Ok(new AutResultModel()
                 {
@@ -39,7 +41,7 @@ namespace RestApi.Controllers
                 });
             }
 
-            await InsertCategory(category);
+            await InsertCategory(requestsCategory);
 
             return Ok(new AutResultModel()
             {
@@ -48,17 +50,25 @@ namespace RestApi.Controllers
             });
         }
 
-        private async Task InsertCategory(Models.Requests.Category category)
+        private async Task InsertCategory(RequestCategory requestsCategory)
         {
             await _repository.Insert(
                 new Entities.Category()
                 {
-                    Name = category.Name,
-                    ChildrenId = category.ChildrenId,
-                    Sequence = category.Sequence,
-                    IsDisplay = category.IsDisplay
+                    Name = requestsCategory.Name,
+                    ChildrenId = requestsCategory.ChildrenId,
+                    Sequence = requestsCategory.Sequence,
+                    IsDisplay = requestsCategory.IsDisplay
                 }
             );
+        }
+
+        [Authorize(Role.SuperAdmin, Role.Admin, Role.Staff)]
+        [Route("ShowMany")]
+        [HttpGet]
+        public IActionResult ShowMany(int pages)
+        {
+            return Ok(_repository.GetMany(pages, 10).ToList());
         }
     }
 }
