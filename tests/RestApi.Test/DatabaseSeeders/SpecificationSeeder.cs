@@ -12,6 +12,9 @@ namespace RestApi.Test.DatabaseSeeders
         public static List<Specification> SeedMany(int min , int max) => 
                 SetSpecification().GenerateBetween(min,max);
 
+        public static List<SpecificationContent> SeedSpecificationContentMany(int min , int max) => 
+                SetSpecificationContent().GenerateBetween(min,max);
+
         private static Faker<Specification> SetSpecification()
         {
             return new Faker<Specification>()
