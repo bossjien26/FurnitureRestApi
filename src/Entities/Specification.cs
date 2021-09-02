@@ -21,7 +21,7 @@ namespace Entities
 
         public bool IsDelete { get; set; } = false;
 
-        public virtual SpecificationContent SpecificationContent { get; set; }
+        public virtual ICollection<SpecificationContent>  SpecificationContent { get; set; }
 
         public virtual ICollection<ProductSpecification> ProductSpecifications { get; set; }
     }
