@@ -13,7 +13,7 @@ using Services.Service;
 namespace RestApi.Controllers
 {
     [ApiController]
-    [Route("api/Controller")]
+    [Route("api/[controller]")]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _repository;
@@ -28,7 +28,7 @@ namespace RestApi.Controllers
         }
 
         [Authorize(Role.SuperAdmin, Role.Admin)]
-        [Route("Insert")]
+        [Route("insert")]
         [HttpPost]
         public async Task<IActionResult> Insert(RequestCategory requestsCategory)
         {
@@ -64,7 +64,7 @@ namespace RestApi.Controllers
         }
 
         [Authorize(Role.SuperAdmin, Role.Admin, Role.Staff)]
-        [Route("ShowMany")]
+        [Route("many")]
         [HttpGet]
         public IActionResult ShowMany(int pages)
         {

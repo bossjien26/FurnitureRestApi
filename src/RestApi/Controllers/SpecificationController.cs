@@ -14,7 +14,7 @@ using Services.Service;
 namespace RestApi.Controllers
 {
     [ApiController]
-    [Route("api/controller")]
+    [Route("api/[controller]")]
     public class SpecificationController : ControllerBase
     {
         private readonly ISpecificationService _repository;
@@ -34,7 +34,7 @@ namespace RestApi.Controllers
 
         [Authorize(Role.SuperAdmin, Role.Customer, Role.Admin, Role.Staff)]
         [HttpPost]
-        [Route("Insert")]
+        [Route("insert")]
         public async Task<IActionResult> Insert(RequestSpecification requestSpecification)
         {
             await InsertSpecification(requestSpecification);
@@ -58,7 +58,7 @@ namespace RestApi.Controllers
 
         [Authorize(Role.SuperAdmin, Role.Customer, Role.Admin, Role.Staff)]
         [HttpPost]
-        [Route("InsertUnderLayer")]
+        [Route("insertunderlayer")]
         public async Task<IActionResult> InsertUnderLayer(RequestSpecificationContent requestSpecificationContent)
         {
             if (await _repositorySpecificationContent.GetById(requestSpecificationContent.SpecificationId) == null)
@@ -91,7 +91,7 @@ namespace RestApi.Controllers
         }
 
         [Authorize(Role.SuperAdmin, Role.Admin, Role.Staff)]
-        [Route("ShowMany")]
+        [Route("many")]
         [HttpGet]
         public IActionResult ShowMany(int pages)
         {
