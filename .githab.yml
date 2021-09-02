@@ -1,0 +1,43 @@
+services:
+  - name: mariadb:latest
+    alias: db
+
+# place project specific paths in variables to make the rest of the script more generic
+variables:
+  APP_FOLDER_PATH: ./src/RestApi
+  TEST_FOLDER_PATH: ./tests/RestApi.Test
+  MARIADB_ROOT_PASSWORD: secret
+
+stages:
+  - build
+  - test
+
+.dotnet-core-runner: &dotnet-core-runner
+  image: mcr.microsoft.com/dotnet/sdk:5.0-focal
+  tags:
+    - docker
+
+.dotnet-core: &dotnet-core
+  <<: *dotnet-core-runner
+  before_script:
+    - dotnet --version
+  tags:
+    - docker
+
+build:
+  <<: *dotnet-core
+  stage: build
+  tags:
+    - docker
+  script:
+    - cd $APP_FOLDER_PATH
+    - dotnet build -c Testing
+
+unit-test:
+  <<: *dotnet-core
+  stage: test
+  tags:
+    - docker
+  script:
+    - cd $TEST_FOLDER_PATH
+    - dotnet test /p:CollectCoverage=true
