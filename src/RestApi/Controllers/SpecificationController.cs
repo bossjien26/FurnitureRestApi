@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using DbEntity;
 using Entities;
@@ -87,6 +88,14 @@ namespace RestApi.Controllers
                     SpecificationId = requestSpecificationContent.SpecificationId
                 }
             );
+        }
+
+        [Authorize(Role.SuperAdmin, Role.Admin, Role.Staff)]
+        [Route("ShowMany")]
+        [HttpGet]
+        public IActionResult ShowMany(int pages)
+        {
+            return Ok(_repository.GetMany(pages, 10).ToList());
         }
     }
 }
