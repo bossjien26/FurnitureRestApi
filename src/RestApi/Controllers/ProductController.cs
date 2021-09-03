@@ -22,13 +22,13 @@ namespace RestApi.Controllers
 
         private readonly ILogger<ProductController> _logger;
 
-        private readonly IProductCategoryService _categoryRepository;
+        private readonly IProductCategoryService _ProductCategoryRepository;
 
         public ProductController(DbContextEntity context, ILogger<ProductController> logger)
         {
             _repository = new ProductService(context);
 
-            _categoryRepository = new ProductCategoryService(context);
+            _ProductCategoryRepository = new ProductCategoryService(context);
 
             _logger = logger;
         }
@@ -92,13 +92,13 @@ namespace RestApi.Controllers
 
         private async Task<bool> CheckProductAndCategoryIsExist(RequestProductCategory requestProductCategory)
         {
-            return (await _categoryRepository.GetById(requestProductCategory.CategoryId) != null 
+            return (await _ProductCategoryRepository.GetById(requestProductCategory.CategoryId) != null 
             && await _repository.GetById(requestProductCategory.ProductId) != null)? true:false;
         }
 
         private async Task InsertProductCategory(RequestProductCategory requestProductCategory)
         {
-            await _categoryRepository.Insert(new ProductCategory()
+            await _ProductCategoryRepository.Insert(new ProductCategory()
             {
                 ProductId = requestProductCategory.ProductId,
                 CategoryId = requestProductCategory.CategoryId
