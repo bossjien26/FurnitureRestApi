@@ -22,9 +22,13 @@ namespace RestApi.Controllers
 
         private readonly ILogger<ProductController> _logger;
 
+        private readonly IProductCategoryService _categoryRepository;
+
         public ProductController(DbContextEntity context, ILogger<ProductController> logger)
         {
             _repository = new ProductService(context);
+
+            _categoryRepository = new ProductCategoryService(context);
 
             _logger = logger;
         }
@@ -51,7 +55,7 @@ namespace RestApi.Controllers
                 Price = requestProduct.Price,
                 Sequence = requestProduct.Sequence,
                 Quantity = requestProduct.Quantity,
-                RelateAt = (requestProduct.RelateAt == null) ? DateTime.Now : requestProduct.RelateAt,
+                RelateAt = requestProduct.RelateAt,
                 IsDisplay = requestProduct.IsDisplay
             });
         }
@@ -62,6 +66,43 @@ namespace RestApi.Controllers
         public IActionResult ShowMany(int pages)
         {
             return Ok(_repository.GetMany(pages, 10).ToList());
+        }
+
+        [Authorize(Role.SuperAdmin, Role.Admin)]
+        [Route("insertProductCategory")]
+        [HttpPost]
+        public async Task<IActionResult> StoreProductCategory(RequestProductCategory requestProductCategory)
+        {
+            if(! await CheckProductAndCategoryIsExist(requestProductCategory))
+            {
+                return Ok(new AutResultModel()
+                {
+                    Status = false,
+                    Data = "Fail"
+                });
+            }
+            await InsertProductCategory(requestProductCategory);
+
+            return Ok(new AutResultModel()
+            {
+                Status = true,
+                Data = "Success"
+            });
+        }
+
+        private async Task<bool> CheckProductAndCategoryIsExist(RequestProductCategory requestProductCategory)
+        {
+            return (await _categoryRepository.GetById(requestProductCategory.CategoryId) != null 
+            && await _repository.GetById(requestProductCategory.ProductId) != null)? true:false;
+        }
+
+        private async Task InsertProductCategory(RequestProductCategory requestProductCategory)
+        {
+            await _categoryRepository.Insert(new ProductCategory()
+            {
+                ProductId = requestProductCategory.ProductId,
+                CategoryId = requestProductCategory.CategoryId
+            });
         }
     }
 }
