@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -41,6 +42,8 @@ namespace RestApi.Test.Controllers
                 Quantity = 1,
                 RelateAt = DateTime.Now
             });
+
+            Assert.IsInstanceOf<OkObjectResult>(result);
         }
 
         [Test]
@@ -51,6 +54,20 @@ namespace RestApi.Test.Controllers
                 ProductId = 1,
                 CategoryId = 1
             });
+
+            Assert.IsInstanceOf<OkObjectResult>(result);
+        }
+
+        [Test]
+        public async Task ShouldInsertProductSpecificationIsFail()
+        {
+            var result = await _controller.StoreProductSpecification(new RequestProductSpecification()
+            {
+                ProductId = 1,
+                SpecificationId = 1
+            });
+
+            Assert.IsInstanceOf<OkObjectResult>(result);
         }
     }
 }
