@@ -22,13 +22,17 @@ namespace RestApi.Controllers
 
         private readonly ILogger<ProductController> _logger;
 
-        private readonly IProductCategoryService _ProductCategoryRepository;
+        private readonly IProductCategoryService _productCategoryRepository;
+
+        private readonly IProductSpecificationService _productSpecificationRepository;
 
         public ProductController(DbContextEntity context, ILogger<ProductController> logger)
         {
             _repository = new ProductService(context);
 
-            _ProductCategoryRepository = new ProductCategoryService(context);
+            _productCategoryRepository = new ProductCategoryService(context);
+
+            _productSpecificationRepository = new ProductSpecificationService(context);
 
             _logger = logger;
         }
@@ -92,16 +96,53 @@ namespace RestApi.Controllers
 
         private async Task<bool> CheckProductAndCategoryIsExist(RequestProductCategory requestProductCategory)
         {
-            return (await _ProductCategoryRepository.GetById(requestProductCategory.CategoryId) != null 
+            return (await _productCategoryRepository.GetById(requestProductCategory.CategoryId) != null 
             && await _repository.GetById(requestProductCategory.ProductId) != null)? true:false;
         }
 
         private async Task InsertProductCategory(RequestProductCategory requestProductCategory)
         {
-            await _ProductCategoryRepository.Insert(new ProductCategory()
+            await _productCategoryRepository.Insert(new ProductCategory()
             {
                 ProductId = requestProductCategory.ProductId,
                 CategoryId = requestProductCategory.CategoryId
+            });
+        }
+
+        [Authorize(Role.SuperAdmin, Role.Admin)]
+        [Route("insertProductSpecification")]
+        [HttpPost]
+        public async Task<IActionResult> StoreProductSpecification(RequestProductSpecification requestProductSpecification)
+        {
+            if(! await CheckProductAndSpecificationIsExist(requestProductSpecification))
+            {
+                return Ok(new AutResultModel()
+                {
+                    Status = false,
+                    Data = "Fail"
+                });
+            }
+            await InsertProductSpecification(requestProductSpecification);
+
+            return Ok(new AutResultModel()
+            {
+                Status = true,
+                Data = "Success"
+            });
+        }
+
+        private async Task<bool> CheckProductAndSpecificationIsExist(RequestProductSpecification requestProductSpecification)
+        {
+            return (await _productSpecificationRepository.GetById(requestProductSpecification.SpecificationId) != null 
+            && await _repository.GetById(requestProductSpecification.ProductId) != null)? true:false;
+        }
+
+        private async Task InsertProductSpecification(RequestProductSpecification requestProductSpecification)
+        {
+            await _productSpecificationRepository.Insert(new ProductSpecification()
+            {
+                ProductId = requestProductSpecification.ProductId,
+                SpecificationId = requestProductSpecification.SpecificationId
             });
         }
     }
