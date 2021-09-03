@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -34,6 +35,8 @@ namespace RestApi.Test.Controllers
                 ChildrenId = 0,
                 IsDisplay = false
             });
+
+            Assert.IsInstanceOf<OkObjectResult>(result);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -33,6 +34,8 @@ namespace RestApi.Test.Controllers
             {
                 Name = "123"
             });
+
+            Assert.IsInstanceOf<OkObjectResult>(result);
         }
 
         [Test]
@@ -43,6 +46,8 @@ namespace RestApi.Test.Controllers
                 Name = "123",
                 SpecificationId = 1
             });
+
+            Assert.IsInstanceOf<OkObjectResult>(result);
         }
     }
 }
