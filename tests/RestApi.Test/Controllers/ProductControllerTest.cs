@@ -18,6 +18,8 @@ namespace RestApi.Test.Controllers
 
         private readonly IProductRepository _repository;
 
+        private readonly IProductCategoryRepository _categoryRepository;
+
         public ProductControllerTest()
         {
             _controller = new ProductController(
@@ -25,6 +27,7 @@ namespace RestApi.Test.Controllers
                 new Mock<ILogger<ProductController>>().Object
             );
             _repository = new ProductRepository(_context);
+            _categoryRepository = new ProductCategoryRepository(_context);
         }
 
         [Test]
@@ -37,6 +40,16 @@ namespace RestApi.Test.Controllers
                 Sequence = 1,
                 Quantity = 1,
                 RelateAt = DateTime.Now
+            });
+        }
+
+        [Test]
+        public async Task ShouldInsertProductCategoryIsFail()
+        {
+            var result = await _controller.StoreProductCategory(new RequestProductCategory()
+            {
+                ProductId = 1,
+                CategoryId = 1
             });
         }
     }
