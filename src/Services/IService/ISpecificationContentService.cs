@@ -8,7 +8,7 @@ namespace Services.IService
     {
         Task Insert(SpecificationContent specification);
 
-        Task<SpecificationContent> GetById(int Id);
+        Task<SpecificationContent> GetById(int id);
 
         IEnumerable<SpecificationContent> GetMany(int index, int size);
     }
