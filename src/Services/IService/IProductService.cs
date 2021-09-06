@@ -8,7 +8,7 @@ namespace Services.IService
     {
         Task Insert(Product instance);
 
-        Task<Product> GetById(int Id);
+        Task<Product> GetById(int id);
 
         IEnumerable<Product> GetMany(int index, int size);
     }

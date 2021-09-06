@@ -24,9 +24,9 @@ namespace Services.Service
         public async Task Insert(Category instance)
             => await _repository.Insert(instance);
 
-        public async Task<Category> GetById(int Id)
+        public async Task<Category> GetById(int id)
         {
-            return await _repository.Get(x => x.Id == Id);
+            return await _repository.Get(x => x.Id == id);
         }
 
         public IEnumerable<Category> GetMany(int index, int size)

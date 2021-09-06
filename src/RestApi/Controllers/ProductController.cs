@@ -15,7 +15,7 @@ using Services.Service;
 namespace RestApi.Controllers
 {
     [ApiController]
-    [Route("api/[Controller]")]
+    [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _repository;
