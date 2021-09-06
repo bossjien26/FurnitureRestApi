@@ -93,9 +93,9 @@ namespace RestApi.Controllers
         [Authorize(Role.SuperAdmin, Role.Admin, Role.Staff)]
         [Route("many")]
         [HttpGet]
-        public IActionResult ShowMany(RequestPage requestPage)
+        public IActionResult ShowMany(int pages)
         {
-            return Ok(_repository.GetMany(requestPage.Pages, 10).ToList());
+            return Ok(_repository.GetMany(pages, 10).ToList());
         }
     }
 }
