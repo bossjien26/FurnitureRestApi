@@ -12,6 +12,7 @@ namespace RestApi.Models.Requests
         public int ProductId { get; set; }
 
         [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than {1}")]
         public int Quantity { get; set; }
 
         [Required]

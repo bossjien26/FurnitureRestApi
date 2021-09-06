@@ -85,11 +85,16 @@ namespace RestApi.Controllers
         {
             var user = (User)_httpContext.Items["User"];
 
-            var checkParametrComfirm = await CheckParametrComfirm(requestCart,user.Id);
-            
-            if (!checkParametrComfirm.Status){return Ok(checkParametrComfirm);}
+            if (!await CheckProductAndCartIsExist(requestCart,user.Id))
+            {
+                return Ok(new AutResultModel()
+                {
+                    Status = false,
+                    Data = "Fail"
+                });
+            }
 
-            UpdateCart(requestCart, user.Id);
+            UpdateCart(requestCart,user.Id);
 
             return Ok(new AutResultModel()
             {
@@ -98,37 +103,14 @@ namespace RestApi.Controllers
             });
         }
 
-        private async Task<AutResultModel> CheckParametrComfirm(RequestCart requestCart, int userId)
-        {
-            if (!await CheckProductAndCartIsExist(requestCart, userId))
-            {
-                return new AutResultModel()
-                {
-                    Status = false,
-                    Data = "Fail"
-                };
-            }
-
-            if (requestCart.Quantity < 1)
-            {
-                return new AutResultModel()
-                {
-                    Status = false,
-                    Data = "The quantity need greater than or equal to one"
-                };
-            }
-
-            return new AutResultModel(){Status=true};
-        }
-
-        private async Task<bool> CheckProductAndCartIsExist(RequestCart requestCart, int userId)
+        private async Task<bool> CheckProductAndCartIsExist(RequestCart requestCart,int userId)
         {
             return (await _repositoryProduct.GetById(requestCart.ProductId) != null &&
-            await _repository.GetUserCart(requestCart.Id, userId, requestCart.ProductId)
+            await _repository.GetUserCart(requestCart.Id,userId,requestCart.ProductId)
              != null) ? true : false;
         }
 
-        private void UpdateCart(RequestCart requestCart, int userId)
+        private void UpdateCart(RequestCart requestCart,int userId)
         {
             _repository.Update(new Cart()
             {
