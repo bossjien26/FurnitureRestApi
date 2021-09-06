@@ -15,5 +15,7 @@ namespace Services.IService
         void Update(Cart instance);
 
         void Delete(Cart instance);
+
+        Task<Cart> GetUserCart(int id, int userId, int productId);
     }
 }

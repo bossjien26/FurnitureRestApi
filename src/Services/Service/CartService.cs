@@ -34,5 +34,10 @@ namespace Services.Service
         public void Update(Cart instance) => _repository.Update(instance);
 
         public void Delete(Cart instance) => _repository.Delete(instance);
+
+        public async Task<Cart> GetUserCart(int id, int userId, int productId)
+        {
+            return await _repository.Get(x => x.Id == id && x.UserId == userId && x.ProductId == productId);
+        }
     }
 }
