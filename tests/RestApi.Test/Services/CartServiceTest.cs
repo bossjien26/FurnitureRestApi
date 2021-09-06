@@ -77,5 +77,16 @@ namespace RestApi.Test.Services
                 new CartService(_repoMock.Object).Delete(_entityMock.Object)
             );
         }
+
+        [Test]
+        public async Task ShouldGetUserCart()
+        {
+            _repoMock.Setup(r => r.Get(x => x.Id == 1 && x.UserId == 1 && x.ProductId == 1))
+            .Returns(Task.FromResult(_entityMock.Object));
+
+            var result = await new CartService(_repoMock.Object).GetUserCart(1,1,1);
+
+            Assert.IsInstanceOf<Cart>(result);
+        }
     }
 }
