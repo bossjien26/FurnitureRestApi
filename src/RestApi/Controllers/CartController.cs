@@ -14,7 +14,7 @@ using Services.Service;
 namespace RestApi.Controllers
 {
     [ApiController]
-    [Route("api/[Controller]")]
+    [Route("api/[controller]")]
     public class CartController : ControllerBase
     {
         private readonly ICartService _repository;
@@ -78,7 +78,7 @@ namespace RestApi.Controllers
             });
         }
 
-        [Route("insert")]
+        [Route("update")]
         [HttpPost]
         [Authorize(Role.SuperAdmin, Role.Customer, Role.Admin, Role.Staff)]
         public async Task<IActionResult> Update(RequestCart requestCart)

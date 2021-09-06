@@ -15,7 +15,7 @@ using Services.Service;
 namespace RestApi.Controllers
 {
     [ApiController]
-    [Route("api/[Controller]")]
+    [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _repository;
@@ -67,9 +67,9 @@ namespace RestApi.Controllers
         [Authorize(Role.SuperAdmin, Role.Admin, Role.Staff)]
         [Route("many")]
         [HttpGet]
-        public IActionResult ShowMany(int pages)
+        public IActionResult ShowMany(RequestPage requestPage)
         {
-            return Ok(_repository.GetMany(pages, 10).ToList());
+            return Ok(_repository.GetMany(requestPage.Pages, 10).ToList());
         }
 
         [Authorize(Role.SuperAdmin, Role.Admin)]
