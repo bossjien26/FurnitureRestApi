@@ -1,6 +1,5 @@
 using DbEntity;
 using Microsoft.EntityFrameworkCore;
-// using Microsoft.EntityFrameworkCore;
 
 namespace RestApi.Test.Repositories
 {
@@ -10,7 +9,7 @@ namespace RestApi.Test.Repositories
 
         public BaseRepositoryTest()
         {
-            var connectionString = "Server=172.20.0.2; Port=3306;User Id=root;Password=Passwo!rd123!;Database=School";
+            var connectionString = "Server=localhost; Port=3306;User Id=newuser;Password=Passwo!rd123!;Database=Furniture";
             var options = new DbContextOptionsBuilder<DbContextEntity>()
                 .UseMySql(
                    connectionString,
