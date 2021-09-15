@@ -30,7 +30,5 @@ namespace Entities
         public bool IsDelete { get; set; } = false;
 
         public virtual UserDetail UserDetail { get; set; }
-
-        public virtual Cart Cart { get; set; }
     }
 }

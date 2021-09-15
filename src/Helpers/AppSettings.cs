@@ -9,5 +9,7 @@ namespace Helpers
         public JwtSettings JwtSettings { get; set; }
 
         public SmtpMailConfig SmtpMailConfig { get; set; }
+
+        public RedisSettings RedisSettings {get;set;}
     }
 }

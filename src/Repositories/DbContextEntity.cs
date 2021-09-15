@@ -42,8 +42,6 @@ namespace DbEntity
 
         public DbSet<UserDetail> UserDetails { get; set; }
 
-        public DbSet<Cart> Carts { get; set; }
-
         #endregion
 
         public async void BeginTransaction()

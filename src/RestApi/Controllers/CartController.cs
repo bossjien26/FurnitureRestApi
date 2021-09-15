@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using DbEntity;
 using Entities;
-using Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,7 +8,10 @@ using Middlewares.Authentication;
 using RestApi.Models.Requests;
 using RestApi.src.Models;
 using Services.IService;
+using Services.IService.Redis;
 using Services.Service;
+using Services.Service.Redis;
+using StackExchange.Redis;
 
 namespace RestApi.Controllers
 {
@@ -26,9 +28,9 @@ namespace RestApi.Controllers
         private readonly HttpContext _httpContext;
 
         public CartController(DbContextEntity context, ILogger<CartController> logger,
-        HttpContext httpContext)
+        HttpContext httpContext,IConnectionMultiplexer redisDb)
         {
-            _repository = new CartService(context);
+            _repository = new CartService(redisDb);
 
             _repositoryProduct = new ProductService(context);
 
@@ -39,19 +41,19 @@ namespace RestApi.Controllers
 
         [Route("insert")]
         [HttpPost]
-        [Authorize(Role.SuperAdmin, Role.Customer, Role.Admin, Role.Staff)]
-        public async Task<IActionResult> Insert(RequestCart requestCart)
+        [Authorize(Enum.Role.SuperAdmin, Enum.Role.Customer, Enum.Role.Admin, Enum.Role.Staff)]
+        public async Task<IActionResult> Store(RequestCart requestCart)
         {
             if (!await CheckProductIsExist(requestCart))
             {
-                return Ok(new AutResultModel()
+                return NotFound(new AutResultModel()
                 {
                     Status = false,
                     Data = "Fail"
                 });
             }
 
-            await InsertCart(requestCart);
+            await StoreCart(requestCart);
 
             return Ok(new AutResultModel()
             {
@@ -65,60 +67,23 @@ namespace RestApi.Controllers
             return (await _repositoryProduct.GetById(requestCart.ProductId) != null) ? true : false;
         }
 
-        private async Task InsertCart(RequestCart requestCart)
+        private async Task StoreCart(RequestCart requestCart)
         {
             var user = (User)_httpContext.Items["User"];
 
-            await _repository.Insert(new Cart()
+            await _repository.Set(new Cart()
             {
-                UserId = user.Id,
-                ProductId = requestCart.ProductId,
-                Quantity = requestCart.Quantity,
-                Attribute = requestCart.Attribute
+                UserId = user.Id.ToString(),
+                ProductId = requestCart.ProductId.ToString(),
+                Quantity = requestCart.Quantity.ToString()
             });
         }
 
-        [Route("update")]
-        [HttpPost]
-        [Authorize(Role.SuperAdmin, Role.Customer, Role.Admin, Role.Staff)]
-        public async Task<IActionResult> Update(RequestCart requestCart)
+        public IActionResult Delete(int productId)
         {
             var user = (User)_httpContext.Items["User"];
-
-            if (!await CheckProductAndCartIsExist(requestCart,user.Id))
-            {
-                return Ok(new AutResultModel()
-                {
-                    Status = false,
-                    Data = "Fail"
-                });
-            }
-
-            UpdateCart(requestCart,user.Id);
-
-            return Ok(new AutResultModel()
-            {
-                Status = true,
-                Data = "Success"
-            });
-        }
-
-        private async Task<bool> CheckProductAndCartIsExist(RequestCart requestCart,int userId)
-        {
-            return (await _repositoryProduct.GetById(requestCart.ProductId) != null &&
-            await _repository.GetUserCart(requestCart.Id,userId,requestCart.ProductId)
-             != null) ? true : false;
-        }
-
-        private void UpdateCart(RequestCart requestCart,int userId)
-        {
-            _repository.Update(new Cart()
-            {
-                UserId = userId,
-                ProductId = requestCart.ProductId,
-                Quantity = requestCart.Quantity,
-                Attribute = requestCart.Attribute
-            });
+            _repository.Delete(user.Id.ToString(),productId.ToString());
+            return NoContent();
         }
     }
 }

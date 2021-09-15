@@ -32,7 +32,5 @@ namespace Entities
         public virtual ICollection<ProductCategory> ProductCategories { get; set; }
 
         public virtual ICollection<ProductSpecification> ProductSpecifications { get; set; }
-
-        public virtual ICollection<Cart> Carts { get; set; }
     }
 }

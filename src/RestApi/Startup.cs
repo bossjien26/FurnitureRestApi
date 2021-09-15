@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Middlewares.Authentication;
+using StackExchange.Redis;
 
 namespace RestApi
 {
@@ -49,8 +50,11 @@ namespace RestApi
 
             // services.AddScoped<RequestHelper>();
             services.AddSingleton<SmtpMailConfig>(appSettings.SmtpMailConfig);
-            
+
             services.AddSingleton<MailHelper>();
+
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(
+                appSettings.RedisSettings.CartRedisSetting.DefaultConnection));
 
             services.AddControllers();
 
