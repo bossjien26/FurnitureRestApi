@@ -9,7 +9,7 @@ using StackExchange.Redis;
 namespace RestApi.Test.Services
 {
     [TestFixture]
-    public class CartServiceTest : BaseRedisRepositoryTest
+    public class CartServiceTest : BaseRepositoryTest
     {
         private readonly ICartService _cartService;
 

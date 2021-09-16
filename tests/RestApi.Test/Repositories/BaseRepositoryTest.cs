@@ -1,11 +1,14 @@
 using DbEntity;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace RestApi.Test.Repositories
 {
     public class BaseRepositoryTest
     {
         internal readonly DbContextEntity _context;
+
+        internal readonly IConnectionMultiplexer _redisConnect;
 
         public BaseRepositoryTest()
         {
@@ -18,8 +21,14 @@ namespace RestApi.Test.Repositories
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
                 .Options;
-                
+            
             _context = new DbContextEntity(options);
+        
+            _redisConnect = ConnectionMultiplexer.Connect(
+                    new ConfigurationOptions
+                    {
+                        EndPoints = { "localhost:6379" }
+                    });
         }
     }
 }
