@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Entities;
+using Enum;
 using StackExchange.Redis;
 
 namespace Services.IService.Redis
@@ -8,10 +9,10 @@ namespace Services.IService.Redis
     {
         Task<bool> Set(Cart instance);
 
-        Task<RedisValue> GetById(string HashId, string key);
+        Task<RedisValue> GetById(string HashId, string key,CartAttribute cartAttribute);
 
-        HashEntry[] GetMany(string HashId);
+        HashEntry[] GetMany(string HashId,CartAttribute cartAttribute);
 
-        bool Delete(string HashId,string key);
+        bool Delete(string HashId,string key,CartAttribute cartAttribute);
     }
 }

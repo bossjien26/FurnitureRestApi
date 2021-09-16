@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using DbEntity;
 using Entities;
+using Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -25,10 +26,11 @@ namespace RestApi.Controllers
 
         private readonly ILogger<CartController> _logger;
 
-        private readonly HttpContext _httpContext;
+        //TODO: Unable to resolve service for type
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public CartController(DbContextEntity context, ILogger<CartController> logger,
-        HttpContext httpContext,IConnectionMultiplexer redisDb)
+        IHttpContextAccessor httpContextAccessor, IConnectionMultiplexer redisDb)
         {
             _repository = new CartService(redisDb);
 
@@ -36,10 +38,10 @@ namespace RestApi.Controllers
 
             _logger = logger;
 
-            _httpContext = httpContext;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        [Route("insert")]
+        [Route("store")]
         [HttpPost]
         [Authorize(Enum.Role.SuperAdmin, Enum.Role.Customer, Enum.Role.Admin, Enum.Role.Staff)]
         public async Task<IActionResult> Store(RequestCart requestCart)
@@ -69,20 +71,24 @@ namespace RestApi.Controllers
 
         private async Task StoreCart(RequestCart requestCart)
         {
-            var user = (User)_httpContext.Items["User"];
+            var user = (User)_httpContextAccessor.HttpContext.Items["User"];
 
             await _repository.Set(new Cart()
             {
                 UserId = user.Id.ToString(),
                 ProductId = requestCart.ProductId.ToString(),
-                Quantity = requestCart.Quantity.ToString()
+                Quantity = requestCart.Quantity.ToString(),
+                Attribute = requestCart.Attribute
             });
         }
 
-        public IActionResult Delete(int productId)
+        [Route("delete")]
+        [HttpDelete]
+        [Authorize(Enum.Role.SuperAdmin, Enum.Role.Customer, Enum.Role.Admin, Enum.Role.Staff)]
+        public IActionResult Delete(int productId, CartAttribute cartAttribute)
         {
-            var user = (User)_httpContext.Items["User"];
-            _repository.Delete(user.Id.ToString(),productId.ToString());
+            var user = (User)_httpContextAccessor.HttpContext.Items["User"];
+            _repository.Delete(user.Id.ToString(), productId.ToString(), cartAttribute);
             return NoContent();
         }
     }

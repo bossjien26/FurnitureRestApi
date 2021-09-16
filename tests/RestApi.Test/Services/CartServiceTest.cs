@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Entities;
+using Enum;
 using NUnit.Framework;
 using RestApi.Test.Repositories;
 using Services.IService.Redis;
@@ -31,7 +32,7 @@ namespace RestApi.Test.Services
         [Test]
         public async Task ShouldGetById()
         {
-            var result = await _cartService.GetById("1","1");
+            var result = await _cartService.GetById("1","1",CartAttribute.Shopping);
 
             Assert.IsInstanceOf<RedisValue>(result);
         }
@@ -40,7 +41,7 @@ namespace RestApi.Test.Services
         public void ShouldDelete()
         {
             Assert.DoesNotThrow(() =>
-                _cartService.Delete("1","1")
+                _cartService.Delete("1","1",CartAttribute.Shopping)
             );
         }
 
@@ -48,9 +49,9 @@ namespace RestApi.Test.Services
         public void ShouldGetMany()
         {
             var db = _redisConnect.GetDatabase();
-            var result = _cartService.GetMany("1");
+            var result = _cartService.GetMany("1",CartAttribute.Shopping);
             Assert.IsInstanceOf<HashEntry[]>(result);
-            Assert.AreEqual(db.HashLength("1"), result.Length);
+            Assert.AreEqual(db.HashLength("cart:1"), result.Length);
         }
     }
 }

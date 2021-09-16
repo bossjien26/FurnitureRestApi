@@ -1,5 +1,3 @@
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using Enum;
 
 namespace Entities
@@ -11,5 +9,7 @@ namespace Entities
         public string ProductId { get; set; }
 
         public string Quantity { get; set; }
+
+        public CartAttribute Attribute { get; set; }
     }
 }
