@@ -10,7 +10,7 @@ namespace Services.IService
 
         void Update(User instance);
 
-        IEnumerable<User> GetAllUser();
+        IEnumerable<User> GetAll();
 
         IEnumerable<User> GetMany(int index, int size);
 
