@@ -25,7 +25,7 @@ namespace Services.Service
 
         public void Update(User instance) => _repository.Update(instance);
 
-        public IEnumerable<User> GetAllUser()
+        public IEnumerable<User> GetAll()
         {
             return _repository.GetAll();
         }
@@ -34,7 +34,8 @@ namespace Services.Service
         {
             return _repository.GetAll()
                 .Skip((index - 1) * size)
-                .Take(size);
+                .Take(size)
+                .OrderByDescending(x => x.Id);
         }
 
         public async Task<User> GetById(int userId)

@@ -33,7 +33,7 @@ namespace Services.Service
 
         public IEnumerable<Specification> GetMany(int index, int size)
         {
-            return _repository.GetAll().Skip((index-1)*size).Take(size);
+            return _repository.GetAll().Skip((index-1)*size).Take(size).OrderByDescending(x => x.Id);
         }
     }
 }
