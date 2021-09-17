@@ -1,6 +1,8 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Newtonsoft.Json;
 using RestApi.Test.Repositories;
 
 namespace RestApi.Test.Controllers
@@ -23,6 +25,12 @@ namespace RestApi.Test.Controllers
                 });
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+        }
+
+        protected StringContent PostType(object request)
+        {
+            return new StringContent(JsonConvert.SerializeObject(request).ToString(),
+            Encoding.UTF8, "application/json");
         }
     }
 }
