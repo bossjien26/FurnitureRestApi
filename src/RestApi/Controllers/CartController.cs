@@ -88,8 +88,8 @@ namespace RestApi.Controllers
         public IActionResult Delete(int productId, CartAttribute cartAttribute)
         {
             var user = (User)_httpContextAccessor.HttpContext.Items["User"];
-            _repository.Delete(user.Id.ToString(), productId.ToString(), cartAttribute);
-            return NoContent();
+            return _repository.Delete(user.Id.ToString(), productId.ToString(), cartAttribute)
+            ? NoContent() : NotFound();
         }
     }
 }
