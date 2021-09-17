@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -56,6 +57,8 @@ namespace RestApi
             services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(
                 appSettings.RedisSettings.CartRedisSetting.DefaultConnection));
 
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddControllers();
 
             services.AddDistributedMemoryCache();
@@ -79,8 +82,6 @@ namespace RestApi
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
             );
-
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddAuthentication(options =>
             {
