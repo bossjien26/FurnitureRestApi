@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using DbEntity;
@@ -42,18 +41,26 @@ namespace RestApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Insert(RequestProduct requestsProduct)
         {
-            await InsertProdcut(requestsProduct);
+            var product = await InsertProdcut(requestsProduct);
 
-            return Ok(new AutResultModel()
+            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, new AutResultModel()
             {
                 Status = true,
                 Data = "Success"
             });
         }
 
-        private async Task InsertProdcut(RequestProduct requestProduct)
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            await _repository.Insert(new Product()
+            var product = await _repository.GetById(id);
+            return Ok(product);
+        }
+
+        private async Task<Product> InsertProdcut(RequestProduct requestProduct)
+        {
+            var product = new Product()
             {
                 Name = requestProduct.Name,
                 Price = requestProduct.Price,
@@ -61,15 +68,17 @@ namespace RestApi.Controllers
                 Quantity = requestProduct.Quantity,
                 RelateAt = requestProduct.RelateAt,
                 IsDisplay = requestProduct.IsDisplay
-            });
+            };
+            await _repository.Insert(product);
+            return product;
         }
 
         [Authorize(Role.SuperAdmin, Role.Admin, Role.Staff)]
-        [Route("many")]
+        [Route("showMany/{perPage}")]
         [HttpGet]
-        public IActionResult ShowMany(int pages)
+        public IActionResult ShowMany(int perPage)
         {
-            return Ok(_repository.GetMany(pages, 10).ToList());
+            return Ok(_repository.GetMany(perPage, 10).ToList());
         }
 
         [Authorize(Role.SuperAdmin, Role.Admin)]
@@ -77,9 +86,9 @@ namespace RestApi.Controllers
         [HttpPost]
         public async Task<IActionResult> StoreProductCategory(RequestProductCategory requestProductCategory)
         {
-            if(! await CheckProductAndCategoryIsExist(requestProductCategory))
+            if (!CheckProductAndCategoryIsExist(requestProductCategory))
             {
-                return Ok(new AutResultModel()
+                return NotFound(new AutResultModel()
                 {
                     Status = false,
                     Data = "Fail"
@@ -87,17 +96,18 @@ namespace RestApi.Controllers
             }
             await InsertProductCategory(requestProductCategory);
 
-            return Ok(new AutResultModel()
-            {
-                Status = true,
-                Data = "Success"
-            });
+            return CreatedAtAction(nameof(GetProduct), new { id = requestProductCategory.ProductId },
+                new AutResultModel()
+                {
+                    Status = true,
+                    Data = "Success"
+                });
         }
 
-        private async Task<bool> CheckProductAndCategoryIsExist(RequestProductCategory requestProductCategory)
+        private bool CheckProductAndCategoryIsExist(RequestProductCategory requestProductCategory)
         {
-            return (await _productCategoryRepository.GetById(requestProductCategory.CategoryId) != null 
-            && await _repository.GetById(requestProductCategory.ProductId) != null)? true:false;
+            return _repository.CheckProductToProductCategoryIsExist(requestProductCategory.ProductId
+            , requestProductCategory.CategoryId) ? true : false;
         }
 
         private async Task InsertProductCategory(RequestProductCategory requestProductCategory)
@@ -114,9 +124,9 @@ namespace RestApi.Controllers
         [HttpPost]
         public async Task<IActionResult> StoreProductSpecification(RequestProductSpecification requestProductSpecification)
         {
-            if(! await CheckProductAndSpecificationIsExist(requestProductSpecification))
+            if (!CheckProductAndSpecificationIsExist(requestProductSpecification))
             {
-                return Ok(new AutResultModel()
+                return NotFound(new AutResultModel()
                 {
                     Status = false,
                     Data = "Fail"
@@ -124,17 +134,18 @@ namespace RestApi.Controllers
             }
             await InsertProductSpecification(requestProductSpecification);
 
-            return Ok(new AutResultModel()
-            {
-                Status = true,
-                Data = "Success"
-            });
+            return CreatedAtAction(nameof(GetProduct), new { id = requestProductSpecification.ProductId },
+                new AutResultModel()
+                {
+                    Status = true,
+                    Data = "Success"
+                });
         }
 
-        private async Task<bool> CheckProductAndSpecificationIsExist(RequestProductSpecification requestProductSpecification)
+        private bool CheckProductAndSpecificationIsExist(RequestProductSpecification requestProductSpecification)
         {
-            return (await _productSpecificationRepository.GetById(requestProductSpecification.SpecificationId) != null 
-            && await _repository.GetById(requestProductSpecification.ProductId) != null)? true:false;
+            return _repository.CheckProductAndProductSpecificationIsExist(requestProductSpecification.ProductId,
+            requestProductSpecification.SpecificationId) ? true : false;
         }
 
         private async Task InsertProductSpecification(RequestProductSpecification requestProductSpecification)

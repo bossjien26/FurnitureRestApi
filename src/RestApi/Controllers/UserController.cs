@@ -15,7 +15,6 @@ using System;
 using Helpers;
 using System.Threading.Tasks;
 using Middlewares.Authentication;
-using Enum;
 using RestApi.Models.Requests;
 
 namespace RestApi.src.Controllers
@@ -44,22 +43,22 @@ namespace RestApi.src.Controllers
             _mailHelper = mailHelper;
         }
 
-        [Authorize(Role.SuperAdmin, Role.Customer, Role.Admin, Role.Staff)]
+        // [Authorize(Role.SuperAdmin, Role.Admin)]
         [HttpGet]
-        [Route("ShowUsers")]
-        public IActionResult ShowUser()
+        [Route("showMany/{perPage}")]
+        public IActionResult ShowUser(int perPage)
         {
-            return Ok(_repository.GetMany(1, 10).ToList());
+            return Ok(_repository.GetMany(perPage, 10).ToList());
         }
 
         [HttpPut]
         [Authorize]
-        [Route("UpdateUser")]
+        [Route("update")]
         public IActionResult UpdateUser(User user)
         {
             if (_repository.GetById(user.Id).Result == null)
             {
-                return Ok(new RegistrationResponse()
+                return NotFound(new RegistrationResponse()
                 {
                     Status = false,
                     Data = "Not Find"
@@ -81,7 +80,7 @@ namespace RestApi.src.Controllers
         {
             if (CheckRegisterMailIsUse(registration.Mail))
             {
-                return Ok(new RegistrationResponse()
+                return NotFound(new RegistrationResponse()
                 {
                     Status = false,
                     Data = "Mail is registration"
@@ -91,7 +90,7 @@ namespace RestApi.src.Controllers
             await CreateUserDetail(registration, await CreateUser(registration));
 
             SendRegisterMail(registration);
-            return Ok(new RegistrationResponse()
+            return Created("", new RegistrationResponse()
             {
                 Status = true,
                 Data = "Register Success"
@@ -153,7 +152,7 @@ namespace RestApi.src.Controllers
         {
             if (_repository.GetVerifyUser(authenticateRequest.Mail, authenticateRequest.Password) == null)
             {
-                return Ok(new RegistrationResponse()
+                return NotFound(new RegistrationResponse()
                 {
                     Status = false,
                     Data = "Not Find"

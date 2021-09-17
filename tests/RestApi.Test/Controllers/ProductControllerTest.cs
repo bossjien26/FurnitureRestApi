@@ -1,25 +1,20 @@
 using System;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using Repositories.IRepository;
-using Repositories.Repository;
 using RestApi.Controllers;
 using RestApi.Models.Requests;
-using RestApi.Test.Repositories;
+using Services.Service;
 
 namespace RestApi.Test.Controllers
 {
     [TestFixture]
-    public class ProductControllerTest : BaseRepositoryTest
+    public class ProductControllerTest : BaseController
     {
         private readonly ProductController _controller;
-
-        private readonly IProductRepository _repository;
-
-        private readonly IProductCategoryRepository _categoryRepository;
 
         public ProductControllerTest()
         {
@@ -27,47 +22,55 @@ namespace RestApi.Test.Controllers
                 _context,
                 new Mock<ILogger<ProductController>>().Object
             );
-            _repository = new ProductRepository(_context);
-            _categoryRepository = new ProductCategoryRepository(_context);
         }
 
         [Test]
         public async Task ShouldInsertProduct()
         {
-            var result = await _controller.Insert(new RequestProduct()
+            var request = new RequestProduct()
             {
                 Name = "name",
                 Price = 1,
                 Sequence = 1,
                 Quantity = 1,
                 RelateAt = DateTime.Now
-            });
+            };
 
-            Assert.IsInstanceOf<OkObjectResult>(result);
+            var response = await _httpClient.PostAsync("http://localhost:5002/api/product/insert", PostType(request));
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         }
 
         [Test]
-        public async Task ShouldInsertProductCategoryIsFail()
+        public async Task ShouldInsertProductCategory()
         {
-            var result = await _controller.StoreProductCategory(new RequestProductCategory()
+            var categoryService = new CategoryService(_context);
+            var productService = new ProductService(_context);
+            var request = new RequestProductCategory()
             {
-                ProductId = 1,
-                CategoryId = 1
-            });
+                ProductId = productService.GetAll().OrderByDescending(x => x.Id).First().Id,
+                CategoryId = categoryService.GetMany(1, 1).First().Id
+            };
 
-            Assert.IsInstanceOf<OkObjectResult>(result);
+            var response = await _httpClient.PostAsync("http://localhost:5002/api/product/insertProductCategory", PostType(request));
+            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         }
 
         [Test]
-        public async Task ShouldInsertProductSpecificationIsFail()
+        public async Task ShouldInsertProductSpecification()
         {
-            var result = await _controller.StoreProductSpecification(new RequestProductSpecification()
-            {
-                ProductId = 1,
-                SpecificationId = 1
-            });
+            var productService = new ProductService(_context);
+            var specificationService = new SpecificationService(_context);
 
-            Assert.IsInstanceOf<OkObjectResult>(result);
+            var request = new RequestProductSpecification()
+            {
+                ProductId = productService.GetAll().OrderByDescending(x => x.Id).First().Id,
+                SpecificationId = specificationService.GetMany(1, 1).First().Id
+            };
+
+            var response = await _httpClient.PostAsync("http://localhost:5002/api/product/insertProductSpecification", PostType(request));
+            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         }
     }
 }

@@ -33,7 +33,8 @@ namespace Services.Service
         {
             return _repository.GetAll()
                 .Skip((index - 1) * size)
-                .Take(size);
+                .Take(size)
+                .OrderByDescending(x => x.Id);
         }
 
     }

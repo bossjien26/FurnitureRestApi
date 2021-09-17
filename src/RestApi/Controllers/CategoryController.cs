@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using DbEntity;
+using Entities;
 using Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -34,41 +35,49 @@ namespace RestApi.Controllers
         {
             if (await _repository.GetById(requestsCategory.ChildrenId) == null && requestsCategory.ChildrenId != 0)
             {
-                return Ok(new AutResultModel()
+                return NotFound(new AutResultModel()
                 {
                     Status = false,
                     Data = "Fail"
                 });
             }
 
-            await InsertCategory(requestsCategory);
+            var category = await InsertCategory(requestsCategory);
 
-            return Ok(new AutResultModel()
+            return CreatedAtAction(nameof(GetCategory), new { id = category.Id }, new AutResultModel()
             {
                 Status = true,
                 Data = "Success"
             });
         }
 
-        private async Task InsertCategory(RequestCategory requestsCategory)
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<Category>> GetCategory(int id)
         {
-            await _repository.Insert(
-                new Entities.Category()
-                {
-                    Name = requestsCategory.Name,
-                    ChildrenId = requestsCategory.ChildrenId,
-                    Sequence = requestsCategory.Sequence,
-                    IsDisplay = requestsCategory.IsDisplay
-                }
-            );
+            var category = await _repository.GetById(id);
+            return Ok(category);
+        }
+
+        private async Task<Category> InsertCategory(RequestCategory requestsCategory)
+        {
+            var category = new Entities.Category()
+            {
+                Name = requestsCategory.Name,
+                ChildrenId = requestsCategory.ChildrenId,
+                Sequence = requestsCategory.Sequence,
+                IsDisplay = requestsCategory.IsDisplay
+            };
+            await _repository.Insert(category);
+            return category;
         }
 
         [Authorize(Role.SuperAdmin, Role.Admin, Role.Staff)]
-        [Route("many")]
+        [Route("showMany/{perPage}")]
         [HttpGet]
-        public IActionResult ShowMany(int pages)
+        public IActionResult ShowMany(int perPage)
         {
-            return Ok(_repository.GetMany(pages, 10).ToList());
+            return Ok(_repository.GetMany(perPage, 10).ToList());
         }
     }
 }

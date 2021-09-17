@@ -1,15 +1,15 @@
+using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using RestApi.Controllers;
 using RestApi.Models.Requests;
+using Services.Service;
+using Services.Service.Redis;
 
 namespace RestApi.Test.Controllers
 {
@@ -32,23 +32,31 @@ namespace RestApi.Test.Controllers
         public async Task ShouldStore()
         {
             //Act
-            var requestCart = new RequestCart()
+            var request = new RequestCart()
             {
                 ProductId = 2,
                 Quantity = 1,
                 Attribute = CartAttribute.Shopping
             };
-            StringContent content = new StringContent(JsonConvert.SerializeObject(requestCart).ToString(), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("http://localhost:5002/api/cart/Store", content);
+            var response = await _httpClient.PostAsync("http://localhost:5002/api/cart/Store", PostType(request));
 
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
 
-        //TODO:test delete
         [Test]
-        public void ShouldDelete()
+        public async Task ShouldDelete()
         {
+            var service = new CartService(_redisConnect);
+            var userService = new UserService(_context);
+            var user = userService.GetAll().Where(u => u.Mail == "jan@example.com").First();
+            await service.Set(new Entities.Cart()
+            {
+                UserId = user.Id.ToString(),
+                ProductId = "2",
+                Quantity = "1",
+                Attribute = CartAttribute.Shopping
+            });
             var response = _httpClient.DeleteAsync("http://localhost:5002/api/cart/delete?productId=2&cartAttribute=1");
             Assert.AreEqual(HttpStatusCode.NoContent, response.Result.StatusCode);
         }

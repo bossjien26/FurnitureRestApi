@@ -37,65 +37,81 @@ namespace RestApi.Controllers
         [Route("insert")]
         public async Task<IActionResult> Insert(RequestSpecification requestSpecification)
         {
-            await InsertSpecification(requestSpecification);
+            var specification = await InsertSpecification(requestSpecification);
 
-            return Ok(new AutResultModel()
-            {
-                Status = true,
-                Data = "Success"
-            });
+            return CreatedAtAction(nameof(GetSpecification), new { id = specification.Id },
+                new AutResultModel()
+                {
+                    Status = true,
+                    Data = "Success"
+                });
         }
 
-        private async Task InsertSpecification(RequestSpecification requestSpecification)
+        private async Task<Specification> InsertSpecification(RequestSpecification requestSpecification)
         {
+            var specification = new Specification()
+            {
+                Name = requestSpecification.Name,
+            };
             await _repository.Insert(
-                new Specification()
-                {
-                    Name = requestSpecification.Name,
-                }
+                specification
             );
+            return specification;
         }
 
         [Authorize(Role.SuperAdmin, Role.Customer, Role.Admin, Role.Staff)]
         [HttpPost]
-        [Route("insertunderlayer")]
-        public async Task<IActionResult> InsertUnderLayer(RequestSpecificationContent requestSpecificationContent)
+        [Route("insertSpecificationContent")]
+        public async Task<IActionResult> storeSpecificationContent(RequestSpecificationContent requestSpecificationContent)
         {
             if (await _repositorySpecificationContent.GetById(requestSpecificationContent.SpecificationId) == null)
             {
-                return Ok(new AutResultModel()
+                return NotFound(new AutResultModel()
                 {
                     Status = false,
                     Data = "Fail"
                 });
             }
 
-            await InsertSpecification(requestSpecificationContent);
+            var specification = await InsertSpecificationContent(requestSpecificationContent);
 
-            return Ok(new AutResultModel()
-            {
-                Status = true,
-                Data = "Success"
-            });
+            return CreatedAtAction(nameof(GetSpecification), new { id = specification.Id },
+                new AutResultModel()
+                {
+                    Status = true,
+                    Data = "Success"
+                });
         }
 
-        private async Task InsertSpecification(RequestSpecificationContent requestSpecificationContent)
+        private async Task<SpecificationContent> InsertSpecificationContent(RequestSpecificationContent requestSpecificationContent)
         {
+            var specification = new SpecificationContent()
+            {
+                Name = requestSpecificationContent.Name,
+                SpecificationId = requestSpecificationContent.SpecificationId
+            };
             await _repositorySpecificationContent.Insert(
-                new SpecificationContent()
-                {
-                    Name = requestSpecificationContent.Name,
-                    SpecificationId = requestSpecificationContent.SpecificationId
-                }
+                specification
             );
+
+            return specification;
         }
 
         [Authorize(Role.SuperAdmin, Role.Admin, Role.Staff)]
-        [Route("many")]
+        [Route("showMany/{perPage}")]
         [HttpGet]
-        public IActionResult ShowMany(int pages)
+        public IActionResult ShowMany(int perPage)
         {
-            return Ok(_repository.GetMany(pages, 10).ToList());
+            return Ok(_repository.GetMany(perPage, 10).ToList());
+        }
+
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<Specification>> GetSpecification(int id)
+        {
+            var specification = await _repository.GetById(id);
+            return Ok(specification);
         }
     }
 }
