@@ -10,11 +10,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Middlewares.Authentication;
+using StackExchange.Redis;
 
 namespace RestApi
 {
@@ -49,8 +51,13 @@ namespace RestApi
 
             // services.AddScoped<RequestHelper>();
             services.AddSingleton<SmtpMailConfig>(appSettings.SmtpMailConfig);
-            
+
             services.AddSingleton<MailHelper>();
+
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(
+                appSettings.RedisSettings.CartRedisSetting.DefaultConnection));
+
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddControllers();
 
@@ -75,8 +82,6 @@ namespace RestApi
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
             );
-
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddAuthentication(options =>
             {

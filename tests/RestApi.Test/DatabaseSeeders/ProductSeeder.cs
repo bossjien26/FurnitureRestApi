@@ -24,19 +24,7 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.Sequence, (f) => f.Random.Number(10))
                 .RuleFor(c => c.RelateAt, (f) => DateTime.Now)
                 .RuleFor(c => c.ProductCategories, (f) => SetProductCategory().Generate(1))
-                .RuleFor(c => c.ProductSpecifications, (f) => SetProductSpecification().Generate(1))
-                .RuleFor(c => c.Carts , SetCart().Generate(1));
-        }
-
-        private static Faker<Cart> SetCart()
-        {
-            return new Faker<Cart>()
-                .RuleFor(c => c.Id , (f) => 0)
-                .RuleFor(c => c.ProductId , (f) => f.Random.Number(10))
-                .RuleFor(c => c.UserId , (f) => f.Random.Number(10))
-                .RuleFor(c => c.Quantity , (f) => f.Random.Number(10))
-                .RuleFor(c => c.Attribute , (f) => CartAttribute.Shopping)
-                .RuleFor(c => c.User , (f) => UserSeeder.SeedOne());
+                .RuleFor(c => c.ProductSpecifications, (f) => SetProductSpecification().Generate(1));
         }
 
         private static Faker<ProductSpecification> SetProductSpecification()

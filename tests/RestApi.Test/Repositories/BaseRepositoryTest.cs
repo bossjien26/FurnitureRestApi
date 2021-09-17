@@ -1,6 +1,6 @@
 using DbEntity;
 using Microsoft.EntityFrameworkCore;
-// using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace RestApi.Test.Repositories
 {
@@ -8,9 +8,11 @@ namespace RestApi.Test.Repositories
     {
         internal readonly DbContextEntity _context;
 
+        internal readonly IConnectionMultiplexer _redisConnect;
+
         public BaseRepositoryTest()
         {
-            var connectionString = "Server=172.20.0.2; Port=3306;User Id=root;Password=Passwo!rd123!;Database=School";
+            var connectionString = "Server=localhost; Port=3306;User Id=newuser;Password=Passwo!rd123!;Database=Furniture";
             var options = new DbContextOptionsBuilder<DbContextEntity>()
                 .UseMySql(
                    connectionString,
@@ -19,8 +21,14 @@ namespace RestApi.Test.Repositories
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
                 .Options;
-                
+            
             _context = new DbContextEntity(options);
+        
+            _redisConnect = ConnectionMultiplexer.Connect(
+                    new ConfigurationOptions
+                    {
+                        EndPoints = { "localhost:6379" }
+                    });
         }
     }
 }
