@@ -52,8 +52,8 @@ namespace Services.Service
         public bool CheckProductAndProductSpecificationIsExist(int productId, int specificationId)
         {
             return _repository.GetAll().Where(x => x.Id == productId &&
-            x.ProductSpecifications.Where(s => s.SpecificationId != specificationId &&
-            s.ProductId != productId && s.Specification.Id == specificationId).Any()
+            x.ProductSpecifications.Where(s => s.SpecificationId == specificationId &&
+            s.ProductId == productId && s.Specification.Id == specificationId).Any()
             ).Any();
         }
     }

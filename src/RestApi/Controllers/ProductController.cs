@@ -86,7 +86,7 @@ namespace RestApi.Controllers
         [HttpPost]
         public async Task<IActionResult> StoreProductCategory(RequestProductCategory requestProductCategory)
         {
-            if (!CheckProductAndCategoryIsExist(requestProductCategory))
+            if (CheckProductAndCategoryIsExist(requestProductCategory))
             {
                 return NotFound(new AutResultModel()
                 {
@@ -124,7 +124,7 @@ namespace RestApi.Controllers
         [HttpPost]
         public async Task<IActionResult> StoreProductSpecification(RequestProductSpecification requestProductSpecification)
         {
-            if (!CheckProductAndSpecificationIsExist(requestProductSpecification))
+            if (CheckProductAndSpecificationIsExist(requestProductSpecification))
             {
                 return NotFound(new AutResultModel()
                 {
