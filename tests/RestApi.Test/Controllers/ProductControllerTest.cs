@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using RestApi.Controllers;
 using RestApi.Models.Requests;
+using Services.IService;
 using Services.Service;
 
 namespace RestApi.Test.Controllers
@@ -45,8 +46,8 @@ namespace RestApi.Test.Controllers
         [Test]
         public async Task ShouldInsertProductCategory()
         {
-            var categoryService = new CategoryService(_context);
-            var productService = new ProductService(_context);
+            ICategoryService categoryService = new CategoryService(_context);
+            IProductService productService = new ProductService(_context);
             var request = new RequestProductCategory()
             {
                 ProductId = productService.GetAll().OrderByDescending(x => x.Id).First().Id,
@@ -60,8 +61,8 @@ namespace RestApi.Test.Controllers
         [Test]
         public async Task ShouldInsertProductSpecification()
         {
-            var productService = new ProductService(_context);
-            var specificationService = new SpecificationService(_context);
+            IProductService productService = new ProductService(_context);
+            ISpecificationService specificationService = new SpecificationService(_context);
 
             var request = new RequestProductSpecification()
             {
