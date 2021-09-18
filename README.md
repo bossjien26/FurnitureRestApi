@@ -33,7 +33,25 @@ dotnet ef migrations add InitialCreate --context DbContextEntity --startup-proje
 dotnet ef database update --context DbContextEntity --startup-project ../RestApi
 ```
 
-## User Visual Studio
+## Redis
+
+```shell
+#install redis image
+docker build -f Dockerfile ..
+```
+
+```sh
+#run redis
+docker run -d --name redisDev -p 6379:6379 redis
+```
+
+### Use Package
+
+```sh
+dotnet add package ServiceStack.Redis
+```
+
+## Use Visual Studio
 > Choice open `RestApi.sln` in root
 
 ## Project
@@ -98,6 +116,8 @@ dotnet test Directory/Test.csproj
 #filter the test method name
 dotnet test Directory/Test.csproj --filter MethodName
 ```
+
+## Api example
 
 ### This is the route table for Api Example:
 
