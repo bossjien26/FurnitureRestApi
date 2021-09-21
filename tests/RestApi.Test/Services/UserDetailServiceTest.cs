@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Entities;
 using Moq;
 using NUnit.Framework;
-using Repositories.IRepository;
+using Repositories.Interface;
 using Services;
 
 namespace RestApi.Test.Services

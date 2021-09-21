@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Entities;
 using Moq;
 using NUnit.Framework;
-using Repositories.IRepository;
+using Repositories.Interface;
 using RestApi.Test.DatabaseSeeders;
 using Services;
 

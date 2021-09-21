@@ -5,7 +5,7 @@ using Entities;
 using Moq;
 using NUnit.Framework;
 using RestApi.Test.DatabaseSeeders;
-using Repositories.IRepository;
+using Repositories.Interface;
 using Services;
 
 namespace RestApi.Test.Services

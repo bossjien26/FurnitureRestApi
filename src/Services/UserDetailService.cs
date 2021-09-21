@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using DbEntity;
 using Entities;
-using Repositories.IRepository;
+using Repositories.Interface;
 using Repositories;
 using Services.Interface;
 

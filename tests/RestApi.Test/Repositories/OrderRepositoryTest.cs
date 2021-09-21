@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using Repositories.IRepository;
+using Repositories.Interface;
 using Repositories;
 using RestApi.Test.DatabaseSeeders;
 
