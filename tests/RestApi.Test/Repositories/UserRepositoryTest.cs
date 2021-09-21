@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Repositories.IRepository;
 using RestApi.Test.DatabaseSeeders;
-using Repositories.Repository;
+using Repositories;
 
 namespace RestApi.Test.Repositories
 {

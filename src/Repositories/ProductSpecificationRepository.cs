@@ -2,7 +2,7 @@ using DbEntity;
 using Entities;
 using Repositories.IRepository;
 
-namespace Repositories.Repository
+namespace Repositories
 {
     public class ProductSpecificationRepository : GenericRepository<ProductSpecification> , IProductSpecificationRepository
     {

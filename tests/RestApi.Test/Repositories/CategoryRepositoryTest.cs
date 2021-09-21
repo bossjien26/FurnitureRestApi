@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Repositories.IRepository;
-using Repositories.Repository;
+using Repositories;
 using RestApi.Test.DatabaseSeeders;
 
 namespace RestApi.Test.Repositories

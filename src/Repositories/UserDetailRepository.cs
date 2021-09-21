@@ -2,7 +2,7 @@ using DbEntity;
 using Entities;
 using Repositories.IRepository;
 
-namespace Repositories.Repository
+namespace Repositories
 {
     public class UserDetailRepository : GenericRepository<UserDetail> , IUserDetailRepository
     {

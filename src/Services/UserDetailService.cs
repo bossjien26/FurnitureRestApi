@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using DbEntity;
 using Entities;
 using Repositories.IRepository;
-using Repositories.Repository;
+using Repositories;
 using Services.Interface;
 
 namespace Services
