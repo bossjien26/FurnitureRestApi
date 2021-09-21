@@ -4,7 +4,7 @@ using Enum;
 using Services.IService.Redis;
 using StackExchange.Redis;
 
-namespace Services.Service.Redis
+namespace Services.Redis
 {
     public class CartService : ICartService
     {

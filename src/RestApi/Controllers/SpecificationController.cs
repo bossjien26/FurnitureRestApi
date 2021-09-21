@@ -9,7 +9,7 @@ using Middlewares.Authentication;
 using RestApi.Models.Requests;
 using RestApi.src.Models;
 using Services.IService;
-using Services.Service;
+using Services;
 
 namespace RestApi.Controllers
 {

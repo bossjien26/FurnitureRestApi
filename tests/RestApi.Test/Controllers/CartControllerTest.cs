@@ -8,8 +8,8 @@ using Moq;
 using NUnit.Framework;
 using RestApi.Controllers;
 using RestApi.Models.Requests;
-using Services.Service;
-using Services.Service.Redis;
+using Services;
+using Services.Redis;
 
 namespace RestApi.Test.Controllers
 {

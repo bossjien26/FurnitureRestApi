@@ -7,7 +7,7 @@ using RestApi.Models.Requests;
 using RestApi.src.Controllers;
 using RestApi.Test.DatabaseSeeders;
 using System.Net;
-using Services.Service;
+using Services;
 using System.Linq;
 
 namespace RestApi.Test.Controllers

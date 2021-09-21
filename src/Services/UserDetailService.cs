@@ -5,7 +5,7 @@ using Repositories.IRepository;
 using Repositories.Repository;
 using Services.IService;
 
-namespace Services.Service
+namespace Services
 {
     public class UserDetailService : IUserDetailService
     {

@@ -6,7 +6,7 @@ using Moq;
 using NUnit.Framework;
 using Repositories.IRepository;
 using RestApi.Test.DatabaseSeeders;
-using Services.Service;
+using Services;
 
 namespace RestApi.Test.Services
 {

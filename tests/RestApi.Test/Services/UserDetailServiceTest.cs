@@ -3,7 +3,7 @@ using Entities;
 using Moq;
 using NUnit.Framework;
 using Repositories.IRepository;
-using Services.Service;
+using Services;
 
 namespace RestApi.Test.Services
 {

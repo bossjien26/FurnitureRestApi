@@ -8,7 +8,7 @@ using NUnit.Framework;
 using RestApi.Controllers;
 using RestApi.Models.Requests;
 using Services.IService;
-using Services.Service;
+using Services;
 
 namespace RestApi.Test.Controllers
 {

@@ -4,7 +4,7 @@ using Enum;
 using NUnit.Framework;
 using RestApi.Test.Repositories;
 using Services.IService.Redis;
-using Services.Service.Redis;
+using Services.Redis;
 using StackExchange.Redis;
 
 namespace RestApi.Test.Services

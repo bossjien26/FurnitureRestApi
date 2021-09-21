@@ -10,8 +10,8 @@ using RestApi.Models.Requests;
 using RestApi.src.Models;
 using Services.IService;
 using Services.IService.Redis;
-using Services.Service;
-using Services.Service.Redis;
+using Services;
+using Services.Redis;
 using StackExchange.Redis;
 
 namespace RestApi.Controllers
