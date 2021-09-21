@@ -3,7 +3,7 @@ using Entities;
 using Enum;
 using StackExchange.Redis;
 
-namespace Services.IService.Redis
+namespace Services.Interface.Redis
 {
     public interface ICartService
     {

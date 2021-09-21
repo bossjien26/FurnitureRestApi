@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Entities;
 using System.Linq;
 using Services;
-using Services.IService;
+using Services.Interface;
 using RestApi.src.Models.Response;
 using Microsoft.Extensions.Logging;
 using Middlewares;

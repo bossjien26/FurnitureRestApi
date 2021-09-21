@@ -3,7 +3,7 @@ using Entities;
 using Enum;
 using NUnit.Framework;
 using RestApi.Test.Repositories;
-using Services.IService.Redis;
+using Services.Interface.Redis;
 using Services.Redis;
 using StackExchange.Redis;
 

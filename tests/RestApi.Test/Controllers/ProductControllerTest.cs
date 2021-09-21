@@ -7,7 +7,7 @@ using Moq;
 using NUnit.Framework;
 using RestApi.Controllers;
 using RestApi.Models.Requests;
-using Services.IService;
+using Services.Interface;
 using Services;
 
 namespace RestApi.Test.Controllers

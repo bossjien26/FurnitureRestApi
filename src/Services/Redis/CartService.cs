@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Entities;
 using Enum;
-using Services.IService.Redis;
+using Services.Interface.Redis;
 using StackExchange.Redis;
 
 namespace Services.Redis

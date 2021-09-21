@@ -3,7 +3,7 @@ using DbEntity;
 using Entities;
 using Repositories.IRepository;
 using Repositories.Repository;
-using Services.IService;
+using Services.Interface;
 
 namespace Services
 {

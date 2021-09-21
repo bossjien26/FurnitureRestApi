@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Middlewares.Authentication;
 using RestApi.Models.Requests;
 using RestApi.src.Models;
-using Services.IService;
+using Services.Interface;
 using Services;
 
 namespace RestApi.Controllers
