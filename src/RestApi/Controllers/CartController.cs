@@ -43,7 +43,7 @@ namespace RestApi.Controllers
 
         [Route("store")]
         [HttpPost]
-        [Authorize(Enum.Role.SuperAdmin, Enum.Role.Customer, Enum.Role.Admin, Enum.Role.Staff)]
+        [Authorize(Enum.RoleEnum.SuperAdmin, Enum.RoleEnum.Customer, Enum.RoleEnum.Admin, Enum.RoleEnum.Staff)]
         public async Task<IActionResult> Store(RequestCart requestCart)
         {
             if (!await CheckProductIsExist(requestCart))
@@ -84,8 +84,8 @@ namespace RestApi.Controllers
 
         [Route("delete")]
         [HttpDelete]
-        [Authorize(Enum.Role.SuperAdmin, Enum.Role.Customer, Enum.Role.Admin, Enum.Role.Staff)]
-        public IActionResult Delete(int productId, CartAttribute cartAttribute)
+        [Authorize(Enum.RoleEnum.SuperAdmin, Enum.RoleEnum.Customer, Enum.RoleEnum.Admin, Enum.RoleEnum.Staff)]
+        public IActionResult Delete(int productId, CartAttributeEnum cartAttribute)
         {
             var user = (User)_httpContextAccessor.HttpContext.Items["User"];
             return _repository.Delete(user.Id.ToString(), productId.ToString(), cartAttribute)

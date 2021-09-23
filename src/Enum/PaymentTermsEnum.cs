@@ -3,7 +3,7 @@ namespace Enum
     /// <summary>
     /// 付款條件
     /// </summary>
-    public enum PaymentTerms
+    public enum PaymentTermsEnum
     {
         /// <summary>
         /// 銀行存款

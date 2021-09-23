@@ -18,9 +18,9 @@ namespace Services.Redis
             _db = _redis.GetDatabase();
         }
 
-        private string hashIdType(string hashId, CartAttribute cartAttribute)
+        private string hashIdType(string hashId, CartAttributeEnum cartAttribute)
         {
-            return CartAttribute.Shopping == cartAttribute ?
+            return CartAttributeEnum.Shopping == cartAttribute ?
             "cart:" + hashId : "likelist:" + hashId;
         }
 
@@ -40,17 +40,17 @@ namespace Services.Redis
             , hashValueType(instance.Quantity));
         }
 
-        public async Task<RedisValue> GetById(string HashId, string key, CartAttribute cartAttribute)
+        public async Task<RedisValue> GetById(string HashId, string key, CartAttributeEnum cartAttribute)
         {
             return await _db.HashGetAsync(hashIdType(HashId, cartAttribute), hashKeyType(key));
         }
 
-        public HashEntry[] GetMany(string HashId, CartAttribute cartAttribute)
+        public HashEntry[] GetMany(string HashId, CartAttributeEnum cartAttribute)
         {
             return _db.HashGetAll(hashIdType(HashId, cartAttribute));
         }
 
-        public bool Delete(string HashId, string key, CartAttribute cartAttribute)
+        public bool Delete(string HashId, string key, CartAttributeEnum cartAttribute)
         {
             return _db.HashDelete(hashIdType(HashId, cartAttribute), hashKeyType(key));
         }

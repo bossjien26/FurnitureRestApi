@@ -12,6 +12,6 @@ namespace RestApi.Models.Requests
         public int Quantity { get; set; }
 
         [Required]
-        public CartAttribute Attribute { get; set; }
+        public CartAttributeEnum Attribute { get; set; }
     }
 }
