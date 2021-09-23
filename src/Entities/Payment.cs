@@ -6,7 +6,7 @@ namespace Entities
     {
         public string Title { get; set; }
 
-        public PaymentTermsEnum Terms { get; set; }
+        public PaymentTypeEnum Terms { get; set; }
 
         public string Introduce { get; set; }
 
