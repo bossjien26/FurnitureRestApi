@@ -10,6 +10,12 @@ namespace DbEntity
         public DbContextEntity(DbContextOptions<DbContextEntity> options)
         : base(options) { }
 
+        #region 
+
+        public DbSet<MetaData> MetaDatas { get; set; }
+
+        #endregion
+
         #region Order
 
         public DbSet<Order> Orders { get; set; }
