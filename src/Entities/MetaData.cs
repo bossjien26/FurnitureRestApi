@@ -6,6 +6,8 @@ namespace Entities
     {
         public int Id { get; set; }
 
+        public MetaDataCategoryEnum Category { get; set; }
+
         public string Type { get; set; }
 
         public string Key { get; set; }
