@@ -1,5 +1,7 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Entities;
+using Enum;
 using Moq;
 using NUnit.Framework;
 using Repositories.Interface;
@@ -50,6 +52,20 @@ namespace RestApi.Test.Services
 
             Assert.DoesNotThrow(() =>
                 new MetaDataService(_repoMock.Object).Update(_entityMock.Object)
+            );
+        }
+
+        [Test]
+        public void ShouldGetByCategory()
+        {
+            _repoMock.Setup(c => c.Get(x => x.Key == PaymentTypeEnum.Bank.ToString()
+            && x.Category == MetaDataCategoryEnum.Pay))
+            .Returns(Task.FromResult(_entityMock.Object));
+
+
+            Assert.DoesNotThrow(() =>
+                new MetaDataService(_repoMock.Object)
+            .GetByCategory(MetaDataCategoryEnum.Pay, PaymentTypeEnum.Bank.ToString())
             );
         }
     }
