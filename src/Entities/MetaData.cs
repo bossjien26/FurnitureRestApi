@@ -1,7 +1,11 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using Enum;
+using Microsoft.EntityFrameworkCore;
 
 namespace Entities
 {
+    [Table("MetaData")]
+    [Index(nameof(Category), nameof(Type), nameof(Key))]
     public class MetaData
     {
         public int Id { get; set; }
