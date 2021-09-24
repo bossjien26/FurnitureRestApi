@@ -11,5 +11,6 @@
 
   <ItemGroup>
     <PackageReference Include="StackExchange.Redis" Version="2.2.50" />
+    <ProjectReference Include="../Enum/Enum.csproj" />
   </ItemGroup>
 </Project>
