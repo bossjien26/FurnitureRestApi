@@ -9,10 +9,10 @@ namespace Services.Interface.Redis
     {
         Task<bool> Set(Cart instance);
 
-        Task<RedisValue> GetById(string HashId, string key,CartAttribute cartAttribute);
+        Task<RedisValue> GetById(string HashId, string key,CartAttributeEnum cartAttribute);
 
-        HashEntry[] GetMany(string HashId,CartAttribute cartAttribute);
+        HashEntry[] GetMany(string HashId,CartAttributeEnum cartAttribute);
 
-        bool Delete(string HashId,string key,CartAttribute cartAttribute);
+        bool Delete(string HashId,string key,CartAttributeEnum cartAttribute);
     }
 }

@@ -9,6 +9,7 @@ using RestApi.Test.DatabaseSeeders;
 using System.Net;
 using Services;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace RestApi.Test.Controllers
 {
@@ -24,7 +25,8 @@ namespace RestApi.Test.Controllers
                 new Mock<ILogger<UserController>>().Object,
                 new Mock<AppSettings>().Object,
                 new Mock<MailHelper>(new Mock<SmtpMailConfig>().Object,
-                new Mock<ILogger<MailHelper>>().Object).Object
+                new Mock<ILogger<MailHelper>>().Object).Object,
+                new Mock<IHttpContextAccessor>().Object
             );
         }
 
@@ -53,7 +55,7 @@ namespace RestApi.Test.Controllers
         public async Task ShouldUpdateUser()
         {
             var service = new UserService(_context);
-            var user = service.GetMany(1, 1).Take(1).First();
+            var user = service.GetVerifyUser("jan@example.com", "aaaaaaa");
 
             user.Name = "test";
             var response = await _httpClient.PutAsync("http://localhost:5002/api/user/update", PostType(user));

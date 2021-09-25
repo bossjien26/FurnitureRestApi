@@ -22,19 +22,11 @@ namespace Repositories
         }
 
         public async Task<T> Get(Expression<Func<T, bool>> predicate)
-        {
-            return await _DbSet.FirstOrDefaultAsync(predicate);
-        }
+        => await _DbSet.FirstOrDefaultAsync(predicate);
 
-        public IQueryable<T> GetAll()
-        {
-            return _DbSet.AsQueryable();
-        }
+        public IQueryable<T> GetAll() => _DbSet.AsQueryable();
 
-        public EntityState DbSetState(T entity)
-        {
-            return _context.Entry(entity).State;
-        }
+        public EntityState DbSetState(T entity) => _context.Entry(entity).State;
 
         public async Task Insert(T entity)
         {
@@ -60,10 +52,7 @@ namespace Repositories
             await SaveChanges();
         }
 
-        public void AsyncMultipleInsert(T entity)
-        {
-            _context.AddRangeAsync(entity);
-        }
+        public void AsyncMultipleInsert(T entity) => _context.AddRangeAsync(entity);
 
         public async Task Update(T entity)
         {
@@ -104,25 +93,13 @@ namespace Repositories
             await SaveChanges();
         }
 
-        public void AddTracked(T entity)
-        {
-            _context.Entry(entity).State = EntityState.Added;
-        }
+        public void AddTracked(T entity) => _context.Entry(entity).State = EntityState.Added;
 
-        public void ModifyTracked(T entity)
-        {
-            _context.Entry(entity).State = EntityState.Modified;
-        }
+        public void ModifyTracked(T entity) => _context.Entry(entity).State = EntityState.Modified;
 
-        public void DeleteTracked(T entity)
-        {
-            _context.Entry(entity).State = EntityState.Deleted;
-        }
+        public void DeleteTracked(T entity) => _context.Entry(entity).State = EntityState.Deleted;
 
 
-        public async Task SaveChanges()
-        {
-            await _context.SaveChangesAsync();
-        }
+        public async Task SaveChanges() => await _context.SaveChangesAsync();
     }
 }

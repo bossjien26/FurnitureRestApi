@@ -13,7 +13,7 @@ namespace Entities
         [ForeignKey("Order")]
         public int OrderId { get; set; }
 
-        public PaymentTerms Terms { get; set; }
+        public PaymentTypeEnum Terms { get; set; }
 
         public bool IsPaid { get; set; } = false;
 

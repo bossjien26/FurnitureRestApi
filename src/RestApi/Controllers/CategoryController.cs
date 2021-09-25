@@ -28,7 +28,7 @@ namespace RestApi.Controllers
             _logger = logger;
         }
 
-        [Authorize(Role.SuperAdmin, Role.Admin)]
+        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
         [Route("insert")]
         [HttpPost]
         public async Task<IActionResult> Insert(RequestCategory requestsCategory)
@@ -72,7 +72,7 @@ namespace RestApi.Controllers
             return category;
         }
 
-        [Authorize(Role.SuperAdmin, Role.Admin, Role.Staff)]
+        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
         [Route("showMany/{perPage}")]
         [HttpGet]
         public IActionResult ShowMany(int perPage)

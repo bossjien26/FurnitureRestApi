@@ -36,7 +36,7 @@ namespace RestApi.Test.Controllers
             {
                 ProductId = 2,
                 Quantity = 1,
-                Attribute = CartAttribute.Shopping
+                Attribute = CartAttributeEnum.Shopping
             };
             var response = await _httpClient.PostAsync("http://localhost:5002/api/cart/Store", PostType(request));
 
@@ -55,7 +55,7 @@ namespace RestApi.Test.Controllers
                 UserId = user.Id.ToString(),
                 ProductId = "2",
                 Quantity = "1",
-                Attribute = CartAttribute.Shopping
+                Attribute = CartAttributeEnum.Shopping
             });
             var response = _httpClient.DeleteAsync("http://localhost:5002/api/cart/delete?productId=2&cartAttribute=1");
             Assert.AreEqual(HttpStatusCode.NoContent, response.Result.StatusCode);

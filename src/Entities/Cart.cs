@@ -10,6 +10,6 @@ namespace Entities
 
         public string Quantity { get; set; }
 
-        public CartAttribute Attribute { get; set; }
+        public CartAttributeEnum Attribute { get; set; }
     }
 }

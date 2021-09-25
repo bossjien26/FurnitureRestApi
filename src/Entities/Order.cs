@@ -15,7 +15,7 @@ namespace Entities
         [ForeignKey("User")]
         public int UserId { get; set; }
 
-        public OrderStatus Status { get; set; } = OrderStatus.Processing;
+        public OrderStatusEnum Status { get; set; } = OrderStatusEnum.Processing;
 
         [Column(TypeName = "Varchar")]
         [StringLength(150)]

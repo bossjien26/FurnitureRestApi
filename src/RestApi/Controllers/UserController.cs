@@ -16,6 +16,8 @@ using Helpers;
 using System.Threading.Tasks;
 using Middlewares.Authentication;
 using RestApi.Models.Requests;
+using Enum;
+using Microsoft.AspNetCore.Http;
 
 namespace RestApi.src.Controllers
 {
@@ -33,17 +35,20 @@ namespace RestApi.src.Controllers
 
         private readonly IUserDetailService _userDetailService;
 
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
         public UserController(DbContextEntity context, ILogger<UserController> logger,
-         AppSettings appsetting, MailHelper mailHelper)
+         AppSettings appsetting, MailHelper mailHelper, IHttpContextAccessor httpContextAccessor)
         {
             _repository = new UserService(context);
             _userDetailService = new UserDetailService(context);
             _logger = logger;
             _appSettings = appsetting;
             _mailHelper = mailHelper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        // [Authorize(Role.SuperAdmin, Role.Admin)]
+        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
         [HttpGet]
         [Route("showMany/{perPage}")]
         public IActionResult ShowUser(int perPage)
@@ -52,11 +57,13 @@ namespace RestApi.src.Controllers
         }
 
         [HttpPut]
-        [Authorize]
+        [AllowAnonymous]
         [Route("update")]
         public IActionResult UpdateUser(User user)
         {
-            if (_repository.GetById(user.Id).Result == null)
+            var myself = (User)_httpContextAccessor.HttpContext.Items["User"];
+
+            if (myself.Id != user.Id || _repository.GetById(user.Id).Result == null)
             {
                 return NotFound(new RegistrationResponse()
                 {

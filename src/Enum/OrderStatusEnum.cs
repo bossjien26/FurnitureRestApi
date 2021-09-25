@@ -1,6 +1,6 @@
 namespace Enum
 {
-    public enum OrderStatus : int
+    public enum OrderStatusEnum
     {
         Cancel = 1,
         Refund = 2,
