@@ -13,6 +13,6 @@ namespace Services.Interface
 
         Task<MetaData> GetById(int id);
 
-        MetaData GetByCategory(MetaDataCategoryEnum category, string key);
+        MetaData GetByCategory(MetaDataCategoryEnum category, int type);
     }
 }

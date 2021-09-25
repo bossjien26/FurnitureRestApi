@@ -12,7 +12,7 @@ namespace Entities
 
         public MetaDataCategoryEnum Category { get; set; }
 
-        public string Type { get; set; }
+        public int Type { get; set; }
 
         public string Key { get; set; }
 

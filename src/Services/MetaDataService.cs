@@ -27,8 +27,8 @@ namespace Services
         public async Task<MetaData> GetById(int id)
         => await _repository.Get(x => x.Id == id);
 
-        public MetaData GetByCategory(MetaDataCategoryEnum category, string key)
-        => _repository.GetAll().Where(x => x.Key == key
+        public MetaData GetByCategory(MetaDataCategoryEnum category, int type)
+        => _repository.GetAll().Where(x => x.Type == type
            && x.Category == category).FirstOrDefault();
     }
 }

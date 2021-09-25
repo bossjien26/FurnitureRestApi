@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Entities;
 using Enum;
@@ -65,7 +64,7 @@ namespace RestApi.Test.Services
 
             Assert.DoesNotThrow(() =>
                 new MetaDataService(_repoMock.Object)
-            .GetByCategory(MetaDataCategoryEnum.Pay, PaymentTypeEnum.Bank.ToString())
+            .GetByCategory(MetaDataCategoryEnum.Pay, (int)PaymentTypeEnum.Bank)
             );
         }
     }
