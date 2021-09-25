@@ -31,7 +31,7 @@ namespace RestApi.Test.Controllers
                 Name = "123"
             };
 
-            var response = await _httpClient.PostAsync("http://localhost:5002/api/specification/insert", PostType(request));
+            var response = await _httpClient.PostAsync("http://localhost:5002/api/specification", PostType(request));
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
@@ -47,7 +47,7 @@ namespace RestApi.Test.Controllers
                 SpecificationId = specificationService.GetMany(1, 1).First().Id
             };
 
-            var response = await _httpClient.PostAsync("http://localhost:5002/api/specification/insertSpecificationContent", PostType(request));
+            var response = await _httpClient.PostAsync("http://localhost:5002/api/specification/store/specificationContent", PostType(request));
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);

@@ -29,7 +29,7 @@ namespace RestApi.Controllers
         }
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
-        [Route("insert")]
+        [Route("")]
         [HttpPost]
         public async Task<IActionResult> Insert(RequestCategory requestsCategory)
         {
@@ -52,7 +52,7 @@ namespace RestApi.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("show/{id}")]
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
             var category = await _repository.GetById(id);
@@ -73,7 +73,7 @@ namespace RestApi.Controllers
         }
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
-        [Route("showMany/{perPage}")]
+        [Route("{perPage}")]
         [HttpGet]
         public IActionResult ShowMany(int perPage)
         {

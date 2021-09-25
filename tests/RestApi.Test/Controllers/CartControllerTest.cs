@@ -38,10 +38,10 @@ namespace RestApi.Test.Controllers
                 Quantity = 1,
                 Attribute = CartAttributeEnum.Shopping
             };
-            var response = await _httpClient.PostAsync("http://localhost:5002/api/cart/Store", PostType(request));
+            var response = await _httpClient.PostAsync("/api/cart", PostType(request));
 
             //Assert
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace RestApi.Test.Controllers
                 Quantity = "1",
                 Attribute = CartAttributeEnum.Shopping
             });
-            var response = _httpClient.DeleteAsync("http://localhost:5002/api/cart/delete?productId=2&cartAttribute=1");
+            var response = _httpClient.DeleteAsync("/api/cart?productId=2&cartAttribute=1");
             Assert.AreEqual(HttpStatusCode.NoContent, response.Result.StatusCode);
         }
     }

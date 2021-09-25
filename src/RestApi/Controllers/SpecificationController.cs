@@ -34,7 +34,7 @@ namespace RestApi.Controllers
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Customer, RoleEnum.Admin, RoleEnum.Staff)]
         [HttpPost]
-        [Route("insert")]
+        [Route("")]
         public async Task<IActionResult> Insert(RequestSpecification requestSpecification)
         {
             var specification = await InsertSpecification(requestSpecification);
@@ -61,7 +61,7 @@ namespace RestApi.Controllers
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Customer, RoleEnum.Admin, RoleEnum.Staff)]
         [HttpPost]
-        [Route("insertSpecificationContent")]
+        [Route("store/specificationContent")]
         public async Task<IActionResult> storeSpecificationContent(RequestSpecificationContent requestSpecificationContent)
         {
             if (await _repositorySpecificationContent.GetById(requestSpecificationContent.SpecificationId) == null)
@@ -98,7 +98,7 @@ namespace RestApi.Controllers
         }
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
-        [Route("showMany/{perPage}")]
+        [Route("{perPage}")]
         [HttpGet]
         public IActionResult ShowMany(int perPage)
         {

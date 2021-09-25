@@ -37,7 +37,7 @@ namespace RestApi.Controllers
         }
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
-        [Route("insert")]
+        [Route("")]
         [HttpPost]
         public async Task<IActionResult> Insert(RequestProduct requestsProduct)
         {
@@ -74,7 +74,7 @@ namespace RestApi.Controllers
         }
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
-        [Route("showMany/{perPage}")]
+        [Route("{perPage}")]
         [HttpGet]
         public IActionResult ShowMany(int perPage)
         {
@@ -82,7 +82,7 @@ namespace RestApi.Controllers
         }
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
-        [Route("insertProductCategory")]
+        [Route("store/productCategory")]
         [HttpPost]
         public async Task<IActionResult> StoreProductCategory(RequestProductCategory requestProductCategory)
         {
@@ -120,7 +120,7 @@ namespace RestApi.Controllers
         }
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
-        [Route("insertProductSpecification")]
+        [Route("store/productSpecification")]
         [HttpPost]
         public async Task<IActionResult> StoreProductSpecification(RequestProductSpecification requestProductSpecification)
         {

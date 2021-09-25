@@ -41,7 +41,7 @@ namespace RestApi.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        [Route("store")]
+        [Route("")]
         [HttpPost]
         [Authorize(Enum.RoleEnum.SuperAdmin, Enum.RoleEnum.Customer, Enum.RoleEnum.Admin, Enum.RoleEnum.Staff)]
         public async Task<IActionResult> Store(RequestCart requestCart)
@@ -57,7 +57,7 @@ namespace RestApi.Controllers
 
             await StoreCart(requestCart);
 
-            return Ok(new AutResultModel()
+            return Created("",new AutResultModel()
             {
                 Status = true,
                 Data = "Success"
@@ -82,7 +82,7 @@ namespace RestApi.Controllers
             });
         }
 
-        [Route("delete")]
+        [Route("")]
         [HttpDelete]
         [Authorize(Enum.RoleEnum.SuperAdmin, Enum.RoleEnum.Customer, Enum.RoleEnum.Admin, Enum.RoleEnum.Staff)]
         public IActionResult Delete(int productId, CartAttributeEnum cartAttribute)

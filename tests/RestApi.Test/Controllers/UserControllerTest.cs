@@ -45,7 +45,7 @@ namespace RestApi.Test.Controllers
         public void ShouldShowMany()
         {
             //Arrange & Act & Assert
-            var response = _httpClient.GetAsync("http://localhost:5002/api/user/showMany/1");
+            var response = _httpClient.GetAsync("http://localhost:5002/api/user/1");
 
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, response.Result.StatusCode);
@@ -58,7 +58,7 @@ namespace RestApi.Test.Controllers
             var user = service.GetVerifyUser("jan@example.com", "aaaaaaa");
 
             user.Name = "test";
-            var response = await _httpClient.PutAsync("http://localhost:5002/api/user/update", PostType(user));
+            var response = await _httpClient.PutAsync("http://localhost:5002/api/user", PostType(user));
 
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);

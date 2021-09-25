@@ -50,7 +50,7 @@ namespace RestApi.src.Controllers
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
         [HttpGet]
-        [Route("showMany/{perPage}")]
+        [Route("{perPage}")]
         public IActionResult ShowUser(int perPage)
         {
             return Ok(_repository.GetMany(perPage, 10).ToList());
@@ -58,7 +58,7 @@ namespace RestApi.src.Controllers
 
         [HttpPut]
         [AllowAnonymous]
-        [Route("update")]
+        [Route("")]
         public IActionResult UpdateUser(User user)
         {
             var myself = (User)_httpContextAccessor.HttpContext.Items["User"];
