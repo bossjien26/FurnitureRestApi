@@ -16,9 +16,9 @@ namespace RestApi.Test.DatabaseSeeders
         {
             return new Faker<MetaData>()
             .RuleFor(c => c.Category, (f) => Enum.MetaDataCategoryEnum.Pay)
-            .RuleFor(c => c.Key, (f) => f.Random.AlphaNumeric(10))
-            .RuleFor(c => c.Type, (f) => f.Random.Number(10))
-            .RuleFor(c => c.Value, (f) => f.Random.AlphaNumeric(10));
+            .RuleFor(c => c.Key, (f) => f.Random.AlphaNumeric(100))
+            .RuleFor(c => c.Type, (f) => f.Random.Number(100, 1000))
+            .RuleFor(c => c.Value, (f) => f.Random.AlphaNumeric(100));
         }
     }
 }
