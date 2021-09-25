@@ -3,6 +3,7 @@ using DbEntity;
 using Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Middlewares;
 using Middlewares.Authentication;
 using RestApi.Models.Requests;
 using Services;
@@ -27,8 +28,9 @@ namespace RestApi.Controllers
         }
 
         [HttpGet]
-        [Route("index")]
-        public IActionResult Index()
+        [AllowAnonymous()]
+        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
+        public IActionResult ShowMany()
         {
             return Ok(GetPaymentMany());
         }
@@ -48,9 +50,17 @@ namespace RestApi.Controllers
         }
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
+        [HttpPut]
+        [Route("")]
         public IActionResult Update(UpdatePaymentRequest request)
         {
-            var payment = _service.GetPayment(request.Type);
+            var payment = new Payment()
+            {
+                Content = request.Content,
+                Title = request.Title,
+                Type = request.Type,
+                Introduce = request.Introduce
+            };
             _service.Update(payment);
             return Ok();
         }
