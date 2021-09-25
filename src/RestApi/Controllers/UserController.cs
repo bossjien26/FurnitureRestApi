@@ -16,6 +16,7 @@ using Helpers;
 using System.Threading.Tasks;
 using Middlewares.Authentication;
 using RestApi.Models.Requests;
+using Enum;
 
 namespace RestApi.src.Controllers
 {
@@ -43,7 +44,7 @@ namespace RestApi.src.Controllers
             _mailHelper = mailHelper;
         }
 
-        // [Authorize(Role.SuperAdmin, Role.Admin)]
+        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
         [HttpGet]
         [Route("showMany/{perPage}")]
         public IActionResult ShowUser(int perPage)
@@ -52,7 +53,7 @@ namespace RestApi.src.Controllers
         }
 
         [HttpPut]
-        [Authorize]
+        [AllowAnonymous]
         [Route("update")]
         public IActionResult UpdateUser(User user)
         {
