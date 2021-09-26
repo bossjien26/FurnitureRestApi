@@ -35,7 +35,7 @@ namespace RestApi.Test.Controllers
         {
             //Arrange &  Act
             var request = new Authenticate() { Mail = "jan@example.com", Password = "aaaaaaa" };
-            var response = _httpClient.PostAsync("http://localhost:5002/api/user/authenticate", PostType(request));
+            var response = _httpClient.PostAsync("/api/user/authenticate", PostType(request));
 
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, response.Result.StatusCode);
@@ -45,7 +45,7 @@ namespace RestApi.Test.Controllers
         public void ShouldShowMany()
         {
             //Arrange & Act & Assert
-            var response = _httpClient.GetAsync("http://localhost:5002/api/user/1");
+            var response = _httpClient.GetAsync("/api/user/1");
 
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, response.Result.StatusCode);
@@ -58,7 +58,7 @@ namespace RestApi.Test.Controllers
             var user = service.GetVerifyUser("jan@example.com", "aaaaaaa");
 
             user.Name = "test";
-            var response = await _httpClient.PutAsync("http://localhost:5002/api/user", PostType(user));
+            var response = await _httpClient.PutAsync("/api/user", PostType(user));
 
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
@@ -76,7 +76,7 @@ namespace RestApi.Test.Controllers
                 Password = user.Password
             };
 
-            var response = await _httpClient.PostAsync("http://localhost:5002/api/user/registration",
+            var response = await _httpClient.PostAsync("/api/user/registration",
             PostType(request));
 
             //Assert

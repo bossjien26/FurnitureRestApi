@@ -30,7 +30,7 @@ namespace RestApi.Test.Controllers
                 ChildrenId = 0,
                 IsDisplay = false
             };
-            var response = await _httpClient.PostAsync("http://localhost:5002/api/category", PostType(request));
+            var response = await _httpClient.PostAsync("/api/category", PostType(request));
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);

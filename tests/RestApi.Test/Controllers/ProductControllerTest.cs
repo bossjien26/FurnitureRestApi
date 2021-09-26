@@ -37,7 +37,7 @@ namespace RestApi.Test.Controllers
                 RelateAt = DateTime.Now
             };
 
-            var response = await _httpClient.PostAsync("http://localhost:5002/api/product", PostType(request));
+            var response = await _httpClient.PostAsync("/api/product", PostType(request));
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
@@ -54,7 +54,7 @@ namespace RestApi.Test.Controllers
                 CategoryId = categoryService.GetMany(1, 1).First().Id
             };
 
-            var response = await _httpClient.PostAsync("http://localhost:5002/api/product/store/productCategory", PostType(request));
+            var response = await _httpClient.PostAsync("/api/product/store/productCategory", PostType(request));
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         }
 
@@ -70,7 +70,7 @@ namespace RestApi.Test.Controllers
                 SpecificationId = specificationService.GetMany(1, 1).First().Id
             };
 
-            var response = await _httpClient.PostAsync("http://localhost:5002/api/product/store/productSpecification", PostType(request));
+            var response = await _httpClient.PostAsync("/api/product/store/productSpecification", PostType(request));
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         }
     }
