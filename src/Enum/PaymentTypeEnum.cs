@@ -1,7 +1,7 @@
 namespace Enum
 {
     /// <summary>
-    /// 付款條件
+    /// 付款方式
     /// </summary>
     public enum PaymentTypeEnum
     {

@@ -31,15 +31,15 @@ namespace Entities
 
         [Column(TypeName = "Varchar")]
         [StringLength(150)]
-        public string Receiver { get; set; }
+        public string Recipient { get; set; }
 
         [Column(TypeName = "Varchar")]
         [StringLength(256)]
-        public string ReceiverMail { get; set; }
+        public string RecipientMail { get; set; }
 
         [Column(TypeName = "Varchar")]
         [StringLength(150)]
-        public string Payer { get; set; }
+        public string Sender { get; set; }
 
         public DateTime CreateAt { get; set; } = DateTime.Now;
 

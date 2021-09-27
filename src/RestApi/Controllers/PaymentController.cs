@@ -29,7 +29,6 @@ namespace RestApi.Controllers
 
         [HttpGet]
         [AllowAnonymous()]
-        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
         public IActionResult ShowMany()
         {
             return Ok(GetPaymentMany());

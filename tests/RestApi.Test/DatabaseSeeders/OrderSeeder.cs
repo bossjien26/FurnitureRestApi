@@ -20,9 +20,9 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.Country, (f) => f.Random.AlphaNumeric(10))
                 .RuleFor(c => c.City, (f) => f.Random.AlphaNumeric(10))
                 .RuleFor(c => c.Street, (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.Receiver, (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.ReceiverMail, (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.Payer, (f) => f.Random.AlphaNumeric(10))
+                .RuleFor(c => c.Recipient, (f) => f.Random.AlphaNumeric(10))
+                .RuleFor(c => c.RecipientMail, (f) => f.Random.AlphaNumeric(10))
+                .RuleFor(c => c.Sender, (f) => f.Random.AlphaNumeric(10))
                 .RuleFor(c => c.User, (f) => UserSeeder.SeedOne())
                 .RuleFor(c => c.OrderProducts, (f) => SetOrderProduct().Generate(5))
                 .RuleFor(c => c.OrderPay, (f) => SetOrderPay());
