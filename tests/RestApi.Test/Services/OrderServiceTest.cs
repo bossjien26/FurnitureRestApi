@@ -58,12 +58,34 @@ namespace RestApi.Test.Services
         public void ShouldGetMany()
         {
             //Arrange
-            var users = OrderSeeder.SeedMany(10, 15).AsQueryable();
-
-            _repoMock.Setup(u => u.GetAll()).Returns(users);
+            var order = OrderSeeder.SeedMany(10, 15).AsQueryable();
+            _repoMock.Setup(u => u.GetAll()).Returns(order);
 
             //Atc
             var result = new OrderService(_repoMock.Object).GetMany(1, 5).ToList();
+
+            //Assert
+            Assert.IsInstanceOf<List<Order>>(result);
+            Assert.AreEqual(5, result.Count);
+        }
+
+        [Test]
+        public async Task ShouldGetUserOrder()
+        {
+            _repoMock.Setup(r => r.Get(x => x.Id == 1 && x.UserId == 1)).Returns(Task.FromResult(_entityMock.Object));
+            var result = await new OrderService(_repoMock.Object).GetUserOrder(1, 1);
+            Assert.IsInstanceOf<Order>(result);
+        }
+
+        [Test]
+        public void ShouldGetUserOrderMany()
+        {
+            //Arrange
+            var order = OrderSeeder.SeedUserMany(1, 10, 15).AsQueryable();
+            _repoMock.Setup(u => u.GetAll()).Returns(order);
+
+            //Atc
+            var result = new OrderService(_repoMock.Object).GetUserOrderMany(1, 1, 5).ToList();
 
             //Assert
             Assert.IsInstanceOf<List<Order>>(result);
