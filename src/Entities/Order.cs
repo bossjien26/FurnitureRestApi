@@ -37,6 +37,11 @@ namespace Entities
         [StringLength(256)]
         public string RecipientMail { get; set; }
 
+
+        [Column(TypeName = "Varchar")]
+        [StringLength(256)]
+        public string RecipientPhone { get; set; }
+
         [Column(TypeName = "Varchar")]
         [StringLength(150)]
         public string Sender { get; set; }
