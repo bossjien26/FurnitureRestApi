@@ -8,15 +8,19 @@ namespace RestApi.Test.DatabaseSeeders
 {
     public class OrderSeeder
     {
-        public static Order SeedOne() => SetOrder().Generate();
+        public static Order SeedOne() => SetOrder(null).Generate();
 
         public static List<Order> SeedMany(int min, int max) =>
-            SetOrder().GenerateBetween(min, max);
-        private static Faker<Order> SetOrder()
+            SetOrder(null).GenerateBetween(min, max);
+
+        public static List<Order> SeedUserMany(int userId, int min, int max) =>
+            SetOrder(userId).GenerateBetween(min, max);
+
+        private static Faker<Order> SetOrder(int? userId)
         {
             return new Faker<Order>()
                 .RuleFor(c => c.Id, (f) => 0)
-                .RuleFor(c => c.UserId, (f) => f.Random.Number(10))
+                .RuleFor(c => c.UserId, (f) => userId == null ? f.Random.Number(10) : userId)
                 .RuleFor(c => c.Country, (f) => f.Random.AlphaNumeric(10))
                 .RuleFor(c => c.City, (f) => f.Random.AlphaNumeric(10))
                 .RuleFor(c => c.Street, (f) => f.Random.AlphaNumeric(10))
