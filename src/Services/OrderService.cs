@@ -30,5 +30,14 @@ namespace Services
             .OrderByDescending(x => x.Id);
 
         public void Update(Order order) => _repository.Update(order);
+
+        public async Task<Order> GetUserOrder(int orderId, int userId)
+        => await _repository.Get(x => x.Id == orderId && x.UserId == userId);
+
+        public IEnumerable<Order> GetUserOrderMany(int userId, int index, int size)
+        => _repository.GetAll().Where(x => x.UserId == userId)
+            .Skip((index - 1) * size)
+            .Take(size)
+            .OrderByDescending(x => x.Id);
     }
 }

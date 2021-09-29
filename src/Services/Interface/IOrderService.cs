@@ -13,5 +13,9 @@ namespace Services.Interface
         Task Insert(Order order);
 
         void Update(Order order);
+
+        Task<Order> GetUserOrder(int orderId,int userId);
+
+        IEnumerable<Order> GetUserOrderMany(int userId, int index, int size);
     }
 }
