@@ -42,10 +42,10 @@ namespace RestApi.Controllers
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff, RoleEnum.Customer)]
         [HttpGet]
         [Route("show/{id}")]
-        public async Task<IActionResult> GetUserOrder(int orderId)
+        public async Task<IActionResult> GetUserOrder(int id)
         {
             var user = (User)_httpContextAccessor.HttpContext.Items["User"];
-            return Ok(await _service.GetUserOrder(user.Id, orderId));
+            return Ok(await _service.GetUserOrder(id, user.Id));
         }
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
