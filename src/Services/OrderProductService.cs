@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DbEntity;
 using Entities;
@@ -18,5 +20,8 @@ namespace Services
         => _repository = genericRepository;
 
         public async Task Insert(OrderProduct orderProduct) => await _repository.Insert(orderProduct);
+
+        public IEnumerable<OrderProduct> GetUserOrderProductMany( int orderId)
+        => _repository.GetAll().Where(x => x.OrderId == orderId);
     }
 }
