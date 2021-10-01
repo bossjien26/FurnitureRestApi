@@ -29,6 +29,10 @@ namespace Services
             return await _repository.Get(x => x.Id == id);
         }
 
+
+        public async Task<Product> GetShowProdcutById(int id)
+        => await _repository.Get(x => x.Id == id && x.IsDisplay == true);
+
         public IEnumerable<Product> GetMany(int index, int size)
         {
             return _repository.GetAll()
@@ -36,6 +40,12 @@ namespace Services
                 .Take(size)
                 .OrderByDescending(x => x.Id);
         }
+
+        public IEnumerable<Product> GetShowProductMany(int index, int size)
+        => _repository.GetAll().Where(x => x.IsDisplay == true)
+                .Skip((index - 1) * size)
+                .Take(size)
+                .OrderByDescending(x => x.Id);
 
         public IEnumerable<Product> GetAll()
         {
