@@ -10,6 +10,8 @@ namespace RestApi.Test.DatabaseSeeders
     {
         public static Order SeedOne() => SetOrder(null).Generate();
 
+        public static Order SeedUserOne(int userId) => SetOrder(userId).Generate();
+
         public static List<Order> SeedMany(int min, int max) =>
             SetOrder(null).GenerateBetween(min, max);
 
