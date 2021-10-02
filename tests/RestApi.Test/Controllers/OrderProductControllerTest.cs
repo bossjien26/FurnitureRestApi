@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -29,7 +30,7 @@ namespace RestApi.Test.Controllers
             var request = new CreateOrderProductRequest()
             {
                 orderId = order.Id,
-                productList = new System.Collections.Generic.List<CreateOrderProductListRequest>(){
+                productList = new List<CreateOrderProductListRequest>(){
                     new CreateOrderProductListRequest(){
                         ProductId = product.Id,
                         Specification = "",
