@@ -7,7 +7,7 @@ namespace Services.Interface.Redis
 {
     public interface ICartService
     {
-        Task<bool> Set(Cart instance);
+        Task Set(Cart instance);
 
         Task<RedisValue> GetById(string HashId, string key,CartAttributeEnum cartAttribute);
 

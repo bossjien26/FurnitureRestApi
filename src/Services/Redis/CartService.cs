@@ -22,21 +22,18 @@ namespace Services.Redis
         => CartAttributeEnum.Shopping == cartAttribute ?
             "cart:" + hashId : "likelist:" + hashId;
 
-        private string hashKeyType(string key) => "product:" + key;
+        private HashEntry[] hashSetValue(string key, string value) => new HashEntry[] { new HashEntry(key, value) };
 
-        private string hashValueType(string value) => "quantity:" + value;
-
-        public async Task<bool> Set(Cart instance)
-        => await _db.HashSetAsync(hashIdType(instance.UserId, instance.Attribute), hashKeyType(instance.ProductId)
-            , hashValueType(instance.Quantity));
+        public async Task Set(Cart instance)
+        => await _db.HashSetAsync(hashIdType(instance.UserId, instance.Attribute), hashSetValue(instance.ProductId, instance.Quantity));
 
         public async Task<RedisValue> GetById(string HashId, string key, CartAttributeEnum cartAttribute)
-        => await _db.HashGetAsync(hashIdType(HashId, cartAttribute), hashKeyType(key));
+        => await _db.HashGetAsync(hashIdType(HashId, cartAttribute), key);
 
         public HashEntry[] GetMany(string HashId, CartAttributeEnum cartAttribute)
         => _db.HashGetAll(hashIdType(HashId, cartAttribute));
 
         public bool Delete(string HashId, string key, CartAttributeEnum cartAttribute)
-        => _db.HashDelete(hashIdType(HashId, cartAttribute), hashKeyType(key));
+        => _db.HashDelete(hashIdType(HashId, cartAttribute), key);
     }
 }
