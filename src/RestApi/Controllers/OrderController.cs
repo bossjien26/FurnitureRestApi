@@ -30,7 +30,7 @@ namespace RestApi.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff, RoleEnum.Customer)]
+        [Authorize()]
         [HttpGet]
         [Route("{perPage}")]
         public IActionResult GetUserOrderMany(int perPage)
@@ -39,7 +39,7 @@ namespace RestApi.Controllers
             return Ok(_service.GetUserOrderMany(user.Id, perPage, 5));
         }
 
-        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff, RoleEnum.Customer)]
+        [Authorize()]
         [HttpGet]
         [Route("show/{id}")]
         public async Task<IActionResult> GetUserOrder(int id)
@@ -48,7 +48,7 @@ namespace RestApi.Controllers
             return Ok(await _service.GetUserOrder(id, user.Id));
         }
 
-        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
+        [Authorize()]
         [HttpPost]
         [Route("")]
         public async Task<IActionResult> Insert(CreateOrderRequest request)
@@ -76,7 +76,7 @@ namespace RestApi.Controllers
             return order;
         }
 
-        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff, RoleEnum.Customer)]
+        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
         [HttpPut]
         [Route("")]
         public async Task<IActionResult> Update(UpdateOrderRequest request)
