@@ -1,18 +1,17 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Entities;
 using Enum;
 
 namespace Services.Interface
 {
-    public interface IMetaDataService
+    public interface IMetadataService
     {
-        Task Insert(MetaData metaData);
+        Task Insert(Metadata Metadata);
 
-        void Update(MetaData metaData);
+        void Update(Metadata Metadata);
 
-        Task<MetaData> GetById(int id);
+        Task<Metadata> GetById(int id);
 
-        MetaData GetByCategory(MetaDataCategoryEnum category, int type);
+        Metadata GetByCategory(MetadataCategoryEnum category, int type);
     }
 }

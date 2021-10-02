@@ -13,16 +13,16 @@ namespace RestApi.Test.Services
     [TestFixture]
     public class PaymentServiceTest : BaseRepositoryTest
     {
-        private readonly Mock<MetaData> _entityMock;
+        private readonly Mock<Metadata> _entityMock;
 
-        private readonly Mock<IMetaDataRepository> _repoMock;
+        private readonly Mock<IMetadataRepository> _repoMock;
 
         private readonly Mock<Payment> _payment;
 
         public PaymentServiceTest()
         {
-            _entityMock = new Mock<MetaData>();
-            _repoMock = new Mock<IMetaDataRepository>();
+            _entityMock = new Mock<Metadata>();
+            _repoMock = new Mock<IMetadataRepository>();
             _payment = new Mock<Payment>();
         }
 
@@ -50,7 +50,7 @@ namespace RestApi.Test.Services
         public void ShouldGetPayment()
         {
             _repoMock.Setup(c => c.Get(x => x.Key == PaymentTypeEnum.Bank.ToString()
-            && x.Category == MetaDataCategoryEnum.Pay))
+            && x.Category == MetadataCategoryEnum.Pay))
             .Returns(Task.FromResult(_entityMock.Object));
 
 

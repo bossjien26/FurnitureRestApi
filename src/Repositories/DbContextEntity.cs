@@ -12,7 +12,7 @@ namespace DbEntity
 
         #region 
 
-        public DbSet<MetaData> MetaDatas { get; set; }
+        public DbSet<Metadata> Metadatas { get; set; }
 
         #endregion
 

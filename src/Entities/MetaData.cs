@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Entities
 {
-    [Table("MetaData")]
+    [Table("Metadata")]
     [Index(nameof(Category), nameof(Type), nameof(Key))]
-    public class MetaData
+    public class Metadata
     {
         public int Id { get; set; }
 
-        public MetaDataCategoryEnum Category { get; set; }
+        public MetadataCategoryEnum Category { get; set; }
 
         public int Type { get; set; }
 

@@ -8,7 +8,7 @@ using Services.Interface;
 
 namespace Services
 {
-    public class PaymentService : MetaDataService, IPaymentService
+    public class PaymentService : MetadataService, IPaymentService
     {
         public PaymentService(DbContextEntity dbContextEntity) : base(dbContextEntity)
         {
@@ -17,9 +17,9 @@ namespace Services
         public async Task Insert(Payment payment)
         {
             await Insert(
-                new MetaData()
+                new Metadata()
                 {
-                    Category = Enum.MetaDataCategoryEnum.Pay,
+                    Category = Enum.MetadataCategoryEnum.Pay,
                     Type = (int)payment.Type,
                     Key = payment.Type.ToString(),
                     Value = JsonSerializer.Serialize(payment)
@@ -29,17 +29,17 @@ namespace Services
 
         public void Update(Payment payment)
         {
-            var metaData = GetByCategory(MetaDataCategoryEnum.Pay, (int)payment.Type);
-            if (metaData != null)
+            var Metadata = GetByCategory(MetadataCategoryEnum.Pay, (int)payment.Type);
+            if (Metadata != null)
             {
-                metaData.Value = JsonSerializer.Serialize(payment);
-                Update(metaData);
+                Metadata.Value = JsonSerializer.Serialize(payment);
+                Update(Metadata);
             }
         }
 
         public Payment GetPayment(PaymentTypeEnum type)
         {
-            var payment = GetByCategory(MetaDataCategoryEnum.Pay, (int)type);
+            var payment = GetByCategory(MetadataCategoryEnum.Pay, (int)type);
 
             return payment == null ? null
             : JsonSerializer.Deserialize<Payment>(payment.Value);

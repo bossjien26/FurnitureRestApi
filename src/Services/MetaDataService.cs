@@ -9,25 +9,25 @@ using Services.Interface;
 
 namespace Services
 {
-    public class MetaDataService : IMetaDataService
+    public class MetadataService : IMetadataService
     {
-        private IMetaDataRepository _repository;
+        private IMetadataRepository _repository;
 
-        public MetaDataService(DbContextEntity dbContextEntity)
-        => _repository = new MetaDataRepository(dbContextEntity);
+        public MetadataService(DbContextEntity dbContextEntity)
+        => _repository = new MetadataRepository(dbContextEntity);
 
-        public MetaDataService(IMetaDataRepository genericRepository)
+        public MetadataService(IMetadataRepository genericRepository)
         => _repository = genericRepository;
 
-        public async Task Insert(MetaData instance)
+        public async Task Insert(Metadata instance)
         => await _repository.Insert(instance);
 
-        public void Update(MetaData instance) => _repository.Update(instance);
+        public void Update(Metadata instance) => _repository.Update(instance);
 
-        public async Task<MetaData> GetById(int id)
+        public async Task<Metadata> GetById(int id)
         => await _repository.Get(x => x.Id == id);
 
-        public MetaData GetByCategory(MetaDataCategoryEnum category, int type)
+        public Metadata GetByCategory(MetadataCategoryEnum category, int type)
         => _repository.GetAll().Where(x => x.Type == type
            && x.Category == category).FirstOrDefault();
     }

@@ -13,16 +13,16 @@ namespace RestApi.Test.Services
     [TestFixture]
     public class DeliveryServiceTest : BaseRepositoryTest
     {
-        private readonly Mock<MetaData> _entityMock;
+        private readonly Mock<Metadata> _entityMock;
 
-        private readonly Mock<IMetaDataRepository> _repoMock;
+        private readonly Mock<IMetadataRepository> _repoMock;
 
         private readonly Mock<Delivery> _delivery;
 
         public DeliveryServiceTest()
         {
-            _entityMock = new Mock<MetaData>();
-            _repoMock = new Mock<IMetaDataRepository>();
+            _entityMock = new Mock<Metadata>();
+            _repoMock = new Mock<IMetadataRepository>();
             _delivery = new Mock<Delivery>();
         }
 
@@ -43,7 +43,7 @@ namespace RestApi.Test.Services
         public void ShouldGetdelivery()
         {
             _repoMock.Setup(c => c.Get(x => x.Key == DeliveryTypeEnum.DirectShipping.ToString()
-            && x.Category == MetaDataCategoryEnum.Delivery))
+            && x.Category == MetadataCategoryEnum.Delivery))
             .Returns(Task.FromResult(_entityMock.Object));
 
 

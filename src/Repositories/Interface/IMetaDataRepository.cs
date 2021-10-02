@@ -2,7 +2,7 @@ using Entities;
 
 namespace Repositories.Interface
 {
-    public interface IMetaDataRepository : IGenericRepository<MetaData>
+    public interface IMetadataRepository : IGenericRepository<Metadata>
     {
 
     }

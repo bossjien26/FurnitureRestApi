@@ -1,6 +1,6 @@
 namespace Enum
 {
-    public enum MetaDataCategoryEnum
+    public enum MetadataCategoryEnum
     {
         Pay = 1,
 

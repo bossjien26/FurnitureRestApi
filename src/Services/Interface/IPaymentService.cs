@@ -6,7 +6,7 @@ using Services.Dto;
 
 namespace Services.Interface
 {
-    public interface IPaymentService : IMetaDataService
+    public interface IPaymentService : IMetadataService
     {
         Task Insert(Payment payment);
 

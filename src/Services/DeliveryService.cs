@@ -8,7 +8,7 @@ using Services.Interface;
 
 namespace Services
 {
-    public class DeliveryService : MetaDataService, IDeliveryService
+    public class DeliveryService : MetadataService, IDeliveryService
     {
         public DeliveryService(DbContextEntity dbContextEntity) : base(dbContextEntity)
         {
@@ -18,9 +18,9 @@ namespace Services
         public async Task Insert(Delivery delivery)
         {
             await Insert(
-                new MetaData()
+                new Metadata()
                 {
-                    Category = Enum.MetaDataCategoryEnum.Delivery,
+                    Category = Enum.MetadataCategoryEnum.Delivery,
                     Type = (int)delivery.Type,
                     Key = delivery.Type.ToString(),
                     Value = JsonSerializer.Serialize(delivery)
@@ -30,17 +30,17 @@ namespace Services
 
         public void Update(Delivery delivery)
         {
-            var metaData = GetByCategory(MetaDataCategoryEnum.Delivery, (int)delivery.Type);
-            if (metaData != null)
+            var Metadata = GetByCategory(MetadataCategoryEnum.Delivery, (int)delivery.Type);
+            if (Metadata != null)
             {
-                metaData.Value = JsonSerializer.Serialize(delivery);
-                Update(metaData);
+                Metadata.Value = JsonSerializer.Serialize(delivery);
+                Update(Metadata);
             }
         }
 
         public Delivery GetDelivery(DeliveryTypeEnum type)
         {
-            var delivery = GetByCategory(MetaDataCategoryEnum.Delivery, (int)type);
+            var delivery = GetByCategory(MetadataCategoryEnum.Delivery, (int)type);
 
             return delivery == null ? null
             : JsonSerializer.Deserialize<Delivery>(delivery.Value);
