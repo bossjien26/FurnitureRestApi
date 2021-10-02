@@ -17,7 +17,7 @@ namespace Entities
 
         public bool IsPaid { get; set; } = false;
 
-        public decimal TotalPrice { get; set; }
+        public int TotalPrice { get; set; }
 
         public virtual Order Order { get; set; }
     }
