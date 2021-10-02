@@ -1,7 +1,10 @@
+using System;
+using System.Text;
 using System.Threading.Tasks;
 using DbEntity;
 using Entities;
 using Enum;
+using Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -18,16 +21,19 @@ namespace RestApi.Controllers
     {
         private readonly ILogger<OrderController> _logger;
 
+        private readonly MailHelper _mailHelper;
+
         private readonly IOrderService _service;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public OrderController(DbContextEntity context, ILogger<OrderController> logger
-        , IHttpContextAccessor httpContextAccessor)
+        , IHttpContextAccessor httpContextAccessor, MailHelper mailHelper)
         {
             _service = new OrderService(context);
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
+            _mailHelper = mailHelper;
         }
 
         [Authorize()]
@@ -54,7 +60,8 @@ namespace RestApi.Controllers
         public async Task<IActionResult> Insert(CreateOrderRequest request)
         {
             var user = (User)_httpContextAccessor.HttpContext.Items["User"];
-            await InsertOrder(request, user.Id);
+            var order = await InsertOrder(request, user.Id);
+            SendMail(order);
             return Created(user.Id.ToString(), request);
         }
 
@@ -74,6 +81,41 @@ namespace RestApi.Controllers
 
             await _service.Insert(order);
             return order;
+        }
+
+        private void SendMail(Order order)
+        {
+            try
+            {
+                _mailHelper.SendMail(new Mailer()
+                {
+                    MailTo = order.RecipientMail,
+                    NameTo = order.Recipient,
+                    Subject = MailTitle(order.Id),
+                    Content = MailContent(order)
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+            }
+        }
+
+        private string MailTitle(int orderId)
+        {
+            var mailTitle = new StringBuilder();
+            mailTitle.AppendFormat("<h2>訂單編號 {0} <h2>", orderId);
+            return mailTitle.ToString();
+        }
+
+        private string MailContent(Order order)
+        {
+            var mailContent = new StringBuilder();
+            mailContent.Append("<h2>ＸＸＸ購物網站<h2>");
+            mailContent.AppendFormat("<h3>訂單編號：{0} </h3>", order.Id);
+            mailContent.AppendFormat("<h3>收款人：{0} </h3>", order.Recipient);
+            mailContent.AppendFormat("<a href='/{0}'>查詢詳細資訊</a>", order.Id);
+            return mailContent.ToString();
         }
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
