@@ -1,48 +1,70 @@
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Entities;
+using Enum;
 using NUnit.Framework;
 using RestApi.Models.Requests;
 using RestApi.Test.DatabaseSeeders;
 using Services;
 using Services.Interface;
+using Services.Interface.Redis;
+using Services.Redis;
 
 namespace RestApi.Test.Controllers
 {
     [TestFixture]
     public class OrderProductControllerTest : BaseController
     {
+        private readonly ICartService _cartService;
+
+        private readonly IOrderService _orderService;
+
+        private readonly IUserService _userService;
+
+        private readonly IOrderProductService _orderProdcutService;
+
+        private readonly IProductService _prodcutService;
+
+        public OrderProductControllerTest()
+        {
+            _cartService = new CartService(_redisConnect);
+            _orderService = new OrderService(_context);
+            _userService = new UserService(_context);
+            _orderProdcutService = new OrderProductService(_context);
+            _prodcutService = new ProductService(_context);
+        }
+
         [Test]
         public async Task ShouldInsertOrderProduct()
         {
-            IOrderService orderService = new OrderService(_context);
-            IUserService userService = new UserService(_context);
-            IOrderProductService orderProdcutService = new OrderProductService(_context);
-            IProductService prodcutService = new ProductService(_context);
-
+            var userId = _userService.SearchUserMail("jan@example.com").Id;
             var order = new Entities.Order()
             {
-                UserId = userService.SearchUserMail("jan@example.com").Id
+                UserId = userId
             };
-            await orderService.Insert(order);
+            await _orderService.Insert(order);
             var product = ProductSeeder.SeedOne();
-            await prodcutService.Insert(product);
-            var request = new CreateOrderProductRequest()
-            {
-                orderId = order.Id,
-                productList = new List<CreateOrderProductListRequest>(){
-                    new CreateOrderProductListRequest(){
-                        ProductId = product.Id,
-                        Specification = "",
-                        Quality = 1
-                    }
+            await _prodcutService.Insert(product);
+            await InsertCart(userId.ToString(), product.Id.ToString());
+            var response = await _httpClient.PostAsync("/api/orderProduct", PostType(
+                new CreateOrderProductRequest()
+                {
+                    orderId = order.Id
                 }
-            };
-
-            var response = await _httpClient.PostAsync("/api/orderProduct", PostType(request));
+            ));
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+        }
+
+        private async Task InsertCart(string userId, string productId)
+        {
+            var entity = new Cart();
+            entity.UserId = userId;
+            entity.ProductId = productId;
+            entity.Quantity = "1";
+            entity.Attribute = CartAttributeEnum.Shopping;
+            await _cartService.Set(entity);
         }
     }
 }
