@@ -19,7 +19,5 @@ namespace Services.Interface
         IEnumerable<Product> GetAll();
 
         bool CheckProductToProductCategoryIsExist(int productId, int categoryId);
-
-        bool CheckProductAndProductSpecificationIsExist(int productId, int specificationId);
     }
 }

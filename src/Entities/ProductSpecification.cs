@@ -3,19 +3,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Entities
 {
-    [Table("ProductSpecification")]
+    [Table("InventorySpecification")]
     [Comment("產品與規格關聯")]
-    public class ProductSpecification
+    public class InventorySpecification
     {
         public int Id { get; set; }
 
-        [ForeignKey("Product")]
-        public int ProductId { get; set; }
+        [ForeignKey("Inventory")]
+        public int InventoryId { get; set; }
 
         [ForeignKey("Specification")]
         public int SpecificationId { get; set; }
 
-        public virtual Product Product { get; set; }
+        public virtual Inventory Inventory { get; set; }
 
         public virtual Specification Specification { get; set; }
     }

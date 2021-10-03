@@ -10,6 +10,7 @@ using RestApi.Models.Requests;
 using RestApi.src.Models;
 using Services.Interface;
 using Services;
+using System;
 
 namespace RestApi.Controllers
 {
@@ -23,15 +24,11 @@ namespace RestApi.Controllers
 
         private readonly IProductCategoryService _productCategoryRepository;
 
-        private readonly IProductSpecificationService _productSpecificationRepository;
-
         public ProductController(DbContextEntity context, ILogger<ProductController> logger)
         {
             _repository = new ProductService(context);
 
             _productCategoryRepository = new ProductCategoryService(context);
-
-            _productSpecificationRepository = new ProductSpecificationService(context);
 
             _logger = logger;
         }
@@ -63,11 +60,7 @@ namespace RestApi.Controllers
             var product = new Product()
             {
                 Name = requestProduct.Name,
-                Price = requestProduct.Price,
-                Sequence = requestProduct.Sequence,
-                Quantity = requestProduct.Quantity,
-                RelateAt = requestProduct.RelateAt,
-                IsDisplay = requestProduct.IsDisplay
+                CreateAt = DateTime.Now
             };
             await _repository.Insert(product);
             return product;
@@ -119,42 +112,43 @@ namespace RestApi.Controllers
             });
         }
 
-        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
-        [Route("store/productSpecification")]
-        [HttpPost]
-        public async Task<IActionResult> StoreProductSpecification(RequestProductSpecification requestProductSpecification)
-        {
-            if (CheckProductAndSpecificationIsExist(requestProductSpecification))
-            {
-                return NotFound(new AutResultModel()
-                {
-                    Status = false,
-                    Data = "Fail"
-                });
-            }
-            await InsertProductSpecification(requestProductSpecification);
+        //TODO:move inventory controller
+        // [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
+        // [Route("store/InventorySpecification")]
+        // [HttpPost]
+        // public async Task<IActionResult> StoreInventorySpecification(RequestInventorySpecification requestInventorySpecification)
+        // {
+        //     if (CheckProductAndSpecificationIsExist(requestInventorySpecification))
+        //     {
+        //         return NotFound(new AutResultModel()
+        //         {
+        //             Status = false,
+        //             Data = "Fail"
+        //         });
+        //     }
+        //     await InsertInventorySpecification(requestInventorySpecification);
 
-            return CreatedAtAction(nameof(GetProduct), new { id = requestProductSpecification.ProductId },
-                new AutResultModel()
-                {
-                    Status = true,
-                    Data = "Success"
-                });
-        }
+        //     return CreatedAtAction(nameof(GetProduct), new { id = requestInventorySpecification.ProductId },
+        //         new AutResultModel()
+        //         {
+        //             Status = true,
+        //             Data = "Success"
+        //         });
+        // }
 
-        private bool CheckProductAndSpecificationIsExist(RequestProductSpecification requestProductSpecification)
-        {
-            return _repository.CheckProductAndProductSpecificationIsExist(requestProductSpecification.ProductId,
-            requestProductSpecification.SpecificationId) ? true : false;
-        }
+        // private bool CheckProductAndSpecificationIsExist(RequestInventorySpecification requestInventorySpecification)
+        // {
+        //     return _repository.CheckProductAndInventorySpecificationIsExist(requestInventorySpecification.ProductId,
+        //     requestInventorySpecification.SpecificationId) ? true : false;
+        // }
 
-        private async Task InsertProductSpecification(RequestProductSpecification requestProductSpecification)
-        {
-            await _productSpecificationRepository.Insert(new ProductSpecification()
-            {
-                ProductId = requestProductSpecification.ProductId,
-                SpecificationId = requestProductSpecification.SpecificationId
-            });
-        }
+        // private async Task InsertInventorySpecification(RequestInventorySpecification requestInventorySpecification)
+        // {
+        //     await _InventorySpecificationRepository.Insert(new InventorySpecification()
+        //     {
+        //         InventoryId = requestInventorySpecification.ProductId,
+        //         SpecificationId = requestInventorySpecification.SpecificationId
+        //     });
+        // }
     }
 }

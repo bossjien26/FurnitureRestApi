@@ -2,7 +2,7 @@ using Entities;
 
 namespace Repositories.Interface
 {
-    public interface IProductSpecificationRepository : IGenericRepository<ProductSpecification>
+    public interface IInventorySpecificationRepository : IGenericRepository<InventorySpecification>
     {
         
     }

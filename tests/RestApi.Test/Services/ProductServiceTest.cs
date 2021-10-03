@@ -43,7 +43,7 @@ namespace RestApi.Test.Services
         [Test]
         public async Task ShouldGetShowProdcutById()
         {
-            _repoMock.Setup(r => r.Get(x => x.Id == 1 && x.IsDisplay == true)).Returns(Task.FromResult(_entityMock.Object));
+            _repoMock.Setup(r => r.Get(x => x.Id == 1 && x.Inventories.Where(r => r.IsDisplay == true).Any())).Returns(Task.FromResult(_entityMock.Object));
             var result = await new ProductService(_repoMock.Object).GetShowProdcutById(1);
             Assert.IsInstanceOf<Product>(result);
 
@@ -65,7 +65,7 @@ namespace RestApi.Test.Services
         public void ShouldGetShowProductMany()
         {
             var seederMany = ProductSeeder.SeedMany(10, 15);
-            seederMany.ForEach(x => { x.IsDisplay = true; });
+            seederMany.ForEach(x => { x.Inventories.Where(r => r.IsDisplay == true).Any(); });
             _repoMock.Setup(r => r.GetAll()).Returns(seederMany.AsQueryable());
             var result = new ProductService(_repoMock.Object).GetShowProductMany(1, 5).ToList();
 
