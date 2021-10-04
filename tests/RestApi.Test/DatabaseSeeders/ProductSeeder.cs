@@ -21,7 +21,7 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.CreateAt, (f) => DateTime.Now)
                 .RuleFor(c => c.UpdateAt, (f) => DateTime.Now)
                 .RuleFor(c => c.ProductCategories, (f) => SetProductCategory().Generate(1))
-                .RuleFor(c => c.Inventories, (f) => SetInventory().Generate(1));
+                .RuleFor(c => c.Inventories, (f) => SetInventory().Generate(5));
         }
 
         private static Faker<Inventory> SetInventory()
