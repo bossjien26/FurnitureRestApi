@@ -15,5 +15,9 @@ namespace Services.Interface
         IEnumerable<Inventory> GetMany(int index, int size);
 
         IEnumerable<Inventory> GetShowMany(int index, int size);
+
+        void Update(Inventory instance);
+
+        void Delete(Inventory instance);
     }
 }

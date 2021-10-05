@@ -40,5 +40,9 @@ namespace Services
                 .Skip((index - 1) * size)
                 .Take(size)
                 .OrderByDescending(x => x.Id);
+
+        public void Update(Inventory instance) => _repository.Update(instance);
+
+        public void Delete(Inventory instance) => _repository.Delete(instance);
     }
 }
