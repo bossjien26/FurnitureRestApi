@@ -17,17 +17,17 @@ namespace RestApi.Controllers
     [Route("api/[controller]")]
     public class SpecificationController : ControllerBase
     {
-        private readonly ISpecificationService _repository;
+        private readonly ISpecificationService _service;
 
-        private readonly ISpecificationContentService _repositorySpecificationContent;
+        private readonly ISpecificationContentService _specificationContentService;
 
         private readonly ILogger<SpecificationController> _logger;
 
         public SpecificationController(DbContextEntity context, ILogger<SpecificationController> logger)
         {
-            _repository = new SpecificationService(context);
+            _service = new SpecificationService(context);
 
-            _repositorySpecificationContent = new SpecificationContentService(context);
+            _specificationContentService = new SpecificationContentService(context);
 
             _logger = logger;
         }
@@ -53,7 +53,7 @@ namespace RestApi.Controllers
             {
                 Name = requestSpecification.Name,
             };
-            await _repository.Insert(
+            await _service.Insert(
                 specification
             );
             return specification;
@@ -64,7 +64,7 @@ namespace RestApi.Controllers
         [Route("store/specificationContent")]
         public async Task<IActionResult> storeSpecificationContent(RequestSpecificationContent requestSpecificationContent)
         {
-            if (await _repositorySpecificationContent.GetById(requestSpecificationContent.SpecificationId) == null)
+            if (await _specificationContentService.GetById(requestSpecificationContent.SpecificationId) == null)
             {
                 return NotFound(new AutResultModel()
                 {
@@ -90,7 +90,7 @@ namespace RestApi.Controllers
                 Name = requestSpecificationContent.Name,
                 SpecificationId = requestSpecificationContent.SpecificationId
             };
-            await _repositorySpecificationContent.Insert(
+            await _specificationContentService.Insert(
                 specification
             );
 
@@ -102,7 +102,7 @@ namespace RestApi.Controllers
         [HttpGet]
         public IActionResult ShowMany(int perPage)
         {
-            return Ok(_repository.GetMany(perPage, 10).ToList());
+            return Ok(_service.GetMany(perPage, 10).ToList());
         }
 
 
@@ -110,7 +110,7 @@ namespace RestApi.Controllers
         [Route("{id}")]
         public async Task<ActionResult<Specification>> GetSpecification(int id)
         {
-            var specification = await _repository.GetById(id);
+            var specification = await _service.GetById(id);
             return Ok(specification);
         }
     }

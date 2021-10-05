@@ -18,7 +18,7 @@ namespace RestApi.Controllers
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
-        private readonly IProductService _repository;
+        private readonly IProductService _service;
 
         private readonly ILogger<ProductController> _logger;
 
@@ -26,7 +26,7 @@ namespace RestApi.Controllers
 
         public ProductController(DbContextEntity context, ILogger<ProductController> logger)
         {
-            _repository = new ProductService(context);
+            _service = new ProductService(context);
 
             _productCategoryRepository = new ProductCategoryService(context);
 
@@ -51,7 +51,7 @@ namespace RestApi.Controllers
         [Route("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _repository.GetById(id);
+            var product = await _service.GetById(id);
             return Ok(product);
         }
 
@@ -62,7 +62,7 @@ namespace RestApi.Controllers
                 Name = requestProduct.Name,
                 CreateAt = DateTime.Now
             };
-            await _repository.Insert(product);
+            await _service.Insert(product);
             return product;
         }
 
@@ -71,7 +71,7 @@ namespace RestApi.Controllers
         [HttpGet]
         public IActionResult ShowMany(int perPage)
         {
-            return Ok(_repository.GetMany(perPage, 10).ToList());
+            return Ok(_service.GetMany(perPage, 10).ToList());
         }
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
@@ -99,7 +99,7 @@ namespace RestApi.Controllers
 
         private bool CheckProductAndCategoryIsExist(RequestProductCategory requestProductCategory)
         {
-            return _repository.CheckProductToProductCategoryIsExist(requestProductCategory.ProductId
+            return _service.CheckProductToProductCategoryIsExist(requestProductCategory.ProductId
             , requestProductCategory.CategoryId) ? true : false;
         }
 

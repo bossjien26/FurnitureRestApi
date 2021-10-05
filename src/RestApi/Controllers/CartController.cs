@@ -20,9 +20,9 @@ namespace RestApi.Controllers
     [Route("api/[controller]")]
     public class CartController : ControllerBase
     {
-        private readonly ICartService _repository;
+        private readonly ICartService _service;
 
-        private readonly IProductService _repositoryProduct;
+        private readonly IProductService _productService;
 
         private readonly ILogger<CartController> _logger;
 
@@ -32,9 +32,9 @@ namespace RestApi.Controllers
         public CartController(DbContextEntity context, ILogger<CartController> logger,
         IHttpContextAccessor httpContextAccessor, IConnectionMultiplexer redisDb)
         {
-            _repository = new CartService(redisDb);
+            _service = new CartService(redisDb);
 
-            _repositoryProduct = new ProductService(context);
+            _productService = new ProductService(context);
 
             _logger = logger;
 
@@ -66,14 +66,14 @@ namespace RestApi.Controllers
 
         private async Task<bool> CheckProductIsExist(RequestCart requestCart)
         {
-            return (await _repositoryProduct.GetById(requestCart.ProductId) != null) ? true : false;
+            return (await _productService.GetById(requestCart.ProductId) != null) ? true : false;
         }
 
         private async Task StoreCart(RequestCart requestCart)
         {
             var user = (User)_httpContextAccessor.HttpContext.Items["User"];
 
-            await _repository.Set(new Cart()
+            await _service.Set(new Cart()
             {
                 UserId = user.Id.ToString(),
                 ProductId = requestCart.ProductId.ToString(),
@@ -88,7 +88,7 @@ namespace RestApi.Controllers
         public IActionResult Delete(int productId, CartAttributeEnum cartAttribute)
         {
             var user = (User)_httpContextAccessor.HttpContext.Items["User"];
-            return _repository.Delete(user.Id.ToString(), productId.ToString(), cartAttribute)
+            return _service.Delete(user.Id.ToString(), productId.ToString(), cartAttribute)
             ? NoContent() : NotFound();
         }
     }

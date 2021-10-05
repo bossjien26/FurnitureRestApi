@@ -17,13 +17,13 @@ namespace RestApi.Controllers
     [Route("api/[controller]")]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryService _repository;
+        private readonly ICategoryService _service;
 
         private readonly ILogger<CategoryController> _logger;
 
         public CategoryController(DbContextEntity context, ILogger<CategoryController> logger)
         {
-            _repository = new CategoryService(context);
+            _service = new CategoryService(context);
 
             _logger = logger;
         }
@@ -33,7 +33,7 @@ namespace RestApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Insert(RequestCategory requestsCategory)
         {
-            if (await _repository.GetById(requestsCategory.ChildrenId) == null && requestsCategory.ChildrenId != 0)
+            if (await _service.GetById(requestsCategory.ChildrenId) == null && requestsCategory.ChildrenId != 0)
             {
                 return NotFound(new AutResultModel()
                 {
@@ -55,7 +55,7 @@ namespace RestApi.Controllers
         [Route("show/{id}")]
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
-            var category = await _repository.GetById(id);
+            var category = await _service.GetById(id);
             return Ok(category);
         }
 
@@ -68,7 +68,7 @@ namespace RestApi.Controllers
                 Sequence = requestsCategory.Sequence,
                 IsDisplay = requestsCategory.IsDisplay
             };
-            await _repository.Insert(category);
+            await _service.Insert(category);
             return category;
         }
 
@@ -77,7 +77,7 @@ namespace RestApi.Controllers
         [HttpGet]
         public IActionResult ShowMany(int perPage)
         {
-            return Ok(_repository.GetMany(perPage, 10).ToList());
+            return Ok(_service.GetMany(perPage, 10).ToList());
         }
     }
 }
