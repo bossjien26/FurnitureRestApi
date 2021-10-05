@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Middlewares.Authentication;
 using RestApi.Models.Requests;
+using RestApi.src.Models;
 using Services;
 using Services.Interface;
 
@@ -62,7 +63,7 @@ namespace RestApi.Controllers
             var user = (User)_httpContextAccessor.HttpContext.Items["User"];
             var order = await InsertOrder(request, user.Id);
             SendMail(order);
-            return Created(user.Id.ToString(), request);
+            return Created(user.Id.ToString(), new AutResultModel() { Status = true, Data = "Success" });
         }
 
         private async Task<Order> InsertOrder(CreateOrderRequest request, int userId)
