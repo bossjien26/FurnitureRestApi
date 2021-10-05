@@ -111,44 +111,5 @@ namespace RestApi.Controllers
                 CategoryId = requestProductCategory.CategoryId
             });
         }
-
-        //TODO:move inventory controller
-        // [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
-        // [Route("store/InventorySpecification")]
-        // [HttpPost]
-        // public async Task<IActionResult> StoreInventorySpecification(RequestInventorySpecification requestInventorySpecification)
-        // {
-        //     if (CheckProductAndSpecificationIsExist(requestInventorySpecification))
-        //     {
-        //         return NotFound(new AutResultModel()
-        //         {
-        //             Status = false,
-        //             Data = "Fail"
-        //         });
-        //     }
-        //     await InsertInventorySpecification(requestInventorySpecification);
-
-        //     return CreatedAtAction(nameof(GetProduct), new { id = requestInventorySpecification.ProductId },
-        //         new AutResultModel()
-        //         {
-        //             Status = true,
-        //             Data = "Success"
-        //         });
-        // }
-
-        // private bool CheckProductAndSpecificationIsExist(RequestInventorySpecification requestInventorySpecification)
-        // {
-        //     return _repository.CheckProductAndInventorySpecificationIsExist(requestInventorySpecification.ProductId,
-        //     requestInventorySpecification.SpecificationId) ? true : false;
-        // }
-
-        // private async Task InsertInventorySpecification(RequestInventorySpecification requestInventorySpecification)
-        // {
-        //     await _InventorySpecificationRepository.Insert(new InventorySpecification()
-        //     {
-        //         InventoryId = requestInventorySpecification.ProductId,
-        //         SpecificationId = requestInventorySpecification.SpecificationId
-        //     });
-        // }
     }
 }
