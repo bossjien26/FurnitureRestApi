@@ -58,14 +58,5 @@ namespace Services
             p.ProductCategories.Where(c => c.CategoryId == categoryId && c.ProductId
             == productId && c.Category.Id == categoryId).Any()).Any();
         }
-
-        //TODO:move inventory
-        // public bool CheckProductAndInventorySpecificationIsExist(int productId, int specificationId)
-        // {
-        //     return _repository.GetAll().Where(x => x.Id == productId &&
-        //     x.InventorySpecifications.Where(s => s.SpecificationId == specificationId &&
-        //     s.ProductId == productId && s.Specification.Id == specificationId).Any()
-        //     ).Any();
-        // }
     }
 }

@@ -36,5 +36,10 @@ namespace Services
                 .Take(size)
                 .OrderByDescending(x => x.Id);
         }
+
+        public bool CheckInventoryAndInventorySpecificationIsExist(int inventoryId, int specificationId)
+        => _repository.GetAll().Where(x => x.Inventory.Id == inventoryId
+        && x.SpecificationId == x.Specification.Id).Any();
+
     }
 }
