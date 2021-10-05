@@ -34,7 +34,7 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.Quantity, (f) => f.Random.Number(10))
                 .RuleFor(c => c.RelateAt, (f) => DateTime.Now)
                 .RuleFor(c => c.Sequence, (f) => f.Random.Number(1))
-                .RuleFor(c => c.InventorySpecification, (f) => SetInventorySpecification());
+                .RuleFor(c => c.InventorySpecifications, (f) => SetInventorySpecification().Generate(5));
         }
 
         private static Faker<InventorySpecification> SetInventorySpecification()

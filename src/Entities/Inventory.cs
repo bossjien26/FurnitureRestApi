@@ -30,7 +30,7 @@ namespace Entities
 
         public bool IsDelete { get; set; } = false;
 
-        public virtual InventorySpecification InventorySpecification { get; set; }
+        public virtual ICollection<InventorySpecification> InventorySpecifications { get; set; }
 
         public virtual Product Products { get; set; }
     }
