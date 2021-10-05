@@ -29,11 +29,11 @@ namespace RestApi.Controllers
 
         [Route("show/{id}")]
         [HttpGet]
-        public async Task<IActionResult> GetInventory(int id) => Ok(await _inventoryService.GetById(id));
+        public async Task<IActionResult> GetInventory(int id) => Ok(await _inventoryService.GetShowById(id));
 
         [Route("{perPage}")]
         [HttpGet]
-        public IActionResult ShowMany(int perPage) => Ok(_inventoryService.GetMany(perPage, 10).ToList());
+        public IActionResult ShowMany(int perPage) => Ok(_inventoryService.GetShowMany(perPage, 10).ToList());
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
         [Route("")]
