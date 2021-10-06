@@ -12,7 +12,8 @@ namespace Entities
         [ForeignKey("Order")]
         public int OrderId { get; set; }
 
-        public int ProductId { get; set; }
+        [ForeignKey("Inventory")]
+        public int InventoryId { get; set; }
 
         [Column(TypeName = "Varchar")]
         [StringLength(256)]
@@ -27,5 +28,7 @@ namespace Entities
         public int Price { get; set; }
 
         public virtual Order Order { get; set; }
+
+        public virtual Inventory Inventory { get; set; }
     }
 }
