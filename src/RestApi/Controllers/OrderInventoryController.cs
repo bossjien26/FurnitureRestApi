@@ -86,7 +86,7 @@ namespace RestApi.Controllers
             var OrderInventory = new OrderInventory();
             OrderInventory.OrderId = orderId;
             // OrderInventory.Price = product.Price;
-            OrderInventory.ProductId = (int)cart.Name;
+            OrderInventory.InventoryId = (int)cart.Name;
             OrderInventory.ProductName = product.Name;
             OrderInventory.Quality = (int)cart.Value;
             // OrderInventory.Specification = product.InventorySpecifications.
