@@ -36,7 +36,10 @@ namespace RestApi.Test.Repositories
         [Test]
         async public Task ShouldGetAll()
         {
-            await _repository.InsertMany(OrderSeeder.SeedMany(5, 5));
+            var product = ProductSeeder.SeedOne();
+            await _productRepository.Insert(product);
+
+            await _repository.InsertMany(OrderSeeder.SeedMany(product.Inventories.First().Id, 5, 5));
             var products = await _repository.GetAll().Take(5).ToListAsync();
             Assert.IsNotNull(products);
             Assert.AreEqual(5, products.Count);

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Entities;
@@ -45,7 +46,7 @@ namespace RestApi.Test.Controllers
             await _orderService.Insert(order);
             var product = ProductSeeder.SeedOne();
             await _prodcutService.Insert(product);
-            await InsertCart(userId.ToString(), product.Id.ToString());
+            await InsertCart(userId.ToString(), product.Inventories.First().Id.ToString());
             var response = await _httpClient.PostAsync("/api/OrderInventory", PostType(
                 new CreateOrderInventoryRequest()
                 {

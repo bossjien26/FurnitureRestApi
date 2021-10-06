@@ -63,8 +63,11 @@ namespace RestApi.Test.Services
         [Test]
         public void ShouldGetMany()
         {
+            var product = ProductSeeder.SeedMany(1, 10).AsQueryable();
+            _productRepoMock.Setup(u => u.GetAll()).Returns(product);
+
             //Arrange
-            var order = OrderSeeder.SeedMany(10, 15).AsQueryable();
+            var order = OrderSeeder.SeedMany(product.First().Inventories.First().Id, 10, 15).AsQueryable();
             _repoMock.Setup(u => u.GetAll()).Returns(order);
 
             //Atc
