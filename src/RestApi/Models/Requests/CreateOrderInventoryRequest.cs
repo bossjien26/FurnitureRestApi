@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace RestApi.Models.Requests
 {
-    public class CreateOrderProductRequest
+    public class CreateOrderInventoryRequest
     {
         public int orderId { get; set; }
     }

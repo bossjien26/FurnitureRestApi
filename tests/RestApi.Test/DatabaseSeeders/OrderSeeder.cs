@@ -30,7 +30,7 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.RecipientMail, (f) => f.Random.AlphaNumeric(10))
                 .RuleFor(c => c.Sender, (f) => f.Random.AlphaNumeric(10))
                 .RuleFor(c => c.User, (f) => UserSeeder.SeedOne())
-                .RuleFor(c => c.OrderProducts, (f) => SetOrderProduct().Generate(5))
+                .RuleFor(c => c.OrderInventorys, (f) => SetOrderInventory().Generate(5))
                 .RuleFor(c => c.OrderPay, (f) => SetOrderPay());
         }
 
@@ -41,9 +41,9 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.Terms, (f) => PaymentTypeEnum.Bank);
         }
 
-        private static Faker<OrderProduct> SetOrderProduct()
+        private static Faker<OrderInventory> SetOrderInventory()
         {
-            return new Faker<OrderProduct>()
+            return new Faker<OrderInventory>()
                 .RuleFor(c => c.Id, (f) => 0)
                 .RuleFor(c => c.Price, (f) => f.Random.Number(10))
                 .RuleFor(c => c.ProductId, (f) => f.Random.Number(10))

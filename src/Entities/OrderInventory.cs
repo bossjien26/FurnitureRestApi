@@ -3,8 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities
 {
-    [Table("OrderProduct")]
-    public class OrderProduct
+    //TODO:rename to OrderInventory
+    [Table("OrderInventory")]
+    public class OrderInventory
     {
         [Key]
         public int Id { get; set; }

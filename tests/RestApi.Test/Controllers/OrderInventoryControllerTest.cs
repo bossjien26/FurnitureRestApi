@@ -13,7 +13,7 @@ using Services.Redis;
 namespace RestApi.Test.Controllers
 {
     [TestFixture]
-    public class OrderProductControllerTest : BaseController
+    public class OrderInventoryControllerTest : BaseController
     {
         private readonly ICartService _cartService;
 
@@ -21,21 +21,21 @@ namespace RestApi.Test.Controllers
 
         private readonly IUserService _userService;
 
-        private readonly IOrderProductService _orderProdcutService;
+        private readonly IOrderInventoryService _orderProdcutService;
 
         private readonly IProductService _prodcutService;
 
-        public OrderProductControllerTest()
+        public OrderInventoryControllerTest()
         {
             _cartService = new CartService(_redisConnect);
             _orderService = new OrderService(_context);
             _userService = new UserService(_context);
-            _orderProdcutService = new OrderProductService(_context);
+            _orderProdcutService = new OrderInventoryService(_context);
             _prodcutService = new ProductService(_context);
         }
 
         [Test]
-        public async Task ShouldInsertOrderProduct()
+        public async Task ShouldInsertOrderInventory()
         {
             var userId = _userService.SearchUserMail("jan@example.com").Id;
             var order = new Entities.Order()
@@ -46,8 +46,8 @@ namespace RestApi.Test.Controllers
             var product = ProductSeeder.SeedOne();
             await _prodcutService.Insert(product);
             await InsertCart(userId.ToString(), product.Id.ToString());
-            var response = await _httpClient.PostAsync("/api/orderProduct", PostType(
-                new CreateOrderProductRequest()
+            var response = await _httpClient.PostAsync("/api/OrderInventory", PostType(
+                new CreateOrderInventoryRequest()
                 {
                     orderId = order.Id
                 }

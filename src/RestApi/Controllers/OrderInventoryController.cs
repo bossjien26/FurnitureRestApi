@@ -13,31 +13,30 @@ using Services.Redis;
 using StackExchange.Redis;
 using Enum;
 using RestApi.Models.Requests;
-using System;
 
 namespace RestApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class OrderProductController : ControllerBase
+    public class OrderInventoryController : ControllerBase
     {
-        private readonly ILogger<OrderProductController> _logger;
+        private readonly ILogger<OrderInventoryController> _logger;
 
         private readonly IOrderService _orderService;
 
         private readonly ICartService _cartService;
 
-        private readonly IOrderProductService _orderProductService;
+        private readonly IOrderInventoryService _OrderInventoryService;
 
         private readonly IProductService _productService;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public OrderProductController(DbContextEntity context, IConnectionMultiplexer redis
-        , ILogger<OrderProductController> logger, IHttpContextAccessor httpContextAccessor)
+        public OrderInventoryController(DbContextEntity context, IConnectionMultiplexer redis
+        , ILogger<OrderInventoryController> logger, IHttpContextAccessor httpContextAccessor)
         {
             _orderService = new OrderService(context);
-            _orderProductService = new OrderProductService(context);
+            _OrderInventoryService = new OrderInventoryService(context);
             _productService = new ProductService(context);
             _cartService = new CartService(redis);
             _logger = logger;
@@ -47,7 +46,7 @@ namespace RestApi.Controllers
         [Authorize()]
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> Insert(CreateOrderProductRequest request)
+        public async Task<IActionResult> Insert(CreateOrderInventoryRequest request)
         {
             var user = (User)_httpContextAccessor.HttpContext.Items["User"];
             if (await _orderService.GetUserOrder(request.orderId, user.Id) == null)
@@ -57,19 +56,19 @@ namespace RestApi.Controllers
             var ids = new List<int>();
             // request.productList.ForEach(async x =>
             // {
-            //     var orderProductId = await InsertOrderProduct(request.orderId, x);
-            //     if (orderProductId != 0)
+            //     var OrderInventoryId = await InsertOrderInventory(request.orderId, x);
+            //     if (OrderInventoryId != 0)
             //     {
-            //         ids.Add(orderProductId);
+            //         ids.Add(OrderInventoryId);
             //     }
             // });
             var carts = _cartService.GetMany(user.Id.ToString(), CartAttributeEnum.Shopping);
             foreach (var cart in carts)
             {
-                var orderProductId = await InsertOrderProduct(request.orderId, cart);
-                if (orderProductId != 0)
+                var OrderInventoryId = await InsertOrderInventory(request.orderId, cart);
+                if (OrderInventoryId != 0)
                 {
-                    ids.Add(orderProductId);
+                    ids.Add(OrderInventoryId);
                     _cartService.Delete(user.Id.ToString(), cart.Name, CartAttributeEnum.Shopping);
                 }
             }
@@ -77,22 +76,22 @@ namespace RestApi.Controllers
         }
 
         //TODO:use redis get user cart list
-        private async Task<int> InsertOrderProduct(int orderId, HashEntry cart)
+        private async Task<int> InsertOrderInventory(int orderId, HashEntry cart)
         {
             var product = await _productService.GetShowProdcutById(orderId);
             if (product == null)
             {
                 return 0;
             }
-            var orderProduct = new OrderProduct();
-            orderProduct.OrderId = orderId;
-            orderProduct.Price = product.Price;
-            orderProduct.ProductId = (int)cart.Name;
-            orderProduct.ProductName = product.Name;
-            orderProduct.Quality = (int)cart.Value;
-            // orderProduct.Specification = product.ProductSpecifications.
-            await _orderProductService.Insert(orderProduct);
-            return orderProduct.Id;
+            var OrderInventory = new OrderInventory();
+            OrderInventory.OrderId = orderId;
+            // OrderInventory.Price = product.Price;
+            OrderInventory.ProductId = (int)cart.Name;
+            OrderInventory.ProductName = product.Name;
+            OrderInventory.Quality = (int)cart.Value;
+            // OrderInventory.Specification = product.InventorySpecifications.
+            await _OrderInventoryService.Insert(OrderInventory);
+            return OrderInventory.Id;
         }
     }
 }

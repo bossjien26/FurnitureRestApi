@@ -22,7 +22,7 @@ namespace RestApi.Controllers
 
         private readonly IOrderService _orderService;
 
-        private readonly IOrderProductService _orderProductService;
+        private readonly IOrderInventoryService _OrderInventoryService;
 
         private readonly IOrderPayService _orderPayService;
 
@@ -33,7 +33,7 @@ namespace RestApi.Controllers
         {
             _orderPayService = new OrderPayService(context);
             _orderService = new OrderService(context);
-            _orderProductService = new OrderProductService(context);
+            _OrderInventoryService = new OrderInventoryService(context);
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -58,7 +58,7 @@ namespace RestApi.Controllers
             orderPay.OrderId = request.orderId;
             orderPay.IsPaid = false;
             orderPay.Terms = request.Terms;
-            orderPay.TotalPrice = _orderProductService.GetUserOrderProductMany(request.orderId)
+            orderPay.TotalPrice = _OrderInventoryService.GetUserOrderInventoryMany(request.orderId)
             .Sum(x => x.Price * x.Quality);
             await _orderPayService.Insert(orderPay);
 

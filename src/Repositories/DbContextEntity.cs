@@ -22,7 +22,7 @@ namespace DbEntity
 
         public DbSet<OrderPay> OrderPays { get; set; }
 
-        public DbSet<OrderProduct> OrderProducts { get; set; }
+        public DbSet<OrderInventory> OrderInventorys { get; set; }
 
         #endregion
 
