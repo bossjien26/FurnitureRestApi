@@ -34,8 +34,8 @@ namespace RestApi.Test.Services
         {
             //Arrange
             var order = OrderSeeder.SeedOne();
-            var OrderInventorys = order.OrderInventorys.AsQueryable();
-            _repoMock.Setup(u => u.GetAll()).Returns(OrderInventorys);
+            var orderInventories = order.OrderInventories.AsQueryable();
+            _repoMock.Setup(u => u.GetAll()).Returns(orderInventories);
 
             //Atc
             var result = new OrderInventoryService(_repoMock.Object).GetUserOrderInventoryMany(order.Id).ToList();

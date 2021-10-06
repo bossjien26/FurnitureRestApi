@@ -54,6 +54,6 @@ namespace Entities
 
         public virtual OrderPay OrderPay { get; set; }
 
-        public virtual ICollection<OrderInventory> OrderInventorys { get; set; }
+        public virtual ICollection<OrderInventory> OrderInventories { get; set; }
     }
 }

@@ -30,7 +30,7 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.RecipientMail, (f) => f.Random.AlphaNumeric(10))
                 .RuleFor(c => c.Sender, (f) => f.Random.AlphaNumeric(10))
                 .RuleFor(c => c.User, (f) => UserSeeder.SeedOne())
-                .RuleFor(c => c.OrderInventorys, (f) => SetOrderInventory().Generate(5))
+                .RuleFor(c => c.OrderInventories, (f) => SetOrderInventory().Generate(5))
                 .RuleFor(c => c.OrderPay, (f) => SetOrderPay());
         }
 
