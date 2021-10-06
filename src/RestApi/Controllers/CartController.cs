@@ -22,7 +22,7 @@ namespace RestApi.Controllers
     {
         private readonly ICartService _service;
 
-        private readonly IProductService _productService;
+        private readonly IInventoryService _inventoryService;
 
         private readonly ILogger<CartController> _logger;
 
@@ -34,7 +34,7 @@ namespace RestApi.Controllers
         {
             _service = new CartService(redisDb);
 
-            _productService = new ProductService(context);
+            _inventoryService = new InventoryService(context);
 
             _logger = logger;
 
@@ -57,7 +57,7 @@ namespace RestApi.Controllers
 
             await StoreCart(requestCart);
 
-            return Created("",new AutResultModel()
+            return Created("", new AutResultModel()
             {
                 Status = true,
                 Data = "Success"
@@ -66,7 +66,7 @@ namespace RestApi.Controllers
 
         private async Task<bool> CheckProductIsExist(RequestCart requestCart)
         {
-            return (await _productService.GetById(requestCart.ProductId) != null) ? true : false;
+            return (await _inventoryService.GetById(requestCart.InventoryId) != null) ? true : false;
         }
 
         private async Task StoreCart(RequestCart requestCart)
@@ -76,7 +76,7 @@ namespace RestApi.Controllers
             await _service.Set(new Cart()
             {
                 UserId = user.Id.ToString(),
-                ProductId = requestCart.ProductId.ToString(),
+                ProductId = requestCart.InventoryId.ToString(),
                 Quantity = requestCart.Quantity.ToString(),
                 Attribute = requestCart.Attribute
             });
