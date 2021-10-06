@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities
 {
-    //TODO:rename to OrderInventory
     [Table("OrderInventory")]
     public class OrderInventory
     {
