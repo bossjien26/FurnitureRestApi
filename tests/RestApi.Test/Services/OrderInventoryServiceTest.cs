@@ -33,7 +33,7 @@ namespace RestApi.Test.Services
         public void ShouldGetUserOrderInventoryMany()
         {
             //Arrange
-            var order = OrderSeeder.SeedOne();
+            var order = OrderSeeder.SeedOne(ProductSeeder.SeedOne().Inventories.First().Id);
             var orderInventories = order.OrderInventories.AsQueryable();
             _repoMock.Setup(u => u.GetAll()).Returns(orderInventories);
 

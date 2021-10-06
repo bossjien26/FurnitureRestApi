@@ -17,10 +17,16 @@ namespace RestApi.Test.Services
 
         private readonly Mock<IOrderRepository> _repoMock;
 
+        private readonly Mock<Product> _productEntityMock;
+
+        private readonly Mock<IProductRepository> _productRepoMock;
+
         public OrderServiceTest()
         {
             _entityMock = new Mock<Order>();
             _repoMock = new Mock<IOrderRepository>();
+            _productEntityMock = new Mock<Product>();
+            _productRepoMock = new Mock<IProductRepository>();
         }
 
         [Test]
@@ -80,8 +86,12 @@ namespace RestApi.Test.Services
         [Test]
         public void ShouldGetUserOrderMany()
         {
+            var product = ProductSeeder.SeedMany(1, 10).AsQueryable();
+            _productRepoMock.Setup(u => u.GetAll()).Returns(product);
+
+
             //Arrange
-            var order = OrderSeeder.SeedUserMany(1, 10, 15).AsQueryable();
+            var order = OrderSeeder.SeedUserMany(1, product.First().Inventories.First().Id, 10, 15).AsQueryable();
             _repoMock.Setup(u => u.GetAll()).Returns(order);
 
             //Atc
