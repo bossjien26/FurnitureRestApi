@@ -6,7 +6,7 @@ namespace Entities
     {
         public string UserId { get; set; }
 
-        public string ProductId { get; set; }
+        public string InventoryId { get; set; }
 
         public string Quantity { get; set; }
 

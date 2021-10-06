@@ -62,7 +62,7 @@ namespace RestApi.Test.Controllers
         {
             var entity = new Cart();
             entity.UserId = userId;
-            entity.ProductId = productId;
+            entity.InventoryId = productId;
             entity.Quantity = "1";
             entity.Attribute = CartAttributeEnum.Shopping;
             await _cartService.Set(entity);

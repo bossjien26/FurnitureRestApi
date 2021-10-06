@@ -24,7 +24,7 @@ namespace RestApi.Test.Services
         {
             var entity = new Cart();
             entity.UserId = "1";
-            entity.ProductId = "1";
+            entity.InventoryId = "1";
             entity.Quantity = "1";
             entity.Attribute = CartAttributeEnum.Shopping;
             Assert.DoesNotThrowAsync(() => _cartService.Set(entity));

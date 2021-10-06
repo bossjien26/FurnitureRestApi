@@ -76,7 +76,7 @@ namespace RestApi.Controllers
             await _service.Set(new Cart()
             {
                 UserId = user.Id.ToString(),
-                ProductId = requestCart.InventoryId.ToString(),
+                InventoryId = requestCart.InventoryId.ToString(),
                 Quantity = requestCart.Quantity.ToString(),
                 Attribute = requestCart.Attribute
             });

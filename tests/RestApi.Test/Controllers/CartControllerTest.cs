@@ -52,7 +52,7 @@ namespace RestApi.Test.Controllers
             await service.Set(new Entities.Cart()
             {
                 UserId = user.Id.ToString(),
-                ProductId = "2",
+                InventoryId = "2",
                 Quantity = "1",
                 Attribute = CartAttributeEnum.Shopping
             });

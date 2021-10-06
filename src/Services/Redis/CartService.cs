@@ -25,7 +25,7 @@ namespace Services.Redis
         private HashEntry[] hashSetValue(string key, string value) => new HashEntry[] { new HashEntry(key, value) };
 
         public async Task Set(Cart instance)
-        => await _db.HashSetAsync(hashIdType(instance.UserId, instance.Attribute), hashSetValue(instance.ProductId, instance.Quantity));
+        => await _db.HashSetAsync(hashIdType(instance.UserId, instance.Attribute), hashSetValue(instance.InventoryId, instance.Quantity));
 
         public async Task<RedisValue> GetById(string HashId, string key, CartAttributeEnum cartAttribute)
         => await _db.HashGetAsync(hashIdType(HashId, cartAttribute), key);
