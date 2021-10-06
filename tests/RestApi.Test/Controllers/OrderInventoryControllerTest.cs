@@ -24,7 +24,7 @@ namespace RestApi.Test.Controllers
 
         private readonly IOrderInventoryService _orderProdcutService;
 
-        private readonly IProductService _prodcutService;
+        private readonly IProductService _productService;
 
         public OrderInventoryControllerTest()
         {
@@ -32,7 +32,7 @@ namespace RestApi.Test.Controllers
             _orderService = new OrderService(_context);
             _userService = new UserService(_context);
             _orderProdcutService = new OrderInventoryService(_context);
-            _prodcutService = new ProductService(_context);
+            _productService = new ProductService(_context);
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace RestApi.Test.Controllers
             };
             await _orderService.Insert(order);
             var product = ProductSeeder.SeedOne();
-            await _prodcutService.Insert(product);
+            await _productService.Insert(product);
             await InsertCart(userId.ToString(), product.Inventories.First().Id.ToString());
             var response = await _httpClient.PostAsync("/api/OrderInventory", PostType(
                 new CreateOrderInventoryRequest()
