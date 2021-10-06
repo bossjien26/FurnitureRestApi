@@ -67,6 +67,14 @@ namespace RestApi.Test.Repositories
         }
 
         [Test]
+        public void ShouldInsert()
+        {
+            var data = ProductSeeder.SeedOne();
+            Assert.DoesNotThrowAsync(() => _repository.Insert(data));
+            Assert.AreNotEqual(0, data.Id);
+        }
+
+        [Test]
         public void ShouldUpdateError()
         {
             Assert.ThrowsAsync<ArgumentNullException>(() => _repository.Update(null));
