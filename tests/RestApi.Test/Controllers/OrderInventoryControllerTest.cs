@@ -58,11 +58,11 @@ namespace RestApi.Test.Controllers
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         }
 
-        private async Task InsertCart(string userId, string productId)
+        private async Task InsertCart(string userId, string inventoryId)
         {
             var entity = new Cart();
             entity.UserId = userId;
-            entity.InventoryId = productId;
+            entity.InventoryId = inventoryId;
             entity.Quantity = "1";
             entity.Attribute = CartAttributeEnum.Shopping;
             await _cartService.Set(entity);
