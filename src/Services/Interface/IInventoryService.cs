@@ -12,6 +12,8 @@ namespace Services.Interface
 
         Task<Inventory> GetShowById(int id);
 
+        IEnumerable<Inventory> GetJoinProductAndSpecification(int id);
+
         IEnumerable<Inventory> GetMany(int index, int size);
 
         IEnumerable<Inventory> GetShowMany(int index, int size);

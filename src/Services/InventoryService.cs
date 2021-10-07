@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DbEntity;
 using Entities;
+using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Repositories.Interface;
 using Services.Interface;
@@ -27,6 +28,14 @@ namespace Services
 
         public async Task<Inventory> GetShowById(int id) => await _repository.Get(x => x.Id == id
             && x.IsDisplay == true && x.IsDelete == false);
+
+        public IEnumerable<Inventory> GetJoinProductAndSpecification(int id)
+        => _repository.GetAll()
+            .Include(x => x.Product)
+            .Include(x => x.InventorySpecifications)
+            .ThenInclude(x => x.Specification)
+            .ThenInclude(x => x.SpecificationContent)
+            .Where(x => x.Id == id);
 
         public IEnumerable<Inventory> GetMany(int index, int size)
             => _repository.GetAll()
