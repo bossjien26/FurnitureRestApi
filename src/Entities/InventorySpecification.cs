@@ -9,14 +9,14 @@ namespace Entities
     {
         public int Id { get; set; }
 
-        [ForeignKey("Inventory")]
         public int InventoryId { get; set; }
 
-        [ForeignKey("Specification")]
         public int SpecificationId { get; set; }
 
+        [ForeignKey(nameof(InventoryId))]
         public virtual Inventory Inventory { get; set; }
 
+        [ForeignKey(nameof(SpecificationId))]
         public virtual Specification Specification { get; set; }
     }
 }

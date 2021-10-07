@@ -9,10 +9,8 @@ namespace Entities
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("Order")]
         public int OrderId { get; set; }
 
-        [ForeignKey("Inventory")]
         public int InventoryId { get; set; }
 
         [Column(TypeName = "Varchar")]
@@ -27,8 +25,10 @@ namespace Entities
 
         public int Price { get; set; }
 
+        [ForeignKey(nameof(OrderId))]
         public virtual Order Order { get; set; }
 
+        [ForeignKey(nameof(InventoryId))]
         public virtual Inventory Inventory { get; set; }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Entities
 {
@@ -11,7 +12,6 @@ namespace Entities
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("Product")]
         public int ProductId { get; set; }
 
         public string SKU { get; set; }
@@ -32,6 +32,7 @@ namespace Entities
 
         public virtual ICollection<InventorySpecification> InventorySpecifications { get; set; }
 
-        public virtual Product Products { get; set; }
+        [ForeignKey(nameof(ProductId))]
+        public virtual Product Product { get; set; }
     }
 }

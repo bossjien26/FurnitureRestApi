@@ -12,7 +12,6 @@ namespace Entities
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("User")]
         public int UserId { get; set; }
 
         public OrderStatusEnum Status { get; set; } = OrderStatusEnum.Processing;
@@ -50,6 +49,7 @@ namespace Entities
 
         public DateTime UpdateAt { get; set; } = DateTime.Now;
 
+        [ForeignKey(nameof(UserId))]
         public virtual User User { get; set; }
 
         public virtual OrderPay OrderPay { get; set; }
