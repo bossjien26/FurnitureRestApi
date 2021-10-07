@@ -13,6 +13,8 @@ using Services.Redis;
 using StackExchange.Redis;
 using Enum;
 using RestApi.Models.Requests;
+using System.Linq;
+using System.Text;
 
 namespace RestApi.Controllers
 {
@@ -28,7 +30,7 @@ namespace RestApi.Controllers
 
         private readonly IOrderInventoryService _OrderInventoryService;
 
-        private readonly IProductService _productService;
+        private readonly IInventoryService _inventoryService;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -37,10 +39,10 @@ namespace RestApi.Controllers
         {
             _orderService = new OrderService(context);
             _OrderInventoryService = new OrderInventoryService(context);
-            _productService = new ProductService(context);
             _cartService = new CartService(redis);
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
+            _inventoryService = new InventoryService(context);
         }
 
         [Authorize()]
@@ -54,14 +56,6 @@ namespace RestApi.Controllers
                 return NotFound();
             }
             var ids = new List<int>();
-            // request.productList.ForEach(async x =>
-            // {
-            //     var OrderInventoryId = await InsertOrderInventory(request.orderId, x);
-            //     if (OrderInventoryId != 0)
-            //     {
-            //         ids.Add(OrderInventoryId);
-            //     }
-            // });
             var carts = _cartService.GetMany(user.Id.ToString(), CartAttributeEnum.Shopping);
             foreach (var cart in carts)
             {
@@ -72,26 +66,33 @@ namespace RestApi.Controllers
                     _cartService.Delete(user.Id.ToString(), cart.Name, CartAttributeEnum.Shopping);
                 }
             }
-            return Created("", request);
+            return Created("", ids);
         }
 
-        //TODO:use redis get user cart list
         private async Task<int> InsertOrderInventory(int orderId, HashEntry cart)
         {
-            var product = await _productService.GetShowProdcutById(orderId);
-            if (product == null)
+            var inventory = _inventoryService.GetJoinProductAndSpecification((int)cart.Name).FirstOrDefault();
+            if (inventory == null)
             {
                 return 0;
             }
-            var OrderInventory = new OrderInventory();
-            OrderInventory.OrderId = orderId;
-            // OrderInventory.Price = product.Price;
-            OrderInventory.InventoryId = (int)cart.Name;
-            OrderInventory.ProductName = product.Name;
-            OrderInventory.Quality = (int)cart.Value;
-            // OrderInventory.Specification = product.InventorySpecifications.
-            await _OrderInventoryService.Insert(OrderInventory);
-            return OrderInventory.Id;
+            var orderInventory = new OrderInventory()
+            {
+                OrderId = orderId,
+                Price = inventory.Price,
+                InventoryId = inventory.Id,
+                ProductName = inventory.Product.Name,
+                Quality = (int)cart.Value,
+                Specification = inventory.InventorySpecifications.Select(x =>
+                x.Specification.Name).Aggregate(
+                    new StringBuilder(),
+                    (current, next) => current.Append(current.Length == 0 ? "" : "-").Append(next)
+                )
+                .ToString()
+            };
+
+            await _OrderInventoryService.Insert(orderInventory);
+            return orderInventory.Id;
         }
     }
 }
