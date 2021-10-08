@@ -45,6 +45,10 @@ namespace Services
 
         public IEnumerable<Inventory> GetShowMany(int index, int size)
             => _repository.GetAll()
+                .Include(x => x.Product)
+                .Include(x => x.InventorySpecifications)
+                .ThenInclude(x => x.Specification)
+                .ThenInclude(x => x.SpecificationContent)
                 .Where(x => x.IsDisplay == true && x.IsDelete == false)
                 .Skip((index - 1) * size)
                 .Take(size)
