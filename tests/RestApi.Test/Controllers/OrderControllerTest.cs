@@ -11,7 +11,6 @@ namespace RestApi.Test.Controllers
     [TestFixture]
     public class OrderControllerTest : BaseController
     {
-        //TODO:move RecipientMail to common mail , verify mail
         [Test]
         public async Task ShouldStore()
         {
@@ -22,7 +21,7 @@ namespace RestApi.Test.Controllers
                 City = "city",
                 Street = "street",
                 Recipient = "recipient",
-                RecipientMail = "example@example.com",
+                RecipientMail = _testMail,
                 RecipientPhone = "123456789;",
                 Sender = "sender"
             };
@@ -68,7 +67,7 @@ namespace RestApi.Test.Controllers
                 City = "city",
                 Street = "street",
                 Recipient = "recipient",
-                RecipientMail = "example@example.com",
+                RecipientMail = _testMail,
                 RecipientPhone = "123456789;",
                 Sender = "senderaa"
             };
