@@ -36,7 +36,35 @@ namespace RestApi.Test.Controllers
         }
 
         [Test]
+        public async Task ShouldGetManyShowOrderInventory()
+        {
+            await FactoryOrderInventory();
+
+            //Arrange & Act & Assert
+            var response = _httpClient.GetAsync("/api/orderInventory/1");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.Result.StatusCode);
+
+        }
+
+
+        [Test]
         public async Task ShouldInsertOrderInventory()
+        {
+            var order = FactoryOrderInventory();
+            var response = await _httpClient.PostAsync("/api/OrderInventory", PostType(
+                new CreateOrderInventoryRequest()
+                {
+                    orderId = order.Id
+                }
+            ));
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+        }
+
+        private async Task<Order> FactoryOrderInventory()
         {
             var userId = _userService.SearchUserMail("jan@example.com").Id;
             var order = new Entities.Order()
@@ -47,15 +75,7 @@ namespace RestApi.Test.Controllers
             var product = ProductSeeder.SeedOne();
             await _productService.Insert(product);
             await InsertCart(userId.ToString(), product.Inventories.First().Id.ToString());
-            var response = await _httpClient.PostAsync("/api/OrderInventory", PostType(
-                new CreateOrderInventoryRequest()
-                {
-                    orderId = order.Id
-                }
-            ));
-
-            //Assert
-            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+            return order;
         }
 
         private async Task InsertCart(string userId, string inventoryId)
