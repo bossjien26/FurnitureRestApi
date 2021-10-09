@@ -46,6 +46,15 @@ namespace RestApi.Controllers
         }
 
         [Authorize()]
+        [HttpGet]
+        [Route("{perPage}")]
+        public IActionResult ShowMany(int perPage)
+        {
+            var user = (User)_httpContextAccessor.HttpContext.Items["User"];
+            return Ok(_inventoryService.GetShowMany(perPage, 5).ToList<Inventory>());
+        }
+
+        [Authorize()]
         [HttpPost]
         [Route("")]
         public async Task<IActionResult> Insert(CreateOrderInventoryRequest request)
