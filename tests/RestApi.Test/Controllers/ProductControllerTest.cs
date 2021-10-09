@@ -53,22 +53,5 @@ namespace RestApi.Test.Controllers
             var response = await _httpClient.PostAsync("/api/product/store/productCategory", PostType(request));
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         }
-
-        //TODO:move inventory
-        // [Test]
-        // public async Task ShouldInsertInventorySpecification()
-        // {
-        //     IProductService productService = new ProductService(_context);
-        //     ISpecificationService specificationService = new SpecificationService(_context);
-
-        //     var request = new RequestInventorySpecification()
-        //     {
-        //         ProductId = productService.GetAll().OrderByDescending(x => x.Id).First().Id,
-        //         SpecificationId = specificationService.GetMany(1, 1).First().Id
-        //     };
-
-        //     var response = await _httpClient.PostAsync("/api/product/store/InventorySpecification", PostType(request));
-        //     Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
-        // }
     }
 }
