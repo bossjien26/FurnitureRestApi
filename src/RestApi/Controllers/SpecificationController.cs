@@ -32,7 +32,7 @@ namespace RestApi.Controllers
             _logger = logger;
         }
 
-        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Customer, RoleEnum.Admin, RoleEnum.Staff)]
+        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
         [HttpPost]
         [Route("")]
         public async Task<IActionResult> Insert(RequestSpecification requestSpecification)
@@ -59,7 +59,7 @@ namespace RestApi.Controllers
             return specification;
         }
 
-        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Customer, RoleEnum.Admin, RoleEnum.Staff)]
+        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
         [HttpPost]
         [Route("store/specificationContent")]
         public async Task<IActionResult> storeSpecificationContent(RequestSpecificationContent requestSpecificationContent)
@@ -97,7 +97,6 @@ namespace RestApi.Controllers
             return specification;
         }
 
-        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
         [Route("{perPage}")]
         [HttpGet]
         public IActionResult ShowMany(int perPage)

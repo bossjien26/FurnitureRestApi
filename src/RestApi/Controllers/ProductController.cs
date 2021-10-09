@@ -66,7 +66,6 @@ namespace RestApi.Controllers
             return product;
         }
 
-        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
         [Route("{perPage}")]
         [HttpGet]
         public IActionResult ShowMany(int perPage)

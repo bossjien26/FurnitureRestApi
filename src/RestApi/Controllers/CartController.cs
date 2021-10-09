@@ -43,7 +43,7 @@ namespace RestApi.Controllers
 
         [Route("")]
         [HttpPost]
-        [Authorize(Enum.RoleEnum.SuperAdmin, Enum.RoleEnum.Customer, Enum.RoleEnum.Admin, Enum.RoleEnum.Staff)]
+        [Authorize()]
         public async Task<IActionResult> Store(RequestCart requestCart)
         {
             if (!await CheckProductIsExist(requestCart))
