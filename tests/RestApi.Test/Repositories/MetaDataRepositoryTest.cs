@@ -9,17 +9,17 @@ using RestApi.Test.DatabaseSeeders;
 
 namespace RestApi.Test.Repositories
 {
-    public class MetaDataRepositoryTest : BaseRepositoryTest
+    public class MetadataRepositoryTest : BaseRepositoryTest
     {
-        private readonly IMetaDataRepository _repository;
+        private readonly IMetadataRepository _repository;
 
-        public MetaDataRepositoryTest() =>
-        _repository = new MetaDataRepository(_context);
+        public MetadataRepositoryTest() =>
+        _repository = new MetadataRepository(_context);
 
         [Test]
         async public Task ShouldGet()
         {
-            var seeder = MetaDataSeeder.SeedOne();
+            var seeder = MetadataSeeder.SeedOne();
             await _repository.Insert(seeder);
             var product = _repository.Get(c => c.Id == seeder.Id);
             Assert.IsNotNull(product);
@@ -28,7 +28,7 @@ namespace RestApi.Test.Repositories
         [Test]
         async public Task ShouldGetAll()
         {
-            await _repository.InsertMany(MetaDataSeeder.SeedMany(5, 5));
+            await _repository.InsertMany(MetadataSeeder.SeedMany(5, 5));
             var products = await _repository.GetAll().Take(5).ToListAsync();
             Assert.IsNotNull(products);
             Assert.AreEqual(5, products.Count);
@@ -43,7 +43,7 @@ namespace RestApi.Test.Repositories
         [Test]
         public async Task ShouldDelete()
         {
-            var testData = MetaDataSeeder.SeedOne();
+            var testData = MetadataSeeder.SeedOne();
             await _repository.Insert(testData);
 
             Assert.DoesNotThrowAsync(() => _repository.Delete(testData));
@@ -59,7 +59,7 @@ namespace RestApi.Test.Repositories
         [Test]
         public async Task ShouldUpdate()
         {
-            var testData = MetaDataSeeder.SeedOne();
+            var testData = MetadataSeeder.SeedOne();
             await _repository.Insert(testData);
 
             testData.Value = "Test";

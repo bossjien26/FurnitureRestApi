@@ -12,7 +12,6 @@ namespace Entities
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("User")]
         public int UserId { get; set; }
 
         public OrderStatusEnum Status { get; set; } = OrderStatusEnum.Processing;
@@ -37,6 +36,11 @@ namespace Entities
         [StringLength(256)]
         public string RecipientMail { get; set; }
 
+
+        [Column(TypeName = "Varchar")]
+        [StringLength(256)]
+        public string RecipientPhone { get; set; }
+
         [Column(TypeName = "Varchar")]
         [StringLength(150)]
         public string Sender { get; set; }
@@ -45,10 +49,11 @@ namespace Entities
 
         public DateTime UpdateAt { get; set; } = DateTime.Now;
 
+        [ForeignKey(nameof(UserId))]
         public virtual User User { get; set; }
 
         public virtual OrderPay OrderPay { get; set; }
 
-        public virtual ICollection<OrderProduct> OrderProducts { get; set; }
+        public virtual ICollection<OrderInventory> OrderInventories { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace DbEntity
 
         #region 
 
-        public DbSet<MetaData> MetaDatas { get; set; }
+        public DbSet<Metadata> Metadatas { get; set; }
 
         #endregion
 
@@ -22,7 +22,7 @@ namespace DbEntity
 
         public DbSet<OrderPay> OrderPays { get; set; }
 
-        public DbSet<OrderProduct> OrderProducts { get; set; }
+        public DbSet<OrderInventory> OrderInventories { get; set; }
 
         #endregion
 
@@ -30,9 +30,11 @@ namespace DbEntity
 
         public DbSet<Product> Products { get; set; }
 
+        public DbSet<Inventory> Inventories { get; set; }
+
         public DbSet<ProductCategory> ProductCategories { get; set; }
 
-        public DbSet<ProductSpecification> ProductSpecifications { get; set; }
+        public DbSet<InventorySpecification> InventorySpecifications { get; set; }
 
         public DbSet<Category> Categories { get; set; }
 

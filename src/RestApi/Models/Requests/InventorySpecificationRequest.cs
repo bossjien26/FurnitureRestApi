@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RestApi.Models.Requests
 {
-    public class RequestProductSpecification
+    public class InventorySpecificationRequest
     {
         [Required]
         public int ProductId { get; set; }

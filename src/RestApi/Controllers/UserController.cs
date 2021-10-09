@@ -25,7 +25,7 @@ namespace RestApi.src.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _repository;
+        private readonly IUserService _service;
 
         private readonly ILogger<UserController> _logger;
 
@@ -40,7 +40,7 @@ namespace RestApi.src.Controllers
         public UserController(DbContextEntity context, ILogger<UserController> logger,
          AppSettings appsetting, MailHelper mailHelper, IHttpContextAccessor httpContextAccessor)
         {
-            _repository = new UserService(context);
+            _service = new UserService(context);
             _userDetailService = new UserDetailService(context);
             _logger = logger;
             _appSettings = appsetting;
@@ -53,7 +53,7 @@ namespace RestApi.src.Controllers
         [Route("{perPage}")]
         public IActionResult ShowUser(int perPage)
         {
-            return Ok(_repository.GetMany(perPage, 10).ToList());
+            return Ok(_service.GetMany(perPage, 10).ToList());
         }
 
         [HttpPut]
@@ -63,7 +63,7 @@ namespace RestApi.src.Controllers
         {
             var myself = (User)_httpContextAccessor.HttpContext.Items["User"];
 
-            if (myself.Id != user.Id || _repository.GetById(user.Id).Result == null)
+            if (myself.Id != user.Id || _service.GetById(user.Id).Result == null)
             {
                 return NotFound(new RegistrationResponse()
                 {
@@ -72,7 +72,7 @@ namespace RestApi.src.Controllers
                 });
             }
 
-            _repository.Update(user);
+            _service.Update(user);
             return Ok(new RegistrationResponse()
             {
                 Status = true,
@@ -143,13 +143,13 @@ namespace RestApi.src.Controllers
                 Password = registration.Password,
                 Name = registration.Name
             };
-            await _repository.Insert(user);
+            await _service.Insert(user);
             return user;
         }
 
         private bool CheckRegisterMailIsUse(string mail)
         {
-            return (_repository.SearchUserMail(mail) != null) ? true : false;
+            return (_service.SearchUserMail(mail) != null) ? true : false;
         }
 
         [AllowAnonymous]
@@ -157,7 +157,7 @@ namespace RestApi.src.Controllers
         [Route("authenticate")]
         public IActionResult Authenticate(Authenticate authenticateRequest)
         {
-            if (_repository.GetVerifyUser(authenticateRequest.Mail, authenticateRequest.Password) == null)
+            if (_service.GetVerifyUser(authenticateRequest.Mail, authenticateRequest.Password) == null)
             {
                 return NotFound(new RegistrationResponse()
                 {

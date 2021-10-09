@@ -13,22 +13,33 @@ namespace RestApi.Test.Repositories
     {
         private readonly IOrderRepository _repository;
 
-        public OrderRepositoryTest() =>
-        _repository = new OrderRepository(_context);
+        private readonly IProductRepository _productRepository;
+
+        public OrderRepositoryTest()
+        {
+            _repository = new OrderRepository(_context);
+            _productRepository = new ProductRepository(_context);
+        }
 
         [Test]
         async public Task ShouldGet()
         {
-            var seeder = OrderSeeder.SeedOne();
+            var product = ProductSeeder.SeedOne();
+            await _productRepository.Insert(product);
+
+            var seeder = OrderSeeder.SeedOne(product.Inventories.First().Id);
             await _repository.Insert(seeder);
-            var product = _repository.Get(c => c.Id == seeder.Id);
-            Assert.IsNotNull(product);
+            var test = _repository.Get(c => c.Id == seeder.Id);
+            Assert.IsNotNull(test);
         }
 
         [Test]
         async public Task ShouldGetAll()
         {
-            await _repository.InsertMany(OrderSeeder.SeedMany(5, 5));
+            var product = ProductSeeder.SeedOne();
+            await _productRepository.Insert(product);
+
+            await _repository.InsertMany(OrderSeeder.SeedMany(product.Inventories.First().Id, 5, 5));
             var products = await _repository.GetAll().Take(5).ToListAsync();
             Assert.IsNotNull(products);
             Assert.AreEqual(5, products.Count);
@@ -43,7 +54,10 @@ namespace RestApi.Test.Repositories
         [Test]
         public async Task ShouldDelete()
         {
-            var testData = OrderSeeder.SeedOne();
+            var product = ProductSeeder.SeedOne();
+            await _productRepository.Insert(product);
+
+            var testData = OrderSeeder.SeedOne(product.Inventories.First().Id);
             await _repository.Insert(testData);
 
             Assert.DoesNotThrowAsync(() => _repository.Delete(testData));
@@ -59,11 +73,25 @@ namespace RestApi.Test.Repositories
         [Test]
         public async Task ShouldUpdate()
         {
-            var testData = OrderSeeder.SeedOne();
+            var product = ProductSeeder.SeedOne();
+            await _productRepository.Insert(product);
+
+            var testData = OrderSeeder.SeedOne(product.Inventories.First().Id);
             await _repository.Insert(testData);
 
             testData.Street = "Taiwain";
             Assert.DoesNotThrowAsync(() => _repository.Update(testData));
+        }
+
+        [Test]
+        async public Task ShouldInsert()
+        {
+            var product = ProductSeeder.SeedOne();
+            await _productRepository.Insert(product);
+
+            var data = OrderSeeder.SeedOne(product.Inventories.First().Id);
+            Assert.DoesNotThrowAsync(() => _repository.Insert(data));
+            Assert.AreNotEqual(0, data.Id);
         }
 
         [Test]

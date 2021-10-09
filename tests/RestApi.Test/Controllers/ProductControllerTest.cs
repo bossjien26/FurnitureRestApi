@@ -30,11 +30,7 @@ namespace RestApi.Test.Controllers
         {
             var request = new RequestProduct()
             {
-                Name = "name",
-                Price = 1,
-                Sequence = 1,
-                Quantity = 1,
-                RelateAt = DateTime.Now
+                Name = "name"
             };
 
             var response = await _httpClient.PostAsync("/api/product", PostType(request));
@@ -55,22 +51,6 @@ namespace RestApi.Test.Controllers
             };
 
             var response = await _httpClient.PostAsync("/api/product/store/productCategory", PostType(request));
-            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
-        }
-
-        [Test]
-        public async Task ShouldInsertProductSpecification()
-        {
-            IProductService productService = new ProductService(_context);
-            ISpecificationService specificationService = new SpecificationService(_context);
-
-            var request = new RequestProductSpecification()
-            {
-                ProductId = productService.GetAll().OrderByDescending(x => x.Id).First().Id,
-                SpecificationId = specificationService.GetMany(1, 1).First().Id
-            };
-
-            var response = await _httpClient.PostAsync("/api/product/store/productSpecification", PostType(request));
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         }
     }

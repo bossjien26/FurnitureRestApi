@@ -23,6 +23,6 @@ namespace Entities
 
         public virtual ICollection<SpecificationContent>  SpecificationContent { get; set; }
 
-        public virtual ICollection<ProductSpecification> ProductSpecifications { get; set; }
+        public virtual ICollection<InventorySpecification> InventorySpecifications { get; set; }
     }
 }

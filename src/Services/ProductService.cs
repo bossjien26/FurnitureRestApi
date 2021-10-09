@@ -29,6 +29,10 @@ namespace Services
             return await _repository.Get(x => x.Id == id);
         }
 
+
+        public async Task<Product> GetShowProdcutById(int id)
+        => await _repository.Get(x => x.Id == id && x.Inventories.Where(r => r.IsDisplay == true).Any());
+
         public IEnumerable<Product> GetMany(int index, int size)
         {
             return _repository.GetAll()
@@ -36,6 +40,12 @@ namespace Services
                 .Take(size)
                 .OrderByDescending(x => x.Id);
         }
+
+        public IEnumerable<Product> GetShowProductMany(int index, int size)
+        => _repository.GetAll().Where(x => x.Inventories.Where(r => r.IsDisplay == true).Any())
+                .Skip((index - 1) * size)
+                .Take(size)
+                .OrderByDescending(x => x.Id);
 
         public IEnumerable<Product> GetAll()
         {
@@ -47,14 +57,6 @@ namespace Services
             return _repository.GetAll().Where(p => p.Id == productId &&
             p.ProductCategories.Where(c => c.CategoryId == categoryId && c.ProductId
             == productId && c.Category.Id == categoryId).Any()).Any();
-        }
-
-        public bool CheckProductAndProductSpecificationIsExist(int productId, int specificationId)
-        {
-            return _repository.GetAll().Where(x => x.Id == productId &&
-            x.ProductSpecifications.Where(s => s.SpecificationId == specificationId &&
-            s.ProductId == productId && s.Specification.Id == specificationId).Any()
-            ).Any();
         }
     }
 }

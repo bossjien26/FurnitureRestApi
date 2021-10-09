@@ -6,7 +6,7 @@ namespace RestApi.Models.Requests
     public class RequestCart
     {
         [Required]
-        public int ProductId { get; set; }
+        public int InventoryId { get; set; }
 
         [Required]
         public int Quantity { get; set; }

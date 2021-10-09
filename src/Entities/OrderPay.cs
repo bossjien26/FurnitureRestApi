@@ -10,7 +10,6 @@ namespace Entities
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("Order")]
         public int OrderId { get; set; }
 
         public PaymentTypeEnum Terms { get; set; }
@@ -19,6 +18,7 @@ namespace Entities
 
         public int TotalPrice { get; set; }
 
+        [ForeignKey(nameof(OrderId))]
         public virtual Order Order { get; set; }
     }
 }

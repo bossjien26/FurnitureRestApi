@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Bogus;
 using Bogus.Extensions;
 using Entities;
-using Enum;
 
 namespace RestApi.Test.DatabaseSeeders
 {
@@ -19,19 +18,30 @@ namespace RestApi.Test.DatabaseSeeders
             return new Faker<Product>()
                 .RuleFor(c => c.Id, (f) => 0)
                 .RuleFor(c => c.Name, (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.Price, (f) => f.Random.Number(10))
-                .RuleFor(c => c.Quantity, (f) => f.Random.Number(10))
-                .RuleFor(c => c.Sequence, (f) => f.Random.Number(10))
-                .RuleFor(c => c.RelateAt, (f) => DateTime.Now)
+                .RuleFor(c => c.CreateAt, (f) => DateTime.Now)
+                .RuleFor(c => c.UpdateAt, (f) => DateTime.Now)
                 .RuleFor(c => c.ProductCategories, (f) => SetProductCategory().Generate(1))
-                .RuleFor(c => c.ProductSpecifications, (f) => SetProductSpecification().Generate(1));
+                .RuleFor(c => c.Inventories, (f) => SetInventory().Generate(5));
         }
 
-        private static Faker<ProductSpecification> SetProductSpecification()
+        private static Faker<Inventory> SetInventory()
         {
-            return new Faker<ProductSpecification>()
+            return new Faker<Inventory>()
                 .RuleFor(c => c.Id, (f) => 0)
-                .RuleFor(c => c.ProductId, (f) => f.Random.Number(10))
+                .RuleFor(c => c.SKU, (f) => f.Random.AlphaNumeric(10))
+                .RuleFor(c => c.Price, (f) => f.Random.Number(10))
+                .RuleFor(c => c.IsDisplay, (f) => true)
+                .RuleFor(c => c.Quantity, (f) => f.Random.Number(10))
+                .RuleFor(c => c.RelateAt, (f) => DateTime.Now)
+                .RuleFor(c => c.Sequence, (f) => f.Random.Number(1))
+                .RuleFor(c => c.InventorySpecifications, (f) => SetInventorySpecification().Generate(5));
+        }
+
+        private static Faker<InventorySpecification> SetInventorySpecification()
+        {
+            return new Faker<InventorySpecification>()
+                .RuleFor(c => c.Id, (f) => 0)
+                .RuleFor(c => c.InventoryId, (f) => f.Random.Number(10))
                 .RuleFor(c => c.SpecificationId, (f) => f.Random.Number(10))
                 .RuleFor(c => c.Specification, (f) => SetSpecification());
         }

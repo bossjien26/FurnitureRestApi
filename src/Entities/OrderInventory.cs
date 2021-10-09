@@ -3,16 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities
 {
-    [Table("OrderProduct")]
-    public class OrderProduct
+    [Table("OrderInventory")]
+    public class OrderInventory
     {
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("Order")]
         public int OrderId { get; set; }
 
-        public int ProductId { get; set; }
+        public int InventoryId { get; set; }
 
         [Column(TypeName = "Varchar")]
         [StringLength(256)]
@@ -26,6 +25,10 @@ namespace Entities
 
         public int Price { get; set; }
 
+        [ForeignKey(nameof(OrderId))]
         public virtual Order Order { get; set; }
+
+        [ForeignKey(nameof(InventoryId))]
+        public virtual Inventory Inventory { get; set; }
     }
 }

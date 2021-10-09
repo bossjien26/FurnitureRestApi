@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using DbEntity;
 using Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -107,6 +108,9 @@ namespace RestApi
 
                 };
             });
+
+            services.AddControllers().AddJsonOptions(x =>
+            x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
             IdentityModelEventSource.ShowPII = true;
 

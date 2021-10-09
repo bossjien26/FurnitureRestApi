@@ -10,6 +10,7 @@ using RestApi.Models.Requests;
 using RestApi.src.Models;
 using Services.Interface;
 using Services;
+using System;
 
 namespace RestApi.Controllers
 {
@@ -17,21 +18,17 @@ namespace RestApi.Controllers
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
-        private readonly IProductService _repository;
+        private readonly IProductService _service;
 
         private readonly ILogger<ProductController> _logger;
 
         private readonly IProductCategoryService _productCategoryRepository;
 
-        private readonly IProductSpecificationService _productSpecificationRepository;
-
         public ProductController(DbContextEntity context, ILogger<ProductController> logger)
         {
-            _repository = new ProductService(context);
+            _service = new ProductService(context);
 
             _productCategoryRepository = new ProductCategoryService(context);
-
-            _productSpecificationRepository = new ProductSpecificationService(context);
 
             _logger = logger;
         }
@@ -54,7 +51,7 @@ namespace RestApi.Controllers
         [Route("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _repository.GetById(id);
+            var product = await _service.GetById(id);
             return Ok(product);
         }
 
@@ -63,22 +60,17 @@ namespace RestApi.Controllers
             var product = new Product()
             {
                 Name = requestProduct.Name,
-                Price = requestProduct.Price,
-                Sequence = requestProduct.Sequence,
-                Quantity = requestProduct.Quantity,
-                RelateAt = requestProduct.RelateAt,
-                IsDisplay = requestProduct.IsDisplay
+                CreateAt = DateTime.Now
             };
-            await _repository.Insert(product);
+            await _service.Insert(product);
             return product;
         }
 
-        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
         [Route("{perPage}")]
         [HttpGet]
         public IActionResult ShowMany(int perPage)
         {
-            return Ok(_repository.GetMany(perPage, 10).ToList());
+            return Ok(_service.GetMany(perPage, 10).ToList());
         }
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
@@ -106,7 +98,7 @@ namespace RestApi.Controllers
 
         private bool CheckProductAndCategoryIsExist(RequestProductCategory requestProductCategory)
         {
-            return _repository.CheckProductToProductCategoryIsExist(requestProductCategory.ProductId
+            return _service.CheckProductToProductCategoryIsExist(requestProductCategory.ProductId
             , requestProductCategory.CategoryId) ? true : false;
         }
 
@@ -116,44 +108,6 @@ namespace RestApi.Controllers
             {
                 ProductId = requestProductCategory.ProductId,
                 CategoryId = requestProductCategory.CategoryId
-            });
-        }
-
-        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
-        [Route("store/productSpecification")]
-        [HttpPost]
-        public async Task<IActionResult> StoreProductSpecification(RequestProductSpecification requestProductSpecification)
-        {
-            if (CheckProductAndSpecificationIsExist(requestProductSpecification))
-            {
-                return NotFound(new AutResultModel()
-                {
-                    Status = false,
-                    Data = "Fail"
-                });
-            }
-            await InsertProductSpecification(requestProductSpecification);
-
-            return CreatedAtAction(nameof(GetProduct), new { id = requestProductSpecification.ProductId },
-                new AutResultModel()
-                {
-                    Status = true,
-                    Data = "Success"
-                });
-        }
-
-        private bool CheckProductAndSpecificationIsExist(RequestProductSpecification requestProductSpecification)
-        {
-            return _repository.CheckProductAndProductSpecificationIsExist(requestProductSpecification.ProductId,
-            requestProductSpecification.SpecificationId) ? true : false;
-        }
-
-        private async Task InsertProductSpecification(RequestProductSpecification requestProductSpecification)
-        {
-            await _productSpecificationRepository.Insert(new ProductSpecification()
-            {
-                ProductId = requestProductSpecification.ProductId,
-                SpecificationId = requestProductSpecification.SpecificationId
             });
         }
     }

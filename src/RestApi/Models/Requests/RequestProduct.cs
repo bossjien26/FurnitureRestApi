@@ -9,19 +9,5 @@ namespace RestApi.Models.Requests
 
         [Required]
         public string Name { get; set; }
-
-        [Required]
-        public int Quantity { get; set; }
-
-        [Required]
-        public int Sequence { get; set; }
-
-        [Required]
-        public int Price { get; set; }
-
-        public DateTime RelateAt { get; set; } = DateTime.Now;
-
-        [Required]
-        public bool IsDisplay { get; set; } = true;
     }
 }

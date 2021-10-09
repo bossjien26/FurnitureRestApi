@@ -10,12 +10,14 @@ namespace Services.Interface
 
         Task<Product> GetById(int id);
 
+        Task<Product> GetShowProdcutById(int id);
+
         IEnumerable<Product> GetMany(int index, int size);
+
+        IEnumerable<Product> GetShowProductMany(int index, int size);
 
         IEnumerable<Product> GetAll();
 
         bool CheckProductToProductCategoryIsExist(int productId, int categoryId);
-
-        bool CheckProductAndProductSpecificationIsExist(int productId, int specificationId);
     }
 }

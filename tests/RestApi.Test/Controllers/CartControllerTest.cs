@@ -8,7 +8,9 @@ using Moq;
 using NUnit.Framework;
 using RestApi.Controllers;
 using RestApi.Models.Requests;
+using RestApi.Test.DatabaseSeeders;
 using Services;
+using Services.Interface;
 using Services.Redis;
 
 namespace RestApi.Test.Controllers
@@ -16,25 +18,22 @@ namespace RestApi.Test.Controllers
     [TestFixture]
     public class CartControllerTest : BaseController
     {
-        private readonly CartController _controller;
+        private readonly IProductService _productService;
 
         public CartControllerTest()
         {
-            _controller = new CartController(
-                _context,
-                new Mock<ILogger<CartController>>().Object,
-                new Mock<IHttpContextAccessor>().Object,
-                _redisConnect
-            );
+            _productService = new ProductService(_context);
         }
 
         [Test]
         public async Task ShouldStore()
         {
+            var product = ProductSeeder.SeedOne();
+            await _productService.Insert(product);
             //Act
             var request = new RequestCart()
             {
-                ProductId = 2,
+                InventoryId = product.Inventories.First().Id,
                 Quantity = 1,
                 Attribute = CartAttributeEnum.Shopping
             };
@@ -53,7 +52,7 @@ namespace RestApi.Test.Controllers
             await service.Set(new Entities.Cart()
             {
                 UserId = user.Id.ToString(),
-                ProductId = "2",
+                InventoryId = "2",
                 Quantity = "1",
                 Attribute = CartAttributeEnum.Shopping
             });

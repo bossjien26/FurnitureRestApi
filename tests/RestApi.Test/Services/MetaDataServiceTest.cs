@@ -9,23 +9,23 @@ using Services;
 namespace RestApi.Test.Services
 {
     [TestFixture]
-    public class MetaDataServiceTest
+    public class MetadataServiceTest
     {
-        private readonly Mock<MetaData> _entityMock;
+        private readonly Mock<Metadata> _entityMock;
 
-        private readonly Mock<IMetaDataRepository> _repoMock;
+        private readonly Mock<IMetadataRepository> _repoMock;
 
-        public MetaDataServiceTest()
+        public MetadataServiceTest()
         {
-            _entityMock = new Mock<MetaData>();
-            _repoMock = new Mock<IMetaDataRepository>();
+            _entityMock = new Mock<Metadata>();
+            _repoMock = new Mock<IMetadataRepository>();
         }
 
         [Test]
         public void ShouldInsert()
         {
             Assert.DoesNotThrowAsync(()
-                => new MetaDataService(_repoMock.Object).Insert(_entityMock.Object));
+                => new MetadataService(_repoMock.Object).Insert(_entityMock.Object));
         }
 
         [Test]
@@ -33,9 +33,9 @@ namespace RestApi.Test.Services
         {
             _repoMock.Setup(r => r.Get(x => x.Id == 1)).Returns(Task.FromResult(_entityMock.Object));
 
-            var result = await new MetaDataService(_repoMock.Object).GetById(1);
+            var result = await new MetadataService(_repoMock.Object).GetById(1);
 
-            Assert.IsInstanceOf<MetaData>(result);
+            Assert.IsInstanceOf<Metadata>(result);
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace RestApi.Test.Services
             _entityMock.Object.Key = "cart";
 
             Assert.DoesNotThrow(() =>
-                new MetaDataService(_repoMock.Object).Update(_entityMock.Object)
+                new MetadataService(_repoMock.Object).Update(_entityMock.Object)
             );
         }
 
@@ -58,13 +58,13 @@ namespace RestApi.Test.Services
         public void ShouldGetByCategory()
         {
             _repoMock.Setup(c => c.Get(x => x.Key == PaymentTypeEnum.Bank.ToString()
-            && x.Category == MetaDataCategoryEnum.Pay))
+            && x.Category == MetadataCategoryEnum.Pay))
             .Returns(Task.FromResult(_entityMock.Object));
 
 
             Assert.DoesNotThrow(() =>
-                new MetaDataService(_repoMock.Object)
-            .GetByCategory(MetaDataCategoryEnum.Pay, (int)PaymentTypeEnum.Bank)
+                new MetadataService(_repoMock.Object)
+            .GetByCategory(MetadataCategoryEnum.Pay, (int)PaymentTypeEnum.Bank)
             );
         }
     }
