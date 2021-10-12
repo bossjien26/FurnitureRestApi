@@ -26,7 +26,6 @@ namespace RestApi.Controllers
 
         private readonly ILogger<CartController> _logger;
 
-        //TODO: Unable to resolve service for type
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public CartController(DbContextEntity context, ILogger<CartController> logger,
