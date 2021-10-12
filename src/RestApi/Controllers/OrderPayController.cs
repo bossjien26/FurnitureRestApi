@@ -2,7 +2,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using DbEntity;
 using Entities;
-using Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
