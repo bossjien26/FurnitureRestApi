@@ -40,7 +40,7 @@ namespace RestApi.Controllers
         {
             var product = await InsertProdcut(requestsProduct);
 
-            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, new AutResultModel()
+            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, new AutResultResponse()
             {
                 Status = true,
                 Data = "Success"
@@ -80,7 +80,7 @@ namespace RestApi.Controllers
         {
             if (CheckProductAndCategoryIsExist(requestProductCategory))
             {
-                return NotFound(new AutResultModel()
+                return NotFound(new AutResultResponse()
                 {
                     Status = false,
                     Data = "Fail"
@@ -89,7 +89,7 @@ namespace RestApi.Controllers
             await InsertProductCategory(requestProductCategory);
 
             return CreatedAtAction(nameof(GetProduct), new { id = requestProductCategory.ProductId },
-                new AutResultModel()
+                new AutResultResponse()
                 {
                     Status = true,
                     Data = "Success"

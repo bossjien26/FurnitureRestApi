@@ -40,7 +40,7 @@ namespace RestApi.Controllers
             var specification = await InsertSpecification(requestSpecification);
 
             return CreatedAtAction(nameof(GetSpecification), new { id = specification.Id },
-                new AutResultModel()
+                new AutResultResponse()
                 {
                     Status = true,
                     Data = "Success"
@@ -66,7 +66,7 @@ namespace RestApi.Controllers
         {
             if (await _specificationContentService.GetById(requestSpecificationContent.SpecificationId) == null)
             {
-                return NotFound(new AutResultModel()
+                return NotFound(new AutResultResponse()
                 {
                     Status = false,
                     Data = "Fail"
@@ -76,7 +76,7 @@ namespace RestApi.Controllers
             var specification = await InsertSpecificationContent(requestSpecificationContent);
 
             return CreatedAtAction(nameof(GetSpecification), new { id = specification.Id },
-                new AutResultModel()
+                new AutResultResponse()
                 {
                     Status = true,
                     Data = "Success"

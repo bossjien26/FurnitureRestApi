@@ -47,7 +47,7 @@ namespace RestApi.Controllers
         {
             if (!await CheckProductIsExist(requestCart))
             {
-                return NotFound(new AutResultModel()
+                return NotFound(new AutResultResponse()
                 {
                     Status = false,
                     Data = "Fail"
@@ -56,7 +56,7 @@ namespace RestApi.Controllers
 
             await StoreCart(requestCart);
 
-            return Created("", new AutResultModel()
+            return Created("", new AutResultResponse()
             {
                 Status = true,
                 Data = "Success"

@@ -63,7 +63,7 @@ namespace RestApi.Controllers
             var user = (User)_httpContextAccessor.HttpContext.Items["User"];
             var order = await InsertOrder(request, user.Id);
             SendMail(order);
-            return Created(user.Id.ToString(), new AutResultModel() { Status = true, Data = "Success" });
+            return Created(user.Id.ToString(), new AutResultResponse() { Status = true, Data = "Success" });
         }
 
         private async Task<Order> InsertOrder(CreateOrderRequest request, int userId)

@@ -4,7 +4,6 @@ using Entities;
 using System.Linq;
 using Services;
 using Services.Interface;
-using RestApi.src.Models.Response;
 using Microsoft.Extensions.Logging;
 using Middlewares;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,6 +17,7 @@ using Middlewares.Authentication;
 using RestApi.Models.Requests;
 using Enum;
 using Microsoft.AspNetCore.Http;
+using RestApi.src.Models;
 
 namespace RestApi.src.Controllers
 {
@@ -65,7 +65,7 @@ namespace RestApi.src.Controllers
 
             if (myself.Id != user.Id || _service.GetById(user.Id).Result == null)
             {
-                return NotFound(new RegistrationResponse()
+                return NotFound(new AutResultResponse()
                 {
                     Status = false,
                     Data = "Not Find"
@@ -73,7 +73,7 @@ namespace RestApi.src.Controllers
             }
 
             _service.Update(user);
-            return Ok(new RegistrationResponse()
+            return Ok(new AutResultResponse()
             {
                 Status = true,
                 Data = "Update"
@@ -87,7 +87,7 @@ namespace RestApi.src.Controllers
         {
             if (CheckRegisterMailIsUse(registration.Mail))
             {
-                return NotFound(new RegistrationResponse()
+                return NotFound(new AutResultResponse()
                 {
                     Status = false,
                     Data = "Mail is registration"
@@ -97,7 +97,7 @@ namespace RestApi.src.Controllers
             await CreateUserDetail(registration, await CreateUser(registration));
 
             SendRegisterMail(registration);
-            return Created("", new RegistrationResponse()
+            return Created("", new AutResultResponse()
             {
                 Status = true,
                 Data = "Register Success"
@@ -159,13 +159,13 @@ namespace RestApi.src.Controllers
         {
             if (_service.GetVerifyUser(authenticateRequest.Mail, authenticateRequest.Password) == null)
             {
-                return NotFound(new RegistrationResponse()
+                return NotFound(new AutResultResponse()
                 {
                     Status = false,
                     Data = "Not Find"
                 });
             }
-            return Ok(new RegistrationResponse()
+            return Ok(new AutResultResponse()
             {
                 Status = true,
                 Data = generateJwtToken(authenticateRequest)

@@ -37,7 +37,7 @@ namespace RestApi.Controllers
             }
             await InsertInventorySpecification(request);
 
-            return Created("", new AutResultModel() { Status = true, Data = "Success" });
+            return Created("", new AutResultResponse() { Status = true, Data = "Success" });
         }
 
         private bool CheckProductAndSpecificationIsExist(InventorySpecificationRequest request)

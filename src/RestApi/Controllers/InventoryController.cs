@@ -42,7 +42,7 @@ namespace RestApi.Controllers
         {
             var inventory = await InsertInventory(request);
 
-            return CreatedAtAction(nameof(inventory), new { id = inventory.Id }, new AutResultModel()
+            return CreatedAtAction(nameof(inventory), new { id = inventory.Id }, new AutResultResponse()
             {
                 Status = true,
                 Data = "Success"
@@ -78,7 +78,7 @@ namespace RestApi.Controllers
 
             UpdateInventory(inventory, request);
 
-            return CreatedAtAction(nameof(inventory), new { id = inventory.Id }, new AutResultModel()
+            return CreatedAtAction(nameof(inventory), new { id = inventory.Id }, new AutResultResponse()
             {
                 Status = true,
                 Data = "Success"

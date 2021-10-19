@@ -35,7 +35,7 @@ namespace RestApi.Controllers
         {
             if (await _service.GetById(requestsCategory.ChildrenId) == null && requestsCategory.ChildrenId != 0)
             {
-                return NotFound(new AutResultModel()
+                return NotFound(new AutResultResponse()
                 {
                     Status = false,
                     Data = "Fail"
@@ -44,7 +44,7 @@ namespace RestApi.Controllers
 
             var category = await InsertCategory(requestsCategory);
 
-            return CreatedAtAction(nameof(GetCategory), new { id = category.Id }, new AutResultModel()
+            return CreatedAtAction(nameof(GetCategory), new { id = category.Id }, new AutResultResponse()
             {
                 Status = true,
                 Data = "Success"

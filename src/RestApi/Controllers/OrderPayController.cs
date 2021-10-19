@@ -48,7 +48,7 @@ namespace RestApi.Controllers
                 return NotFound();
             }
             var orderPay = await InsertOrderPay(request);
-            return Created("", new AutResultModel() { Status = true, Data = "" });
+            return Created("", new AutResultResponse() { Status = true, Data = "" });
         }
 
         private async Task<OrderPay> InsertOrderPay(CreateOrderPayRequest request)
