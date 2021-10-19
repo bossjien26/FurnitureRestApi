@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RestApi.Models.Requests
 {
-    public class Authenticate
+    public class GenerateAuthenticateRequest
     {
         public int Id { get; set; }
 

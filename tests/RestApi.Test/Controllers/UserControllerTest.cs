@@ -34,7 +34,7 @@ namespace RestApi.Test.Controllers
         public void ShouldGenerateJwtToken()
         {
             //Arrange &  Act
-            var request = new Authenticate() { Mail = "jan@example.com", Password = "aaaaaaa" };
+            var request = new GenerateAuthenticateRequest() { Mail = "jan@example.com", Password = "aaaaaaa" };
             var response = _httpClient.PostAsync("/api/user/authenticate", PostType(request));
 
             //Assert

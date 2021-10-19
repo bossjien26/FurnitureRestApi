@@ -155,7 +155,7 @@ namespace RestApi.src.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("authenticate")]
-        public IActionResult Authenticate(Authenticate authenticateRequest)
+        public IActionResult Authenticate(GenerateAuthenticateRequest authenticateRequest)
         {
             if (_service.GetVerifyUser(authenticateRequest.Mail, authenticateRequest.Password) == null)
             {
@@ -177,7 +177,7 @@ namespace RestApi.src.Controllers
         /// </summary>
         /// <param name="loginInfo"></param>
         /// <returns></returns>
-        private string generateJwtToken(Authenticate loginInfo)
+        private string generateJwtToken(GenerateAuthenticateRequest loginInfo)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
