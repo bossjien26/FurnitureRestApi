@@ -3,7 +3,7 @@ using Enum;
 
 namespace RestApi.Models.Requests
 {
-    public class RequestCart
+    public class CreateCartRequest
     {
         [Required]
         public int InventoryId { get; set; }

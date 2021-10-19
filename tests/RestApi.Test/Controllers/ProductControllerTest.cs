@@ -28,7 +28,7 @@ namespace RestApi.Test.Controllers
         [Test]
         public async Task ShouldInsertProduct()
         {
-            var request = new RequestProduct()
+            var request = new CreateProductRequest()
             {
                 Name = "name"
             };
@@ -44,7 +44,7 @@ namespace RestApi.Test.Controllers
         {
             ICategoryService categoryService = new CategoryService(_context);
             IProductService productService = new ProductService(_context);
-            var request = new RequestProductCategory()
+            var request = new CreateProductCategoryRequest()
             {
                 ProductId = productService.GetAll().OrderByDescending(x => x.Id).First().Id,
                 CategoryId = categoryService.GetMany(1, 1).First().Id

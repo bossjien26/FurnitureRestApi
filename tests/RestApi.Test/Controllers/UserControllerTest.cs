@@ -69,7 +69,7 @@ namespace RestApi.Test.Controllers
         {
             //Arrange
             var user = UserSeeder.SeedOne();
-            var request = new Registration()
+            var request = new RegistrationRequest()
             {
                 Name = user.Name,
                 Mail = user.Mail,

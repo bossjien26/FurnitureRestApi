@@ -31,7 +31,7 @@ namespace RestApi.Test.Controllers
             var product = ProductSeeder.SeedOne();
             await _productService.Insert(product);
             //Act
-            var request = new RequestCart()
+            var request = new CreateCartRequest()
             {
                 InventoryId = product.Inventories.First().Id,
                 Quantity = 1,

@@ -83,7 +83,7 @@ namespace RestApi.src.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("registration")]
-        public async Task<IActionResult> Registration(Registration registration)
+        public async Task<IActionResult> Registration(RegistrationRequest registration)
         {
             if (CheckRegisterMailIsUse(registration.Mail))
             {
@@ -104,7 +104,7 @@ namespace RestApi.src.Controllers
             });
         }
 
-        private void SendRegisterMail(Registration registration)
+        private void SendRegisterMail(RegistrationRequest registration)
         {
             try
             {
@@ -122,7 +122,7 @@ namespace RestApi.src.Controllers
             }
         }
 
-        private async Task CreateUserDetail(Registration registration, User user)
+        private async Task CreateUserDetail(RegistrationRequest registration, User user)
         {
             await _userDetailService.Insert(
                 new UserDetail()
@@ -135,7 +135,7 @@ namespace RestApi.src.Controllers
             );
         }
 
-        private async Task<User> CreateUser(Registration registration)
+        private async Task<User> CreateUser(RegistrationRequest registration)
         {
             var user = new User()
             {

@@ -26,7 +26,7 @@ namespace RestApi.Test.Controllers
         [Test]
         public async Task ShouldInsertSpecification()
         {
-            var request = new RequestSpecification()
+            var request = new CreateSpecificationRequest()
             {
                 Name = "123"
             };
@@ -41,7 +41,7 @@ namespace RestApi.Test.Controllers
         public async Task ShouldInsertSpecificationContent()
         {
             var specificationService = new SpecificationService(_context);
-            var request = new RequestSpecificationContent()
+            var request = new CreateSpecificationContentRequest()
             {
                 Name = "123",
                 SpecificationId = specificationService.GetMany(1, 1).First().Id

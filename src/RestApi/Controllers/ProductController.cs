@@ -36,7 +36,7 @@ namespace RestApi.Controllers
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
         [Route("")]
         [HttpPost]
-        public async Task<IActionResult> Insert(RequestProduct requestsProduct)
+        public async Task<IActionResult> Insert(CreateProductRequest requestsProduct)
         {
             var product = await InsertProdcut(requestsProduct);
 
@@ -55,7 +55,7 @@ namespace RestApi.Controllers
             return Ok(product);
         }
 
-        private async Task<Product> InsertProdcut(RequestProduct requestProduct)
+        private async Task<Product> InsertProdcut(CreateProductRequest requestProduct)
         {
             var product = new Product()
             {
@@ -76,7 +76,7 @@ namespace RestApi.Controllers
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
         [Route("store/productCategory")]
         [HttpPost]
-        public async Task<IActionResult> StoreProductCategory(RequestProductCategory requestProductCategory)
+        public async Task<IActionResult> StoreProductCategory(CreateProductCategoryRequest requestProductCategory)
         {
             if (CheckProductAndCategoryIsExist(requestProductCategory))
             {
@@ -96,13 +96,13 @@ namespace RestApi.Controllers
                 });
         }
 
-        private bool CheckProductAndCategoryIsExist(RequestProductCategory requestProductCategory)
+        private bool CheckProductAndCategoryIsExist(CreateProductCategoryRequest requestProductCategory)
         {
             return _service.CheckProductToProductCategoryIsExist(requestProductCategory.ProductId
             , requestProductCategory.CategoryId) ? true : false;
         }
 
-        private async Task InsertProductCategory(RequestProductCategory requestProductCategory)
+        private async Task InsertProductCategory(CreateProductCategoryRequest requestProductCategory)
         {
             await _productCategoryRepository.Insert(new ProductCategory()
             {

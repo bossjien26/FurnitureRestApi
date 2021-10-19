@@ -24,7 +24,7 @@ namespace RestApi.Test.Controllers
         [Test]
         public async Task ShouldInsertCategory()
         {
-            var request = new RequestCategory()
+            var request = new CreateCategoryRequest()
             {
                 Name = "123",
                 ChildrenId = 0,

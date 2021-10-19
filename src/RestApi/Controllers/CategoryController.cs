@@ -31,7 +31,7 @@ namespace RestApi.Controllers
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
         [Route("")]
         [HttpPost]
-        public async Task<IActionResult> Insert(RequestCategory requestsCategory)
+        public async Task<IActionResult> Insert(CreateCategoryRequest requestsCategory)
         {
             if (await _service.GetById(requestsCategory.ChildrenId) == null && requestsCategory.ChildrenId != 0)
             {
@@ -59,7 +59,7 @@ namespace RestApi.Controllers
             return Ok(category);
         }
 
-        private async Task<Category> InsertCategory(RequestCategory requestsCategory)
+        private async Task<Category> InsertCategory(CreateCategoryRequest requestsCategory)
         {
             var category = new Entities.Category()
             {

@@ -43,7 +43,7 @@ namespace RestApi.Controllers
         [Route("")]
         [HttpPost]
         [Authorize()]
-        public async Task<IActionResult> Store(RequestCart requestCart)
+        public async Task<IActionResult> Store(CreateCartRequest requestCart)
         {
             if (!await CheckProductIsExist(requestCart))
             {
@@ -63,12 +63,12 @@ namespace RestApi.Controllers
             });
         }
 
-        private async Task<bool> CheckProductIsExist(RequestCart requestCart)
+        private async Task<bool> CheckProductIsExist(CreateCartRequest requestCart)
         {
             return (await _inventoryService.GetById(requestCart.InventoryId) != null) ? true : false;
         }
 
-        private async Task StoreCart(RequestCart requestCart)
+        private async Task StoreCart(CreateCartRequest requestCart)
         {
             var user = (User)_httpContextAccessor.HttpContext.Items["User"];
 

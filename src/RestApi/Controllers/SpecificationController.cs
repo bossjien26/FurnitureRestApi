@@ -35,7 +35,7 @@ namespace RestApi.Controllers
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> Insert(RequestSpecification requestSpecification)
+        public async Task<IActionResult> Insert(CreateSpecificationRequest requestSpecification)
         {
             var specification = await InsertSpecification(requestSpecification);
 
@@ -47,7 +47,7 @@ namespace RestApi.Controllers
                 });
         }
 
-        private async Task<Specification> InsertSpecification(RequestSpecification requestSpecification)
+        private async Task<Specification> InsertSpecification(CreateSpecificationRequest requestSpecification)
         {
             var specification = new Specification()
             {
@@ -62,7 +62,7 @@ namespace RestApi.Controllers
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
         [HttpPost]
         [Route("store/specificationContent")]
-        public async Task<IActionResult> storeSpecificationContent(RequestSpecificationContent requestSpecificationContent)
+        public async Task<IActionResult> storeSpecificationContent(CreateSpecificationContentRequest requestSpecificationContent)
         {
             if (await _specificationContentService.GetById(requestSpecificationContent.SpecificationId) == null)
             {
@@ -83,7 +83,7 @@ namespace RestApi.Controllers
                 });
         }
 
-        private async Task<SpecificationContent> InsertSpecificationContent(RequestSpecificationContent requestSpecificationContent)
+        private async Task<SpecificationContent> InsertSpecificationContent(CreateSpecificationContentRequest requestSpecificationContent)
         {
             var specification = new SpecificationContent()
             {
