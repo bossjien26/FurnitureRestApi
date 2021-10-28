@@ -48,7 +48,7 @@ namespace RestApi.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("show/{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
             var product = await _service.GetById(id);
@@ -72,6 +72,11 @@ namespace RestApi.Controllers
         {
             return Ok(_service.GetMany(perPage, 10).ToList());
         }
+
+        [Route("category/{categoryId}/{perPage}")]
+        [HttpGet]
+        public IActionResult ShowCategoryMany(int categoryId, int perPage)
+        => Ok(_service.GetProductByCategory(perPage, 10, categoryId).ToList());
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin)]
         [Route("store/productCategory")]
