@@ -52,6 +52,15 @@ namespace Services
             return _repository.GetAll();
         }
 
+        public IEnumerable<Product> GetProductByCategory(int index,int size,int categoryId)
+        => _repository.GetAll().Where(x => x.Inventories.Where(r => r.IsDisplay == true).Any() 
+            && x.ProductCategories.Where(r => r.CategoryId == categoryId 
+                    && r.Category.IsDisplay == true
+            ).Any())
+            .Skip((index - 1) * size)
+            .Take(size)
+            .OrderByDescending(x => x.Id);                        
+
         public bool CheckProductToProductCategoryIsExist(int productId, int categoryId)
         {
             return _repository.GetAll().Where(p => p.Id == productId &&
