@@ -10,6 +10,8 @@ namespace Services.Interface
 
         Task<Product> GetById(int id);
 
+        IEnumerable<Product> GetByIdDetail(int id);
+
         Task<Product> GetShowProdcutById(int id);
 
         IEnumerable<Product> GetMany(int index, int size);

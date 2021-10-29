@@ -55,6 +55,14 @@ namespace RestApi.Controllers
             return Ok(product);
         }
 
+        [HttpGet]
+        [Route("detail/{id}")]
+        public IActionResult GetProductDetail(int id)
+        {
+            var product = _service.GetByIdDetail(id).FirstOrDefault();
+            return product.Inventories.Count() == 0 ? NotFound() : Ok(product);
+        }
+
         private async Task<Product> InsertProdcut(CreateProductRequest requestProduct)
         {
             var product = new Product()
