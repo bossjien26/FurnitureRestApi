@@ -51,7 +51,7 @@ namespace RestApi.Controllers
             await _service.Insert(new InventorySpecification()
             {
                 InventoryId = request.ProductId,
-                SpecificationId = request.SpecificationId
+                SpecificationContentId = request.SpecificationId
             });
         }
     }

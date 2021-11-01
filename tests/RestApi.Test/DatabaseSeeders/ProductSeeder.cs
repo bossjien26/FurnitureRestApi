@@ -42,16 +42,15 @@ namespace RestApi.Test.DatabaseSeeders
             return new Faker<InventorySpecification>()
                 .RuleFor(c => c.Id, (f) => 0)
                 .RuleFor(c => c.InventoryId, (f) => f.Random.Number(10))
-                .RuleFor(c => c.SpecificationId, (f) => f.Random.Number(10))
-                .RuleFor(c => c.Specification, (f) => SetSpecification());
+                .RuleFor(c => c.SpecificationContentId, (f) => f.Random.Number(10))
+                .RuleFor(c => c.SpecificationContent, (f) => SetSpecificationContent());
         }
 
         private static Faker<Specification> SetSpecification()
         {
             return new Faker<Specification>()
                 .RuleFor(c => c.Id, (f) => 0)
-                .RuleFor(c => c.Name, (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.SpecificationContent, SetSpecificationContent().Generate(2));
+                .RuleFor(c => c.Name, (f) => f.Random.AlphaNumeric(10));
         }
 
         private static Faker<SpecificationContent> SetSpecificationContent()
@@ -59,7 +58,8 @@ namespace RestApi.Test.DatabaseSeeders
             return new Faker<SpecificationContent>()
                 .RuleFor(c => c.Id, (f) => 0)
                 .RuleFor(c => c.Name, (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.SpecificationId, (f) => f.Random.Number(10));
+                .RuleFor(c => c.SpecificationId, (f) => f.Random.Number(10))
+                .RuleFor(c => c.Specification, (f) => SetSpecification());
         }
 
         private static Faker<ProductCategory> SetProductCategory()

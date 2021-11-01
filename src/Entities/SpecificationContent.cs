@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
@@ -24,5 +25,7 @@ namespace Entities
 
         [ForeignKey(nameof(SpecificationId))]
         public virtual Specification Specification { get; set; }
+
+        public virtual ICollection<InventorySpecification> InventorySpecifications { get; set; }
     }
 }

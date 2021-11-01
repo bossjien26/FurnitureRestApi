@@ -33,8 +33,8 @@ namespace Services
         => _repository.GetAll()
             .Include(x => x.Product)
             .Include(x => x.InventorySpecifications)
-            .ThenInclude(x => x.Specification)
             .ThenInclude(x => x.SpecificationContent)
+            .ThenInclude(x => x.Specification)
             .Where(x => x.Id == id);
 
         public IEnumerable<Inventory> GetMany(int index, int size)
@@ -47,8 +47,8 @@ namespace Services
             => _repository.GetAll()
                 .Include(x => x.Product)
                 .Include(x => x.InventorySpecifications)
-                .ThenInclude(x => x.Specification)
                 .ThenInclude(x => x.SpecificationContent)
+                .ThenInclude(x => x.Specification)
                 .Where(x => x.IsDisplay == true && x.IsDelete == false)
                 .Skip((index - 1) * size)
                 .Take(size)

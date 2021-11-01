@@ -11,12 +11,12 @@ namespace Entities
 
         public int InventoryId { get; set; }
 
-        public int SpecificationId { get; set; }
+        public int SpecificationContentId { get; set; }
 
         [ForeignKey(nameof(InventoryId))]
         public virtual Inventory Inventory { get; set; }
 
-        [ForeignKey(nameof(SpecificationId))]
-        public virtual Specification Specification { get; set; }
+        [ForeignKey(nameof(SpecificationContentId))]
+        public virtual SpecificationContent SpecificationContent { get; set; }
     }
 }

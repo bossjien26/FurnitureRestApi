@@ -93,7 +93,7 @@ namespace RestApi.Controllers
                 ProductName = inventory.Product.Name,
                 Quality = (int)cart.Value,
                 Specification = inventory.InventorySpecifications.Select(x =>
-                x.Specification.Name).Aggregate(
+                x.SpecificationContent.Name).Aggregate(
                     new StringBuilder(),
                     (current, next) => current.Append(current.Length == 0 ? "" : "-").Append(next)
                 )
