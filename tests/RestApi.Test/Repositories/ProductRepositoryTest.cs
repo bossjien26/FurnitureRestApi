@@ -13,14 +13,37 @@ namespace RestApi.Test.Repositories
     {
         private readonly IProductRepository _repository;
 
-        public ProductRepositoryTest() =>
+        private readonly IInventoryRepository _inventoryRepository;
+
+        private readonly IProductSpecificationRepository _productSpecificationRepository;
+
+        private readonly ISpecificationContentRepository _specificationContentRepository;
+
+        public ProductRepositoryTest()
+        {
             _repository = new ProductRepository(_context);
+
+            _inventoryRepository = new InventoryRepository(_context);
+
+            _productSpecificationRepository = new ProductSpecificationRepository(_context);
+
+            _specificationContentRepository = new SpecificationContentRepository(_context);
+        }
 
         [Test]
         async public Task ShouldGet()
         {
             var seeder = ProductSeeder.SeedOne();
             await _repository.Insert(seeder);
+
+            var productSpecification = _productSpecificationRepository.Get(x => x.ProductId == seeder.Id).Result;
+            var specificationContent = SpecificationSeeder.SeedContentOnce(productSpecification.SpecificationId);
+            await _specificationContentRepository.Insert(specificationContent);
+
+            var inventorySeeder = ProductSeeder.SeedInventoryOne(seeder.Id, productSpecification.Id
+            , specificationContent.Id);
+            await _inventoryRepository.Insert(inventorySeeder);
+
             var product = _repository.Get(c => c.Id == seeder.Id);
             Assert.IsNotNull(product);
         }
