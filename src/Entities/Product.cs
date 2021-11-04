@@ -24,5 +24,7 @@ namespace Entities
         public virtual ICollection<ProductCategory> ProductCategories { get; set; }
 
         public virtual ICollection<Inventory> Inventories { get; set; }
+
+        public virtual ICollection<ProductSpecification> ProductSpecifications { get; set; }
     }
 }

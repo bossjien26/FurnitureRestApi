@@ -34,6 +34,8 @@ namespace DbEntity
 
         public DbSet<ProductCategory> ProductCategories { get; set; }
 
+        public DbSet<ProductSpecification> ProductSpecifications { get; set; }
+
         public DbSet<InventorySpecification> InventorySpecifications { get; set; }
 
         public DbSet<Category> Categories { get; set; }
