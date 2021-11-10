@@ -14,9 +14,15 @@ namespace Services
     {
         private readonly IProductRepository _repository;
 
+        private readonly IProductCategoryRepository _productCategoryRepository;
+
+        private readonly IInventoryRepository _inventoryRepository;
+
         public ProductService(DbContextEntity contextEntity)
         {
             _repository = new ProductRepository(contextEntity);
+            _productCategoryRepository = new ProductCategoryRepository(contextEntity);
+            _inventoryRepository = new InventoryRepository(contextEntity);
         }
 
         public ProductService(IProductRepository genericRepository)
@@ -55,13 +61,29 @@ namespace Services
             return _repository.GetAll();
         }
 
-        public IEnumerable<Product> GetProductByCategory(int index, int size, int categoryId)
-        => _repository.GetAll().Include(x => x.Inventories.Where(r => r.IsDisplay == true))
-            .Include(x => x.ProductCategories.Where(r => r.CategoryId == categoryId))
-            .Skip((index - 1) * size)
-            .Take(size)
-            .OrderByDescending(x => x.Id);
-
+        public IQueryable<Product> GetProductByCategory(int index, int size, int categoryId)
+        {
+            return _repository.GetAll()
+                .Join(
+                    _productCategoryRepository.GetAll(),
+                    product => product.Id,
+                    productCategory => productCategory.ProductId,
+                    (x, b) => new { Product = x, ProductCategory = b }
+                )
+                .Join(
+                    _inventoryRepository.GetAll(),
+                    product => product.Product.Id,
+                    inventory => inventory.ProductId,
+                    (x, y) => new { Product = x, Inventory = y }
+                )
+                .Where(x => x.Product.ProductCategory.Id == categoryId
+                    && x.Inventory.IsDisplay == true && x.Inventory.IsDelete == false)
+                .Select(x => x.Product.Product)
+                .Skip((index - 1) * size)
+                .Take(size)
+                .OrderByDescending(x => x.Id);
+        }
+        
         public bool CheckProductToProductCategoryIsExist(int productId, int categoryId)
         {
             return _repository.GetAll().Where(p => p.Id == productId &&
