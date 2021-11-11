@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Entities;
+using Services.Dto;
 
 namespace Services.Interface
 {
@@ -11,7 +12,7 @@ namespace Services.Interface
 
         Task<Product> GetById(int id);
 
-        IEnumerable<Product> GetByIdDetail(int id);
+        IQueryable<ProductInventory> GetByIdDetail(int id);
 
         Task<Product> GetShowProdcutById(int id);
 

@@ -7,6 +7,7 @@ using Repositories.Interface;
 using Repositories;
 using Services.Interface;
 using Microsoft.EntityFrameworkCore;
+using Services.Dto;
 
 namespace Services
 {
@@ -36,8 +37,21 @@ namespace Services
             return await _repository.Get(x => x.Id == id);
         }
 
-        public IEnumerable<Product> GetByIdDetail(int id)
-        => _repository.GetAll().Where(x => x.Id == id).Include(x => x.Inventories.Where(r => r.IsDisplay == true));
+        public IQueryable<ProductInventory> GetByIdDetail(int id)
+        => _repository.GetAll().Where(x => x.Id == id)
+            .Join(
+                _inventoryRepository.GetAll(),
+                product => product.Id,
+                inventory => inventory.ProductId,
+                (x,y) => new {Product = x, Inventory = y}
+            ).Select(
+                x=> new ProductInventory{
+                    Product = x.Product,
+                    Inventory = new List<Inventory>(){
+                        x.Inventory
+                    }
+                }
+            );
 
         public async Task<Product> GetShowProdcutById(int id)
         => await _repository.Get(x => x.Id == id && x.Inventories.Where(r => r.IsDisplay == true).Any());
@@ -62,8 +76,7 @@ namespace Services
         }
 
         public IQueryable<Product> GetProductByCategory(int index, int size, int categoryId)
-        {
-            return _repository.GetAll()
+        => _repository.GetAll()
                 .Join(
                     _productCategoryRepository.GetAll(),
                     product => product.Id,
@@ -82,8 +95,7 @@ namespace Services
                 .Skip((index - 1) * size)
                 .Take(size)
                 .OrderByDescending(x => x.Id);
-        }
-        
+
         public bool CheckProductToProductCategoryIsExist(int productId, int categoryId)
         {
             return _repository.GetAll().Where(p => p.Id == productId &&
