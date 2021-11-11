@@ -80,20 +80,20 @@ namespace RestApi.Controllers
 
         private async Task<int> InsertOrderInventory(int orderId, HashEntry cart)
         {
-            var inventory = _inventoryService.GetJoinProductAndSpecification((int)cart.Name).FirstOrDefault();
-            if (inventory == null)
+            var inventoryToOrderInventory = _inventoryService.GetJoinProductAndSpecification((int)cart.Name).FirstOrDefault();
+            if (inventoryToOrderInventory == null)
             {
                 return 0;
             }
             var orderInventory = new OrderInventory()
             {
                 OrderId = orderId,
-                Price = inventory.Price,
-                InventoryId = inventory.Id,
-                ProductName = inventory.Product.Name,
+                Price = inventoryToOrderInventory.Price,
+                InventoryId = inventoryToOrderInventory.InventoryId,
+                ProductName = inventoryToOrderInventory.ProductName,
                 Quality = (int)cart.Value,
-                Specification = inventory.InventorySpecifications.Select(x =>
-                x.SpecificationContent.Name).Aggregate(
+                Specification = inventoryToOrderInventory.Specifications.Select(x =>
+                x.SpecificationContent).Aggregate(
                     new StringBuilder(),
                     (current, next) => current.Append(current.Length == 0 ? "" : "-").Append(next)
                 )

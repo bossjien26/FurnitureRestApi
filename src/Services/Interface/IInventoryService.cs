@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Entities;
+using Services.Dto;
 
 namespace Services.Interface
 {
@@ -12,7 +14,7 @@ namespace Services.Interface
 
         Task<Inventory> GetShowById(int id);
 
-        IEnumerable<Inventory> GetJoinProductAndSpecification(int id);
+        IQueryable<InventoryToOrderInventory> GetJoinProductAndSpecification(int id);
 
         IEnumerable<Inventory> GetMany(int index, int size);
 
