@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Repositories;
 using Repositories.Interface;
+using Services.Dto;
 using Services.Interface;
 
 namespace Services
@@ -16,8 +18,19 @@ namespace Services
 
         private readonly IProductSpecificationRepository _repository;
 
+        private readonly ISpecificationRepository _specificationRepository;
+
+        private readonly ISpecificationContentRepository _specificationContentRepository;
+
+        private readonly IInventorySpecificationRepository _inventorySpecificationRepository;
+
         public ProductSpecificationService(DbContextEntity contextEntity)
-        => _repository = new ProductSpecificationRepository(contextEntity);
+        {
+            _repository = new ProductSpecificationRepository(contextEntity);
+            _specificationRepository = new SpecificationRepository(contextEntity);
+            _specificationContentRepository = new SpecificationContentRepository(contextEntity);
+            _inventorySpecificationRepository = new InventorySpecificationRepository(contextEntity);
+        }
 
         public ProductSpecificationService(IProductSpecificationRepository genericRepository)
             => _repository = genericRepository;
@@ -28,25 +41,135 @@ namespace Services
         public IEnumerable<ProductSpecification> GetMany(int productId)
         => _repository.GetAll().Where(x => x.ProductId == productId);
 
-
-        private IIncludableQueryable<ProductSpecification, ICollection<SpecificationContent>> GetOneJoinSpecification(int ProductId)
-        => _repository.GetAll().Where(x => x.ProductId == ProductId)
-            .Include(x => x.Specification)
-            .ThenInclude(x => x.SpecificationContent);
-
-        public IEnumerable<ProductSpecification> GetOneJoinSpecificationByProductId(int productId, int offset, int[] inventoryId)
+        public IEnumerable<ProductSpecification> GetByNextSpecification(int productId, int? id)
         {
-            var iEnumerable = GetOneJoinSpecification(productId);
-            if (inventoryId.Count() > 0)
+            return (id == null) ? _repository.GetAll().Where(x => x.ProductId == productId) 
+            : _repository.GetAll().Where(x => x.ProductId == productId && x.Id > id);
+        }
+
+        public IEnumerable<ProductSpecificationJoinSpecification> GetManyJoinSpecification(int productId)
+        => _repository.GetAll().Where(x => x.ProductId == productId)
+            .Join(
+                _specificationRepository.GetAll(),
+                productSpecification => productSpecification.SpecificationId,
+                specification => specification.Id,
+                (x, y) => new { ProductSpecification = x, Specification = y }
+            )
+            .Where(x => x.Specification.IsDelete == false)
+            .Select(
+                x => new ProductSpecificationJoinSpecification()
+                {
+                    Id = x.Specification.Id,
+                    Name = x.Specification.Name
+                }
+            );
+
+        public IQueryable<int> GetOneJoinSpecificationByProductId(int productId, List<int> specificationContents)
+        {
+            var iEnumerable = _repository.GetAll().Where(x => x.ProductId == productId)
+            .Join(
+                _specificationRepository.GetAll(),
+                productSpecification => productSpecification.SpecificationId,
+                specification => specification.Id,
+                (x, y) => new { ProductSpecification = x, Specification = y }
+            ).Join(
+                _specificationContentRepository.GetAll(),
+                productSpecification => productSpecification.Specification.Id,
+                specificationContent => specificationContent.SpecificationId,
+                (ProductSpecification, SpecificationContent)
+                    => new { ProductSpecification, SpecificationContent }
+            ).Join(
+                _inventorySpecificationRepository.GetAll(),
+                productSpecification => productSpecification.SpecificationContent.Id,
+                inventorySpecification => inventorySpecification.SpecificationContentId,
+                (ProductSpecification, InventorySpecification) =>
+                    new { ProductSpecification, InventorySpecification }
+            );
+
+            if (specificationContents.Count() > 0)
             {
-                return iEnumerable.Include(x => x.InventorySpecifications.Where(y =>
-                    inventoryId.All(z => z == y.ProductSpecificationId)
-                )).Skip(offset)
-                .Take(1);
+                iEnumerable = iEnumerable.Where(x => specificationContents.Any(z => z == x.InventorySpecification.SpecificationContentId));
             }
-            return iEnumerable.Include(x => x.InventorySpecifications)
-            .Skip(offset)
-            .Take(1);
+
+            return iEnumerable.Select(
+                x => x.InventorySpecification.InventoryId
+            );
+        }
+
+        public IEnumerable<InventoryIdBySpecifications> GetBySpecificationContent(int productId, List<int> specifications)
+        {
+            var iEnumerable = _repository.GetAll().Where(x => x.ProductId == productId)
+            .Join(
+                _specificationRepository.GetAll(),
+                productSpecification => productSpecification.SpecificationId,
+                specification => specification.Id,
+                (x, y) => new { ProductSpecification = x, Specification = y }
+            ).Join(
+                _specificationContentRepository.GetAll(),
+                productSpecification => productSpecification.Specification.Id,
+                specificationContent => specificationContent.SpecificationId,
+                (ProductSpecification, SpecificationContent)
+                    => new { ProductSpecification, SpecificationContent }
+            ).Join(
+                _inventorySpecificationRepository.GetAll(),
+                productSpecification => productSpecification.SpecificationContent.Id,
+                inventorySpecification => inventorySpecification.SpecificationContentId,
+                (ProductSpecification, InventorySpecification) =>
+                    new { ProductSpecification, InventorySpecification }
+            );
+
+            if (specifications.Count() > 0)
+            {
+                iEnumerable = iEnumerable.Where(x => specifications.Any(z => z == x.ProductSpecification.ProductSpecification.Specification.Id));
+            }
+
+            return iEnumerable.Select(
+                x => new InventoryIdBySpecifications()
+                {
+                    Id = x.ProductSpecification.ProductSpecification.Specification.Id,
+                    Name = x.ProductSpecification.ProductSpecification.Specification.Name,
+                    InventoryIdBySpecificationContent = new InventoryIdBySpecificationContents(){
+                        Id = x.ProductSpecification.SpecificationContent.Id,
+                        Name = x.ProductSpecification.SpecificationContent.Name
+                    }
+                }
+            );
+        }
+
+        public IEnumerable<InventoryIdBySpecifications> GetByInventoryIds(List<int> inventoryIds, int productSpecificationId)
+        {
+            var iEnumerable = _repository.GetAll()
+            .Join(
+                _inventorySpecificationRepository.GetAll(),
+                productSpecification => productSpecification.Id,
+                inventorySpecification => inventorySpecification.ProductSpecificationId,
+                (ProductSpecification, InventorySpecification) => new { ProductSpecification, InventorySpecification }
+            ).Join(
+                _specificationRepository.GetAll(),
+                ProductSpecification => ProductSpecification.ProductSpecification.SpecificationId,
+                Specification => Specification.Id,
+                (ProductSpecification, Specification) => new { ProductSpecification, Specification }
+            ).Join(
+                _specificationContentRepository.GetAll(),
+                ProductSpecification => ProductSpecification.ProductSpecification.InventorySpecification.SpecificationContentId,
+                SpecificationContent => SpecificationContent.Id,
+                (ProductSpecification, SpecificationContent) => new { ProductSpecification, SpecificationContent }
+            );
+            
+            if(inventoryIds.Count > 0){
+                iEnumerable = iEnumerable.Where(x => inventoryIds.Any(z => z == x.ProductSpecification.ProductSpecification.InventorySpecification.InventoryId));
+            }
+
+            return iEnumerable.Where(x => x.ProductSpecification.ProductSpecification.InventorySpecification.ProductSpecificationId == productSpecificationId) 
+            .Select(x => new InventoryIdBySpecifications()
+            {
+                Id = x.ProductSpecification.Specification.Id,
+                Name = x.ProductSpecification.Specification.Name,
+                InventoryIdBySpecificationContent = new InventoryIdBySpecificationContents(){
+                        Id = x.SpecificationContent.Id,
+                        Name = x.SpecificationContent.Name
+                    }
+            });
         }
     }
 }

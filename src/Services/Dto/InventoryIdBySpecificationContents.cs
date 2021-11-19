@@ -1,6 +1,6 @@
 namespace Services.Dto
 {
-    public class SpecificationContentList
+    public class InventoryIdBySpecificationContents
     {
         public int Id { get; set; }
 
