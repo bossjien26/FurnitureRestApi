@@ -7,8 +7,8 @@ namespace RestApi.Models.Requests
         [Required]
         public int ProductId { get; set; }
 
-        public int[] Specifications { get; set; }
+        public int[] Specifications { get; set; } = new int[0];
 
-        public int[] SpecificationContents { get; set; }
+        public int[] SpecificationContents { get; set; } = new int[0];
     }
 }
