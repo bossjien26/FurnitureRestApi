@@ -69,6 +69,8 @@ namespace RestApi.Controllers
             var product = new Product()
             {
                 Name = requestProduct.Name,
+                Describe = requestProduct.Describe,
+                Information = requestProduct.Information,
                 CreateAt = DateTime.Now
             };
             await _service.Insert(product);

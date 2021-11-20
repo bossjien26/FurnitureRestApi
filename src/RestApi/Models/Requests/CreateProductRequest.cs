@@ -9,5 +9,9 @@ namespace RestApi.Models.Requests
 
         [Required]
         public string Name { get; set; }
+
+        public string Describe { get; set; }
+
+        public string Information { get; set; }
     }
 }

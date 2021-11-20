@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -30,7 +29,9 @@ namespace RestApi.Test.Controllers
         {
             var request = new CreateProductRequest()
             {
-                Name = "name"
+                Name = "name",
+                Describe = "describe",
+                Information = "information"
             };
 
             var response = await _httpClient.PostAsync("/api/product", PostType(request));

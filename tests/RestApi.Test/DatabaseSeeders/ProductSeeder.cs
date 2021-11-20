@@ -10,8 +10,8 @@ namespace RestApi.Test.DatabaseSeeders
     {
         public static Product SeedOne() => SetProduct().Generate();
 
-        public static Inventory SeedInventoryOne(int ProductId,int productSpecificationId, int specificationContentId)
-            => SetInventory(ProductId,productSpecificationId, specificationContentId).Generate();
+        public static Inventory SeedInventoryOne(int ProductId, int productSpecificationId, int specificationContentId)
+            => SetInventory(ProductId, productSpecificationId, specificationContentId).Generate();
 
         public static List<Product> SeedMany(int min, int max) =>
             SetProduct().GenerateBetween(min, max);
@@ -21,6 +21,8 @@ namespace RestApi.Test.DatabaseSeeders
             return new Faker<Product>()
                 .RuleFor(c => c.Id, (f) => 0)
                 .RuleFor(c => c.Name, (f) => f.Random.AlphaNumeric(10))
+                .RuleFor(c => c.Describe, (f) => f.Random.AlphaNumeric(10))
+                .RuleFor(c => c.Information, (f) => f.Random.AlphaNumeric(10))
                 .RuleFor(c => c.CreateAt, (f) => DateTime.Now)
                 .RuleFor(c => c.UpdateAt, (f) => DateTime.Now)
                 .RuleFor(c => c.ProductCategories, (f) => SetProductCategory().Generate(1))

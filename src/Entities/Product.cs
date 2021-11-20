@@ -15,6 +15,11 @@ namespace Entities
         [StringLength(256)]
         public string Name { get; set; }
 
+        public string Describe { get; set; }
+
+        [Column(TypeName = "Text")]
+        public string Information { get; set; }
+
         public DateTime CreateAt { get; set; }
 
         public DateTime UpdateAt { get; set; } = DateTime.Now;
