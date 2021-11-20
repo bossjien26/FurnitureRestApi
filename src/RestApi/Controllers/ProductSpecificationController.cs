@@ -57,7 +57,7 @@ namespace RestApi.Controllers
             specificationContents.AddRange(nextInventorySpecification);
 
             var specifications = specificationContents.GroupBy(x => x.Id).ToDictionary(x => x.Key, x => x.ToList());
-            return Ok(TransferSpecification(specifications));
+            return Ok(TransferSpecification(specifications).ToList());
         }
 
         private Dictionary<int, SpecificationResponse> TransferSpecification(Dictionary<int, List<InventoryIdBySpecifications>> specifications)
