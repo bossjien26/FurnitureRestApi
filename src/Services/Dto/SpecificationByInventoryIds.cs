@@ -9,6 +9,6 @@ namespace Services.Dto
 
         public string Name { get; set; }
 
-        public InventoryIdBySpecificationContents InventoryIdBySpecificationContent { get; set; }
+        public InventoryIdBySpecificationContents InventoryIdBySpecificationContent { get; set; } = new InventoryIdBySpecificationContents();
     }
 }
