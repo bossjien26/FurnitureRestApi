@@ -12,8 +12,8 @@ namespace Services.Interface
 
         IEnumerable<InventorySpecification> GetMany(int index, int size);
 
-        bool CheckInventoryAndInventorySpecificationIsExist(int inventoryId, int specificationId);
+        Task<bool> CheckInventoryAndInventorySpecificationIsExist(int inventoryId, int specificationContentId);
 
-        IEnumerable<int[]> GetInventory( int productId,int[] specificationContents);
+        IEnumerable<int> GetInventory( int productId,int[] specificationContents);
     }
 }

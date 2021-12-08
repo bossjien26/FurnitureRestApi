@@ -21,8 +21,12 @@ namespace Services
             _productSpecificationRepository = new ProductSpecificationRepository(contextEntity);
         }
 
-        public InventorySpecificationService(IInventorySpecificationRepository genericRepository)
-            => _repository = genericRepository;
+        public InventorySpecificationService(IInventorySpecificationRepository genericRepository,
+        IProductSpecificationRepository productSpecificationRepository)
+        {
+            _repository = genericRepository;
+            _productSpecificationRepository = productSpecificationRepository;
+        }
 
         public async Task Insert(InventorySpecification instance)
             => await _repository.Insert(instance);
@@ -40,22 +44,20 @@ namespace Services
                 .OrderByDescending(x => x.Id);
         }
 
-        public bool CheckInventoryAndInventorySpecificationIsExist(int inventoryId, int specificationId)
-        => _repository.GetAll().Where(x => x.Inventory.Id == inventoryId
-        && x.SpecificationContentId == specificationId).Any();
+        public async Task<bool> CheckInventoryAndInventorySpecificationIsExist(int inventoryId, int specificationContentId)
+        => await _repository.Get(x => x.InventoryId == inventoryId && x.SpecificationContentId == specificationContentId) != null;
 
         //TODO:show inventory
-        public IEnumerable<int[]> GetInventory( int productId,int[] specificationContents)
+        public IEnumerable<int> GetInventory(int productId, int[] specificationContents)
         => _repository.GetAll().Where(x => specificationContents.Contains(x.SpecificationContentId)).
             Join(
                 _productSpecificationRepository.GetAll(),
                 inventorySpecification => inventorySpecification.SpecificationContentId,
                 productSpecification => productSpecification.Id,
                 (InventorySpecification, ProductSpecification) =>
-                    new { InventorySpecification,ProductSpecification }
-            ).Where(x => x.ProductSpecification.ProductId == productId).
-            Select(x => new int[]{
-                x.InventorySpecification.InventoryId
-            });
+                    new { InventorySpecification, ProductSpecification }
+            )
+            .Where(x => x.ProductSpecification.ProductId == productId)
+            .Select(x => x.InventorySpecification.InventoryId);
     }
 }
