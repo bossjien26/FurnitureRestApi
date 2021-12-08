@@ -13,5 +13,7 @@ namespace Services.Interface
         IEnumerable<InventorySpecification> GetMany(int index, int size);
 
         bool CheckInventoryAndInventorySpecificationIsExist(int inventoryId, int specificationId);
+
+        IEnumerable<int[]> GetInventory( int productId,int[] specificationContents);
     }
 }
