@@ -8,6 +8,6 @@ namespace RestApi.Models.Requests
         public int ProductId { get; set; }
 
         [Required]
-        public int SpecificationId { get; set; }
+        public int SpecificationContentId { get; set; }
     }
 }

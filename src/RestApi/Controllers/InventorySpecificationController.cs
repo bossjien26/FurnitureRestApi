@@ -31,7 +31,7 @@ namespace RestApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Insert(InventorySpecificationRequest request)
         {
-            if (CheckProductAndSpecificationIsExist(request))
+            if (await CheckProductAndSpecificationIsExist(request))
             {
                 return NotFound();
             }
@@ -40,10 +40,10 @@ namespace RestApi.Controllers
             return Created("", new AutResultResponse() { Status = true, Data = "Success" });
         }
 
-        private bool CheckProductAndSpecificationIsExist(InventorySpecificationRequest request)
+        private async Task<bool> CheckProductAndSpecificationIsExist(InventorySpecificationRequest request)
         {
-            return _service.CheckInventoryAndInventorySpecificationIsExist(request.ProductId,
-            request.SpecificationId) ? true : false;
+            return await _service.CheckInventoryAndInventorySpecificationIsExist(request.ProductId,
+            request.SpecificationContentId) ? true : false;
         }
 
         private async Task InsertInventorySpecification(InventorySpecificationRequest request)
@@ -51,7 +51,7 @@ namespace RestApi.Controllers
             await _service.Insert(new InventorySpecification()
             {
                 InventoryId = request.ProductId,
-                SpecificationContentId = request.SpecificationId
+                SpecificationContentId = request.SpecificationContentId
             });
         }
     }
