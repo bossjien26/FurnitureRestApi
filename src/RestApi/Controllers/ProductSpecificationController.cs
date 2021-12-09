@@ -49,8 +49,10 @@ namespace RestApi.Controllers
         {
             var specificationIds = getProductSpecification.Specifications.ToList();
             var basicSpecifications = new List<InventoryIdBySpecifications>();
-            _service.GetManyJoinSpecification(getProductSpecification.ProductId).ToList().ForEach(r => {
-                basicSpecifications.Add(new InventoryIdBySpecifications(){
+            _service.GetManyJoinSpecification(getProductSpecification.ProductId).ToList().ForEach(r =>
+            {
+                basicSpecifications.Add(new InventoryIdBySpecifications()
+                {
                     Id = r.Id,
                     Name = r.Name
                 });
@@ -59,9 +61,9 @@ namespace RestApi.Controllers
             var inventoryIds = _service.GetOneJoinSpecificationByProductId(getProductSpecification.ProductId
                 , specificationIds).ToList();
             var nextSpecification = _service.GetByNextSpecification(getProductSpecification.ProductId, specificationIds.LastOrDefault()).FirstOrDefault();
-            if(nextSpecification == null)
+            if (nextSpecification == null)
             {
-                return Ok("no specification");
+                return Ok(_inventorySpecificationService.GetInventory(getProductSpecification.ProductId, getProductSpecification.SpecificationContents).FirstOrDefault());
             }
             var nextInventorySpecification = _service.GetByInventoryIds(inventoryIds, nextSpecification.Id).ToList();
             nextInventorySpecification.RemoveAll(x => specificationContents.Where(z => z.InventoryIdBySpecificationContent.Id == x.InventoryIdBySpecificationContent.Id).Any());
@@ -79,7 +81,8 @@ namespace RestApi.Controllers
                 var specificationContentResponses = new List<SpecificationContentResponse>();
                 specification.Value.ForEach(x =>
                 {
-                    if(x.InventoryIdBySpecificationContent.Name != null){
+                    if (x.InventoryIdBySpecificationContent.Name != null)
+                    {
                         specificationContentResponses.Add(
                         new SpecificationContentResponse()
                         {

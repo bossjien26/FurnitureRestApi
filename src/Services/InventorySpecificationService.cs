@@ -15,17 +15,21 @@ namespace Services
 
         private readonly IProductSpecificationRepository _productSpecificationRepository;
 
+        private readonly IInventoryRepository _inventoryRepository;
+
         public InventorySpecificationService(DbContextEntity contextEntity)
         {
             _repository = new InventorySpecificationRepository(contextEntity);
             _productSpecificationRepository = new ProductSpecificationRepository(contextEntity);
+            _inventoryRepository = new InventoryRepository(contextEntity);
         }
 
         public InventorySpecificationService(IInventorySpecificationRepository genericRepository,
-        IProductSpecificationRepository productSpecificationRepository)
+        IProductSpecificationRepository productSpecificationRepository,IInventoryRepository inventoryRepository)
         {
             _repository = genericRepository;
             _productSpecificationRepository = productSpecificationRepository;
+            inventoryRepository = _inventoryRepository;
         }
 
         public async Task Insert(InventorySpecification instance)
@@ -47,8 +51,7 @@ namespace Services
         public async Task<bool> CheckInventoryAndInventorySpecificationIsExist(int inventoryId, int specificationContentId)
         => await _repository.Get(x => x.InventoryId == inventoryId && x.SpecificationContentId == specificationContentId) != null;
 
-        //TODO:show inventory
-        public IEnumerable<int> GetInventory(int productId, int[] specificationContents)
+        public IEnumerable<Inventory> GetInventory(int productId, int[] specificationContents)
         => _repository.GetAll().Where(x => specificationContents.Contains(x.SpecificationContentId)).
             Join(
                 _productSpecificationRepository.GetAll(),
@@ -56,8 +59,13 @@ namespace Services
                 productSpecification => productSpecification.Id,
                 (InventorySpecification, ProductSpecification) =>
                     new { InventorySpecification, ProductSpecification }
+            ).Join(
+                _inventoryRepository.GetAll(),
+                inventorySpecification => inventorySpecification.InventorySpecification.InventoryId,
+                inventory => inventory.Id,
+                (InventorySpecification,Inventory) => new {InventorySpecification,Inventory}
             )
-            .Where(x => x.ProductSpecification.ProductId == productId)
-            .Select(x => x.InventorySpecification.InventoryId);
+            .Where(x => x.InventorySpecification.ProductSpecification.ProductId == productId)
+            .Select(x => x.Inventory);
     }
 }

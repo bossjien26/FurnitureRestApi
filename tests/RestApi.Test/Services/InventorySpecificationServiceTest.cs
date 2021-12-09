@@ -17,23 +17,28 @@ namespace RestApi.Test.Services
 
         private readonly Mock<IProductSpecificationRepository> _productSpecificationRepository;
 
+        private readonly Mock<IInventoryRepository> _inventoryRepository;
+
         public InventorySpecificationServiceTest()
         {
             _entityMock = new Mock<InventorySpecification>();
             _repoMock = new Mock<IInventorySpecificationRepository>();
             _productSpecificationRepository = new Mock<IProductSpecificationRepository>();
+            _inventoryRepository = new Mock<IInventoryRepository>();
         }
 
         [Test]
         public void ShouldInsert()
         => Assert.DoesNotThrowAsync(()
-                => new InventorySpecificationService(_repoMock.Object, _productSpecificationRepository.Object).Insert(_entityMock.Object));
+                => new InventorySpecificationService(_repoMock.Object,
+                _productSpecificationRepository.Object, _inventoryRepository.Object).Insert(_entityMock.Object));
 
         [Test]
         public async Task ShouldGetById()
         {
             _repoMock.Setup(r => r.Get(x => x.Id == 1)).Returns(Task.FromResult(_entityMock.Object));
-            var result = await new InventorySpecificationService(_repoMock.Object, _productSpecificationRepository.Object).GetById(1);
+            var result = await new InventorySpecificationService(_repoMock.Object,
+             _productSpecificationRepository.Object, _inventoryRepository.Object).GetById(1);
             Assert.IsInstanceOf<InventorySpecification>(result);
         }
 
@@ -41,7 +46,9 @@ namespace RestApi.Test.Services
         public async Task ShouldCheckInventoryAndInventorySpecificationIsExist()
         {
             _repoMock.Setup(r => r.Get(x => x.InventoryId == 1 && x.SpecificationContentId == 1)).Returns(Task.FromResult(_entityMock.Object));
-            var result = await new InventorySpecificationService(_repoMock.Object, _productSpecificationRepository.Object).CheckInventoryAndInventorySpecificationIsExist(1, 1);
+            var result = await new InventorySpecificationService(_repoMock.Object,
+             _productSpecificationRepository.Object, _inventoryRepository.Object)
+             .CheckInventoryAndInventorySpecificationIsExist(1, 1);
             Assert.True(result);
         }
 
@@ -51,7 +58,9 @@ namespace RestApi.Test.Services
             int[] specificationContentIds = { 1 };
             _repoMock.Setup(r => r.Get(x => x.ProductSpecificationId == 1 && x.ProductSpecification.ProductId == 1)).Returns(Task.FromResult(_entityMock.Object));
 
-            var result = new InventorySpecificationService(_repoMock.Object, _productSpecificationRepository.Object).GetInventory(1, specificationContentIds).ToList().FirstOrDefault();
+            var result = new InventorySpecificationService(_repoMock.Object,
+             _productSpecificationRepository.Object, _inventoryRepository.Object)
+             .GetInventory(1, specificationContentIds).ToList().FirstOrDefault();
             Assert.IsInstanceOf<int>(result);
         }
     }
