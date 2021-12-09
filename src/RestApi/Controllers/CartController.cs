@@ -13,6 +13,7 @@ using Services.Interface.Redis;
 using Services;
 using Services.Redis;
 using StackExchange.Redis;
+using System;
 
 namespace RestApi.Controllers
 {
@@ -76,7 +77,7 @@ namespace RestApi.Controllers
             {
                 UserId = user.Id.ToString(),
                 InventoryId = requestCart.InventoryId.ToString(),
-                Quantity = requestCart.Quantity.ToString(),
+                Quantity = SumQuantity(user,requestCart).ToString(),
                 Attribute = requestCart.Attribute
             });
         }
@@ -89,6 +90,17 @@ namespace RestApi.Controllers
             var user = (User)_httpContextAccessor.HttpContext.Items["User"];
             return _service.Delete(user.Id.ToString(), productId.ToString(), cartAttribute)
             ? NoContent() : NotFound();
+        }
+
+        private int SumQuantity(User user,CreateCartRequest requestCart)
+        {
+            var cart = _service.GetById(user.Id.ToString(), requestCart.InventoryId.ToString(), requestCart.Attribute);
+            var quantity = requestCart.Quantity;
+            if (cart.Result.HasValue)
+            {
+                quantity += Convert.ToInt32(cart.Result.ToString());
+            }
+            return quantity;
         }
     }
 }
