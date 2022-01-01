@@ -14,6 +14,9 @@ using Services;
 using Services.Redis;
 using StackExchange.Redis;
 using System;
+using RestApi.Models.Response;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RestApi.Controllers
 {
@@ -25,6 +28,8 @@ namespace RestApi.Controllers
 
         private readonly IInventoryService _inventoryService;
 
+        private readonly IInventorySpecificationService _inventorySpecificationService;
+
         private readonly ILogger<CartController> _logger;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -35,6 +40,8 @@ namespace RestApi.Controllers
             _service = new CartService(redisDb);
 
             _inventoryService = new InventoryService(context);
+
+            _inventorySpecificationService = new InventorySpecificationService(context);
 
             _logger = logger;
 
@@ -77,7 +84,7 @@ namespace RestApi.Controllers
             {
                 UserId = user.Id.ToString(),
                 InventoryId = requestCart.InventoryId.ToString(),
-                Quantity = SumQuantity(user,requestCart).ToString(),
+                Quantity = SumQuantity(user, requestCart).ToString(),
                 Attribute = requestCart.Attribute
             });
         }
@@ -92,7 +99,33 @@ namespace RestApi.Controllers
             ? NoContent() : NotFound();
         }
 
-        private int SumQuantity(User user,CreateCartRequest requestCart)
+        [Route("many/{cartAttribute}")]
+        [HttpGet]
+        [Authorize(Enum.RoleEnum.Customer)]
+        public IActionResult GetMany(CartAttributeEnum cartAttribute)
+        {
+            var cartList = new List<CartListResponse>();
+            var user = (User)_httpContextAccessor.HttpContext.Items["User"];
+            var carts = _service.GetMany(user.Id.ToString(), cartAttribute);
+            foreach (var cart in carts)
+            {
+                var inventory = _inventoryService.GetJoinProduct((int)cart.Name).FirstOrDefault();
+                if (inventory != null)
+                {
+                    var specificationContents = _inventorySpecificationService.GetSpecificationContent(inventory.InventoryId).ToList();
+                    cartList.Add(new CartListResponse()
+                    {
+                        InventoryId = inventory.InventoryId,
+                        Name = inventory.ProductName + " " + string.Join("-", specificationContents),
+                        Quantity = (int)cart.Value,
+                        Price = inventory.Price
+                    });
+                }
+            }
+            return Ok(cartList);
+        }
+
+        private int SumQuantity(User user, CreateCartRequest requestCart)
         {
             var cart = _service.GetById(user.Id.ToString(), requestCart.InventoryId.ToString(), requestCart.Attribute);
             var quantity = requestCart.Quantity;
