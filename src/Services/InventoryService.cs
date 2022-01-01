@@ -16,16 +16,12 @@ namespace Services
         private readonly IInventoryRepository _repository;
         private readonly IProductRepository _productRepository;
         private readonly IInventorySpecificationRepository _inventorySpecificationRepository;
-        private readonly ISpecificationRepository _specificationRepository;
-        private readonly ISpecificationContentRepository _specificationContentRepository;
-
+        
         public InventoryService(DbContextEntity contextEntity)
         {
             _repository = new InventoryRepository(contextEntity);
             _productRepository = new ProductRepository(contextEntity);
             _inventorySpecificationRepository = new InventorySpecificationRepository(contextEntity);
-            _specificationRepository = new SpecificationRepository(contextEntity);
-            _specificationContentRepository = new SpecificationContentRepository(contextEntity);
         }
 
         public InventoryService(IInventoryRepository genericRepository)
@@ -38,7 +34,7 @@ namespace Services
         public async Task<Inventory> GetShowById(int id) => await _repository.Get(x => x.Id == id
             && x.IsDisplay == true && x.IsDelete == false);
 
-        public IQueryable<InventoryToOrderInventory> GetJoinProductAndSpecification(int id)
+        public IQueryable<ProductToInventory> GetJoinProduct(int id)
         => _repository.GetAll().Where(x => x.Id == id)
             .Join(
                 _inventorySpecificationRepository.GetAll(),
@@ -46,35 +42,17 @@ namespace Services
                 inventorySpecification => inventorySpecification.InventoryId,
                 (x, y) => new { Inventory = x, InventorySpecification = y }
             ).Join(
-                _specificationContentRepository.GetAll(),
-                inventory => inventory.InventorySpecification.SpecificationContentId,
-                specificationContent => specificationContent.Id,
-                (x, y) => new { Inventory = x, SpecificationContent = y }
-            ).Join(
-                _specificationRepository.GetAll(),
-                inventory => inventory.SpecificationContent.SpecificationId,
-                specification => specification.Id,
-                (x, y) => new { Inventory = x, Specification = y }
-            ).Join(
                 _productRepository.GetAll(),
-                inventory => inventory.Inventory.Inventory.Inventory.ProductId,
+                inventory => inventory.Inventory.ProductId,
                 product => product.Id,
                 (x, y) => new { Inventory = x, Product = y }
             )
             .Select(
-                x => new InventoryToOrderInventory
+                x => new ProductToInventory
                 {
-                    InventoryId = x.Inventory.Inventory.Inventory.Inventory.Id,
+                    InventoryId = x.Inventory.Inventory.Id,
                     ProductName = x.Product.Name,
-                    Price = x.Inventory.Inventory.Inventory.Inventory.Price,
-                    Specifications = new List<Specification>()
-                    {
-                        x.Inventory.Specification
-                    },
-                    SpecificationContents = new List<SpecificationContent>()
-                    {
-                        x.Inventory.Inventory.SpecificationContent
-                    }
+                    Price = x.Inventory.Inventory.Price
                 }
             );
 
