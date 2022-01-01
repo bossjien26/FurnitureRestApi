@@ -18,6 +18,7 @@ using RestApi.Models.Requests;
 using Enum;
 using Microsoft.AspNetCore.Http;
 using RestApi.src.Models;
+using RestApi.Models.Response;
 
 namespace RestApi.src.Controllers
 {
@@ -54,6 +55,19 @@ namespace RestApi.src.Controllers
         public IActionResult ShowUser(int perPage)
         {
             return Ok(_service.GetMany(perPage, 10).ToList());
+        }
+
+        /// <summary>
+        /// identity user token verification
+        /// </summary>
+        /// <param name="CheckIdentityVerificationRequest"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize()]
+        [Route("identity/verification")]
+        public IActionResult CheckIdentityVerification()
+        {
+            return NoContent();
         }
 
         [HttpPut]
@@ -165,10 +179,9 @@ namespace RestApi.src.Controllers
                     Data = "Not Find"
                 });
             }
-            return Ok(new AutResultResponse()
+            return Ok(new AuthenticateResponse()
             {
-                Status = true,
-                Data = generateJwtToken(authenticateRequest)
+                Token = generateJwtToken(authenticateRequest)
             });
         }
 
