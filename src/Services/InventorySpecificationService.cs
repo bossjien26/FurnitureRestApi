@@ -17,15 +17,22 @@ namespace Services
 
         private readonly IInventoryRepository _inventoryRepository;
 
+        private readonly ISpecificationRepository _specificationRepository;
+
+        private readonly ISpecificationContentRepository _specificationContentRepository;
+
+
         public InventorySpecificationService(DbContextEntity contextEntity)
         {
             _repository = new InventorySpecificationRepository(contextEntity);
             _productSpecificationRepository = new ProductSpecificationRepository(contextEntity);
             _inventoryRepository = new InventoryRepository(contextEntity);
+            _specificationRepository = new SpecificationRepository(contextEntity);
+            _specificationContentRepository = new SpecificationContentRepository(contextEntity);
         }
 
         public InventorySpecificationService(IInventorySpecificationRepository genericRepository,
-        IProductSpecificationRepository productSpecificationRepository,IInventoryRepository inventoryRepository)
+        IProductSpecificationRepository productSpecificationRepository, IInventoryRepository inventoryRepository)
         {
             _repository = genericRepository;
             _productSpecificationRepository = productSpecificationRepository;
@@ -63,9 +70,31 @@ namespace Services
                 _inventoryRepository.GetAll(),
                 inventorySpecification => inventorySpecification.InventorySpecification.InventoryId,
                 inventory => inventory.Id,
-                (InventorySpecification,Inventory) => new {InventorySpecification,Inventory}
+                (InventorySpecification, Inventory) => new { InventorySpecification, Inventory }
             )
             .Where(x => x.InventorySpecification.ProductSpecification.ProductId == productId)
             .Select(x => x.Inventory);
+
+        public IEnumerable<string> GetSpecificationContent(int inventoryId)
+        => _repository.GetAll().Where(r => r.InventoryId == inventoryId)
+            .Join(
+                _specificationContentRepository.GetAll(),
+                InventorySpecification => InventorySpecification.SpecificationContentId,
+                SpecificationContent => SpecificationContent.Id,
+                (InventorySpecification, SpecificationContent) => new
+                {
+                    InventorySpecification,
+                    SpecificationContent
+                }
+            ).Join(
+                _specificationRepository.GetAll(),
+                InventorySpecificationContent => InventorySpecificationContent.SpecificationContent.SpecificationId,
+                Specification => Specification.Id,
+                (InventorySpecificationContent, Specification) => new
+                {
+                    InventorySpecificationContent,
+                    Specification
+                }
+            ).Select(x => x.Specification.Name + "-" + x.InventorySpecificationContent.SpecificationContent.Name);
     }
 }

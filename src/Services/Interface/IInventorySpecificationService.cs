@@ -15,5 +15,7 @@ namespace Services.Interface
         Task<bool> CheckInventoryAndInventorySpecificationIsExist(int inventoryId, int specificationContentId);
 
         IEnumerable<Inventory> GetInventory(int productId, int[] specificationContents);
+
+        IEnumerable<string> GetSpecificationContent(int inventoryId);
     }
 }

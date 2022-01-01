@@ -28,6 +28,8 @@ namespace RestApi.Controllers
 
         private readonly ICartService _cartService;
 
+        private readonly IInventorySpecificationService _inventorySpecificationService;
+
         private readonly IOrderInventoryService _OrderInventoryService;
 
         private readonly IInventoryService _inventoryService;
@@ -43,6 +45,7 @@ namespace RestApi.Controllers
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _inventoryService = new InventoryService(context);
+            _inventorySpecificationService = new InventorySpecificationService(context);
         }
 
         [Authorize()]
@@ -80,24 +83,21 @@ namespace RestApi.Controllers
 
         private async Task<int> InsertOrderInventory(int orderId, HashEntry cart)
         {
-            var inventoryToOrderInventory = _inventoryService.GetJoinProductAndSpecification((int)cart.Name).FirstOrDefault();
+            var inventoryToOrderInventory = _inventoryService.GetJoinProduct((int)cart.Name).FirstOrDefault();
             if (inventoryToOrderInventory == null)
             {
                 return 0;
             }
+
+            var specificationContents = _inventorySpecificationService.GetSpecificationContent(inventoryToOrderInventory.InventoryId).ToList();
+
             var orderInventory = new OrderInventory()
             {
                 OrderId = orderId,
                 Price = inventoryToOrderInventory.Price,
                 InventoryId = inventoryToOrderInventory.InventoryId,
-                ProductName = inventoryToOrderInventory.ProductName,
+                ProductName = inventoryToOrderInventory.ProductName + " " + string.Join("-", specificationContents),
                 Quality = (int)cart.Value,
-                Specification = inventoryToOrderInventory.Specifications.Select(x =>
-                x.SpecificationContent).Aggregate(
-                    new StringBuilder(),
-                    (current, next) => current.Append(current.Length == 0 ? "" : "-").Append(next)
-                )
-                .ToString()
             };
 
             await _OrderInventoryService.Insert(orderInventory);
