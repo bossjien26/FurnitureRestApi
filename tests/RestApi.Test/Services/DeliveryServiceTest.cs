@@ -42,15 +42,26 @@ namespace RestApi.Test.Services
         [Test]
         public void ShouldGetdelivery()
         {
-            _repoMock.Setup(c => c.Get(x => x.Key == DeliveryTypeEnum.DirectShipping.ToString()
+            _repoMock.Setup(c => c.Get(x => x.Key == (int)DeliveryTypeEnum.DropShipping
             && x.Category == MetadataCategoryEnum.Delivery))
             .Returns(Task.FromResult(_entityMock.Object));
 
 
             Assert.DoesNotThrow(() =>
                 new DeliveryService(_context)
-                .GetDelivery(DeliveryTypeEnum.DirectShipping)
+                .GetDelivery(DeliveryTypeEnum.DropShipping)
             );
+        }
+
+        [Test]
+        public void ShouldInsert()
+        {
+            _delivery.Object.Title = "直接運送";
+            _delivery.Object.Introduce = "您再也無需提前支付庫存費用或處理運送物流。使用直運(Dropshipping) 後，便可透過批發商直接將產品寄給顧客。";
+            _delivery.Object.Content = "內容";
+            _delivery.Object.Type = DeliveryTypeEnum.DropShipping;
+            Assert.DoesNotThrowAsync(()
+                => new DeliveryService(_context).Insert(_delivery.Object));
         }
     }
 }
