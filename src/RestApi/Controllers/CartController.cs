@@ -91,7 +91,7 @@ namespace RestApi.Controllers
 
         [Route("")]
         [HttpDelete]
-        [Authorize(Enum.RoleEnum.SuperAdmin, Enum.RoleEnum.Customer, Enum.RoleEnum.Admin, Enum.RoleEnum.Staff)]
+        [Authorize()]
         public IActionResult Delete(int productId, CartAttributeEnum cartAttribute)
         {
             var user = (User)_httpContextAccessor.HttpContext.Items["User"];
@@ -101,7 +101,7 @@ namespace RestApi.Controllers
 
         [Route("many/{cartAttribute}")]
         [HttpGet]
-        [Authorize(Enum.RoleEnum.Customer)]
+        [Authorize()]
         public IActionResult GetMany(CartAttributeEnum cartAttribute)
         {
             var cartList = new List<CartListResponse>();
