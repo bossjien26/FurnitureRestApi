@@ -49,10 +49,9 @@ namespace RestApi.Test.Services
         [Test]
         public void ShouldGetPayment()
         {
-            _repoMock.Setup(c => c.Get(x => x.Key == PaymentTypeEnum.Bank.ToString()
+            _repoMock.Setup(c => c.Get(x => x.Key == (int)PaymentTypeEnum.Bank
             && x.Category == MetadataCategoryEnum.Pay))
             .Returns(Task.FromResult(_entityMock.Object));
-
 
             Assert.DoesNotThrow(() =>
                 new PaymentService(_context)

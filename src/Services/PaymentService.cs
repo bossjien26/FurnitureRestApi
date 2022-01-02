@@ -20,8 +20,7 @@ namespace Services
                 new Metadata()
                 {
                     Category = Enum.MetadataCategoryEnum.Pay,
-                    Type = (int)payment.Type,
-                    Key = payment.Type.ToString(),
+                    Key = (int)payment.Type,
                     Value = JsonSerializer.Serialize(payment)
                 }
             );
@@ -29,7 +28,7 @@ namespace Services
 
         public void Update(Payment payment)
         {
-            var Metadata = GetByCategory(MetadataCategoryEnum.Pay, (int)payment.Type);
+            var Metadata = GetByCategoryDetail(MetadataCategoryEnum.Pay, (int)payment.Type);
             if (Metadata != null)
             {
                 Metadata.Value = JsonSerializer.Serialize(payment);
@@ -39,7 +38,7 @@ namespace Services
 
         public Payment GetPayment(PaymentTypeEnum type)
         {
-            var payment = GetByCategory(MetadataCategoryEnum.Pay, (int)type);
+            var payment = GetByCategoryDetail(MetadataCategoryEnum.Pay, (int)type);
 
             return payment == null ? null
             : JsonSerializer.Deserialize<Payment>(payment.Value);
