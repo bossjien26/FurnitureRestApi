@@ -40,7 +40,7 @@ namespace RestApi.Test.Controllers
             var request = new UpdateDeliveryRequest()
             {
                 Title = "DirectShipping",
-                Type = DeliveryTypeEnum.DirectShipping,
+                Type = DeliveryTypeEnum.DropShipping,
                 Introduce = "introduce",
                 Content = "content"
             };
@@ -54,12 +54,12 @@ namespace RestApi.Test.Controllers
         private async Task InsertDelivery()
         {
             var service = new DeliveryService(_context);
-            if (service.GetDelivery(DeliveryTypeEnum.DirectShipping) == null)
+            if (service.GetDelivery(DeliveryTypeEnum.DropShipping) == null)
             {
                 await service.Insert(new Delivery()
                 {
                     Title = "DirectShipping",
-                    Type = DeliveryTypeEnum.DirectShipping,
+                    Type = DeliveryTypeEnum.DropShipping,
                     Introduce = "test",
                     Content = "content"
                 });
