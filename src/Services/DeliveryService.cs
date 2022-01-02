@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DbEntity;
@@ -21,8 +23,7 @@ namespace Services
                 new Metadata()
                 {
                     Category = Enum.MetadataCategoryEnum.Delivery,
-                    Type = (int)delivery.Type,
-                    Key = delivery.Type.ToString(),
+                    Key = (int)delivery.Type,
                     Value = JsonSerializer.Serialize(delivery)
                 }
             );
@@ -30,7 +31,7 @@ namespace Services
 
         public void Update(Delivery delivery)
         {
-            var Metadata = GetByCategory(MetadataCategoryEnum.Delivery, (int)delivery.Type);
+            var Metadata = GetByCategoryDetail(MetadataCategoryEnum.Delivery, (int)delivery.Type);
             if (Metadata != null)
             {
                 Metadata.Value = JsonSerializer.Serialize(delivery);
@@ -40,10 +41,21 @@ namespace Services
 
         public Delivery GetDelivery(DeliveryTypeEnum type)
         {
-            var delivery = GetByCategory(MetadataCategoryEnum.Delivery, (int)type);
+            var delivery = GetByCategoryDetail(MetadataCategoryEnum.Delivery, (int)type);
 
             return delivery == null ? null
             : JsonSerializer.Deserialize<Delivery>(delivery.Value);
+        }
+
+        public List<Delivery> GetMany()
+        {
+            var deliveries = GetByCategory(MetadataCategoryEnum.Delivery).ToList();
+            var result = new List<Delivery>();
+            deliveries.ForEach(r =>
+            {
+                result.Add(JsonSerializer.Deserialize<Delivery>(r.Value));
+            });
+            return result;
         }
     }
 }

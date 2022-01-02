@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DbEntity;
@@ -27,8 +28,11 @@ namespace Services
         public async Task<Metadata> GetById(int id)
         => await _repository.Get(x => x.Id == id);
 
-        public Metadata GetByCategory(MetadataCategoryEnum category, int type)
-        => _repository.GetAll().Where(x => x.Type == type
+        public Metadata GetByCategoryDetail(MetadataCategoryEnum category, int key)
+        => _repository.GetAll().Where(x => x.Key == key
            && x.Category == category).FirstOrDefault();
+
+        public IEnumerable<Metadata> GetByCategory(MetadataCategoryEnum category)
+        => _repository.GetAll().Where(x => x.Category == category);
     }
 }

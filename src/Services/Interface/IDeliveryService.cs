@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Enum;
 using Services.Dto;
@@ -11,5 +12,7 @@ namespace Services.Interface
         void Update(Delivery delivery);
 
         Delivery GetDelivery(DeliveryTypeEnum type);
+
+        List<Delivery> GetMany();
     }
 }

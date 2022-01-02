@@ -44,10 +44,10 @@ namespace RestApi.Test.Services
             //Arrange
             //Act
             //Asset
-            _repoMock.Setup(c => c.Get(x => x.Key == "category"))
+            _repoMock.Setup(c => c.Get(x => x.Key == 1))
                 .Returns(Task.FromResult(_entityMock.Object));
 
-            _entityMock.Object.Key = "cart";
+            _entityMock.Object.Key = 2;
 
             Assert.DoesNotThrow(() =>
                 new MetadataService(_repoMock.Object).Update(_entityMock.Object)
@@ -57,14 +57,14 @@ namespace RestApi.Test.Services
         [Test]
         public void ShouldGetByCategory()
         {
-            _repoMock.Setup(c => c.Get(x => x.Key == PaymentTypeEnum.Bank.ToString()
+            _repoMock.Setup(c => c.Get(x => x.Key == (int)PaymentTypeEnum.Bank
             && x.Category == MetadataCategoryEnum.Pay))
             .Returns(Task.FromResult(_entityMock.Object));
 
 
             Assert.DoesNotThrow(() =>
                 new MetadataService(_repoMock.Object)
-            .GetByCategory(MetadataCategoryEnum.Pay, (int)PaymentTypeEnum.Bank)
+            .GetByCategoryDetail(MetadataCategoryEnum.Pay, (int)PaymentTypeEnum.Bank)
             );
         }
     }

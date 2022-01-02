@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Entities;
 using Enum;
@@ -12,6 +13,8 @@ namespace Services.Interface
 
         Task<Metadata> GetById(int id);
 
-        Metadata GetByCategory(MetadataCategoryEnum category, int type);
+        Metadata GetByCategoryDetail(MetadataCategoryEnum category, int key);
+
+        IEnumerable<Metadata> GetByCategory(MetadataCategoryEnum category);
     }
 }
