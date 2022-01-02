@@ -31,21 +31,7 @@ namespace RestApi.Controllers
         [AllowAnonymous()]
         public IActionResult ShowMany()
         {
-            return Ok(GetDeliveryMany());
-        }
-
-        private List<Delivery> GetDeliveryMany()
-        {
-            var directShipping = _service.GetDelivery(DeliveryTypeEnum.DirectShipping);
-            var dropShipping = _service.GetDelivery(DeliveryTypeEnum.DropShipping);
-            var inStorePickUp = _service.GetDelivery(DeliveryTypeEnum.InStorePickup);
-
-            var deliveries = new List<Delivery>() { };
-            deliveries.Add(directShipping);
-            deliveries.Add(dropShipping);
-            deliveries.Add(inStorePickUp);
-
-            return deliveries;
+            return Ok(_service.GetMany());
         }
 
         [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
