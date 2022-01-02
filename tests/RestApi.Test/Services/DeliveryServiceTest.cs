@@ -63,5 +63,18 @@ namespace RestApi.Test.Services
             Assert.DoesNotThrowAsync(()
                 => new DeliveryService(_context).Insert(_delivery.Object));
         }
+
+        [Test]
+        public void ShouldGetMany()
+        {
+            _repoMock.Setup(c => c.Get(x => x.Key == (int)DeliveryTypeEnum.DropShipping))
+            .Returns(Task.FromResult(_entityMock.Object));
+
+            Assert.DoesNotThrow(() =>
+                new DeliveryService(_context)
+                .GetMany()
+            );
+        
+        }
     }
 }
