@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DbEntity;
 using Enum;
 using Microsoft.AspNetCore.Mvc;
@@ -31,24 +30,10 @@ namespace RestApi.Controllers
         [AllowAnonymous()]
         public IActionResult ShowMany()
         {
-            return Ok(GetPaymentMany());
+            return Ok(_service.GetMany());
         }
 
-        private List<Payment> GetPaymentMany()
-        {
-            var bank = _service.GetPayment(PaymentTypeEnum.Bank);
-            var COD = _service.GetPayment(PaymentTypeEnum.COD);
-            var credit = _service.GetPayment(PaymentTypeEnum.Credit);
-
-            var payments = new List<Payment>() { };
-            payments.Add(bank);
-            payments.Add(COD);
-            payments.Add(credit);
-
-            return payments;
-        }
-
-        [Authorize(RoleEnum.SuperAdmin, RoleEnum.Admin, RoleEnum.Staff)]
+        [Authorize(RoleEnum.Admin, RoleEnum.Staff)]
         [HttpPut]
         [Route("")]
         public IActionResult Update(UpdatePaymentRequest request)
