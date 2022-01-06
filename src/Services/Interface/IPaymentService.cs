@@ -13,5 +13,7 @@ namespace Services.Interface
         void Update(Payment payment);
 
         Payment GetPayment(PaymentTypeEnum type);
+
+        List<Payment> GetMany();
     }
 }

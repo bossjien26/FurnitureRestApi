@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DbEntity;
@@ -42,6 +44,17 @@ namespace Services
 
             return payment == null ? null
             : JsonSerializer.Deserialize<Payment>(payment.Value);
+        }
+
+        public List<Payment> GetMany()
+        {
+            var deliveries = GetByCategory(MetadataCategoryEnum.Pay).ToList();
+            var result = new List<Payment>();
+            deliveries.ForEach(r =>
+            {
+                result.Add(JsonSerializer.Deserialize<Payment>(r.Value));
+            });
+            return result;
         }
     }
 }
