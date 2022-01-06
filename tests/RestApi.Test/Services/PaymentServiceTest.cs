@@ -58,5 +58,18 @@ namespace RestApi.Test.Services
                 .GetPayment(PaymentTypeEnum.Bank)
             );
         }
+
+        [Test]
+        public void ShouldGetMany()
+        {
+            _repoMock.Setup(c => c.Get(x => x.Key == (int)PaymentTypeEnum.Bank))
+            .Returns(Task.FromResult(_entityMock.Object));
+
+            Assert.DoesNotThrow(() =>
+                new PaymentService(_context)
+                .GetMany()
+            );
+
+        }
     }
 }
