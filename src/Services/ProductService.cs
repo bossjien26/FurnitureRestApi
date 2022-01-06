@@ -6,7 +6,6 @@ using Entities;
 using Repositories.Interface;
 using Repositories;
 using Services.Interface;
-using Microsoft.EntityFrameworkCore;
 using Services.Dto;
 
 namespace Services
