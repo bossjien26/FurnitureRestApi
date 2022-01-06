@@ -1,4 +1,4 @@
-# FurnitureRestApi
+# Rest-Api
 
 ## Database
 
@@ -13,19 +13,22 @@ docker compose up -d db
 ```mysql
 CREATE USER 'User Account'@'Docker Database Ip' IDENTIFIED BY 'Password';
 GRANT ALL PRIVILEGES ON *.* TO 'User Account'@'Docker Database Ip' WITH GRANT OPTION;
-Flush Privileges; 
+Flush Privileges;
 ```
 
 ### Database connection strings
+
 Modify the `ConnectionStrings` in `DefaultConnection` at the following file
 
->src/RestApi/appsettings.json
+> src/RestApi/appsettings.json
 
 ### Add Migration
+
 ```sh
 #switch to src/Repositories
 dotnet ef migrations add InitialCreate --context DbContextEntity --startup-project ../RestApi
 ```
+
 ### Update Database
 
 ```sh
@@ -52,6 +55,7 @@ dotnet add package ServiceStack.Redis
 ```
 
 ## Use Visual Studio
+
 > Choice open `RestApi.sln` in root
 
 ## Project
@@ -84,7 +88,7 @@ dotnet clean
 dotnet restore
 ```
 
-### 
+###
 
 ## Test
 
@@ -98,7 +102,6 @@ dotnet watch test
 ### Run test
 
 [Example Url](https://docs.microsoft.com/en-us/dotnet/core/testing/selective-unit-tests?pivots=mstest)
-
 
 ```sh
 #run all tests
@@ -121,10 +124,10 @@ dotnet test Directory/Test.csproj --filter MethodName
 
 ### This is the route table for Api Example:
 
-| VERB | URL | DESCRIPTION |
-| ------------- | ------------- | ------------- |
-| GET | api/ControllerRoute/MethodRoute | Retrieves stock items |
-| GET | api/ControllerRoute/MethodRoute/Id | Retrieves a stock item by id |
-| POST| api/ControllerRoute/MethodRoute | Create a new stock item |
-| PUT | api/ControllerRoute/MethodRoute | Update an existing stock item |
+| VERB   | URL                                | DESCRIPTION                   |
+| ------ | ---------------------------------- | ----------------------------- |
+| GET    | api/ControllerRoute/MethodRoute    | Retrieves stock items         |
+| GET    | api/ControllerRoute/MethodRoute/Id | Retrieves a stock item by id  |
+| POST   | api/ControllerRoute/MethodRoute    | Create a new stock item       |
+| PUT    | api/ControllerRoute/MethodRoute    | Update an existing stock item |
 | DELETE | api/ControllerRoute/MethodRoute/Id | Delete an existing stock item |
