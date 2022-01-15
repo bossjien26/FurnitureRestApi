@@ -33,7 +33,7 @@ namespace RestApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Insert(CreateCategoryRequest requestsCategory)
         {
-            if (await _service.GetById(requestsCategory.ChildrenId) == null && requestsCategory.ChildrenId != 0)
+            if (await _service.GetById(requestsCategory.ParentId) == null && requestsCategory.ParentId != 0)
             {
                 return NotFound(new AutResultResponse()
                 {
@@ -64,7 +64,7 @@ namespace RestApi.Controllers
             var category = new Entities.Category()
             {
                 Name = requestsCategory.Name,
-                ChildrenId = requestsCategory.ChildrenId,
+                ParentId = requestsCategory.ParentId,
                 Sequence = requestsCategory.Sequence,
                 IsDisplay = requestsCategory.IsDisplay
             };

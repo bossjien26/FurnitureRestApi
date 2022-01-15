@@ -91,7 +91,7 @@ namespace RestApi.Test.DatabaseSeeders
             return new Faker<Category>()
                 .RuleFor(c => c.Id, (f) => 0)
                 .RuleFor(c => c.Name, (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.ChildrenId, (f) => 0)
+                .RuleFor(c => c.ParentId, (f) => 0)
                 .RuleFor(c => c.Sequence, (f) => f.Random.Number(10));
         }
     }

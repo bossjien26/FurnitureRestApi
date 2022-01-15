@@ -27,7 +27,7 @@ namespace RestApi.Test.Controllers
             var request = new CreateCategoryRequest()
             {
                 Name = "123",
-                ChildrenId = 0,
+                ParentId = 0,
                 IsDisplay = false
             };
             var response = await _httpClient.PostAsync("/api/category", PostType(request));

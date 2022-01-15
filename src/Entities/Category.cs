@@ -17,7 +17,7 @@ namespace Entities
         [StringLength(256)]
         public string Name { get; set; }
 
-        public int ChildrenId { get; set; }
+        public int ParentId { get; set; }
 
         public int Sequence { get; set; }
 

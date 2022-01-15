@@ -8,7 +8,7 @@ namespace RestApi.Models.Requests
         public string Name { get; set; }
 
         [Required]
-        public int ChildrenId { get; set; }
+        public int ParentId { get; set; }
 
         public int Sequence { get; set; }
 
