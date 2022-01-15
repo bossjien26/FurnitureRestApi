@@ -36,12 +36,12 @@ namespace Services
                 .Where(r => r.ParentId == null)
                 .Skip((index - 1) * size)
                 .Take(size)
-                .OrderByDescending(x => x.Id);
+                .OrderBy(x => x.Id);
 
         public IEnumerable<Category> GetChildren(int id)
         => _repository.GetAll()
             .Where(r => r.ParentId == id)
-            .OrderByDescending(x => x.Id);
+            .OrderBy(x => x.Id);
 
         public List<CategoryRelationChildren> GetCategoryRelationChildren(int index, int size)
         {
