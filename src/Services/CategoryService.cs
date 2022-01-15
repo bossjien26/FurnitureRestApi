@@ -29,9 +29,13 @@ namespace Services
             return await _repository.Get(x => x.Id == id);
         }
 
+        /// <summary>
+        /// 獲得第一層分類
+        /// </summary>
         public IEnumerable<Category> GetMany(int index, int size)
         {
             return _repository.GetAll()
+                .Where(r => r.ParentId == 0)
                 .Skip((index - 1) * size)
                 .Take(size)
                 .OrderByDescending(x => x.Id);
