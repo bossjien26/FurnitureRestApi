@@ -76,7 +76,7 @@ namespace RestApi.Controllers
         [HttpGet]
         public IActionResult ShowMany(int perPage)
         {
-            return Ok(_service.GetMany(perPage, 10).ToList());
+            return Ok(_service.GetCategoryRelationChildren(perPage, 10));
         }
     }
 }
