@@ -80,7 +80,11 @@ namespace DbEntity
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Category>()
+                .HasOne(x => x.ParentCategory)
+                .WithMany(x => x.ChildrenCategories)
+                .HasForeignKey(x => x.ParentId);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

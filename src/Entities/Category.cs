@@ -17,7 +17,7 @@ namespace Entities
         [StringLength(256)]
         public string Name { get; set; }
 
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
 
         public int Sequence { get; set; }
 
@@ -27,6 +27,10 @@ namespace Entities
 
         public bool IsDelete { get; set; } = false;
 
-        public virtual ICollection<ProductCategory> ProductCategories{get;set;}
+        public virtual Category ParentCategory { get; set; }
+
+        public virtual ICollection<Category> ChildrenCategories { get; set; }
+
+        public virtual ICollection<ProductCategory> ProductCategories { get; set; }
     }
 }
