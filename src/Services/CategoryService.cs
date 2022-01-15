@@ -6,6 +6,7 @@ using Entities;
 using Repositories.Interface;
 using Repositories;
 using Services.Interface;
+using Services.Dto;
 
 namespace Services
 {
@@ -25,20 +26,41 @@ namespace Services
             => await _repository.Insert(instance);
 
         public async Task<Category> GetById(int id)
-        {
-            return await _repository.Get(x => x.Id == id);
-        }
+            => await _repository.Get(x => x.Id == id);
 
         /// <summary>
         /// 獲得第一層分類
         /// </summary>
         public IEnumerable<Category> GetMany(int index, int size)
-        {
-            return _repository.GetAll()
-                .Where(r => r.ParentId == 0)
+        => _repository.GetAll()
+                .Where(r => r.ParentId == null)
                 .Skip((index - 1) * size)
                 .Take(size)
                 .OrderByDescending(x => x.Id);
+
+        public IEnumerable<Category> GetChildren(int id)
+        => _repository.GetAll()
+            .Where(r => r.ParentId == id)
+            .OrderByDescending(x => x.Id);
+
+        public List<CategoryRelationChildren> GetCategoryRelationChildren(int index, int size)
+        {
+            var categoryRelationChildren = new List<CategoryRelationChildren>();
+            GetMany(index, size).ToList().ForEach(r =>
+             {
+                 categoryRelationChildren.Add(new CategoryRelationChildren()
+                 {
+                     Id = r.Id,
+                     Name = r.Name,
+                     ChildrenCategories = GetChildren(r.Id).Select(r => new ChildrenCategory
+                     {
+                         Id = r.Id,
+                         Name = r.Name
+                     }).ToList()
+                 });
+             });
+
+            return categoryRelationChildren;
         }
     }
 }

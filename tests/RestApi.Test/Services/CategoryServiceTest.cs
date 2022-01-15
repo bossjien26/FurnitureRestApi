@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Repositories.Interface;
 using RestApi.Test.DatabaseSeeders;
 using Services;
+using Services.Dto;
 
 namespace RestApi.Test.Services
 {
@@ -43,13 +44,38 @@ namespace RestApi.Test.Services
         [Test]
         public void ShouldGetMany()
         {
-            _repoMock.Setup(r => r.GetAll()).Returns(CategorySeeder.SeedMany(10,15).AsQueryable());
+            _repoMock.Setup(r => r.GetAll()).Returns(CategorySeeder.SeedMany(10, 15).AsQueryable());
 
-            var result = new CategoryService(_repoMock.Object).GetMany(1,5).ToList();
+            var result = new CategoryService(_repoMock.Object).GetMany(1, 5).ToList();
 
             //Assert
             Assert.IsInstanceOf<List<Category>>(result);
-            Assert.AreEqual(5,result.Count);
+            Assert.AreEqual(5, result.Count);
         }
+
+        [Test]
+        public void ShouldGetGetChildren()
+        {
+            _repoMock.Setup(r => r.GetAll()).Returns(CategorySeeder.SeedMany(10, 15).AsQueryable());
+
+            var result = new CategoryService(_repoMock.Object).GetChildren(_entityMock.Object.Id).ToList();
+
+            //Assert
+            Assert.IsInstanceOf<List<Category>>(result);
+            Assert.AreEqual(1, result.Count);
+        }
+
+        [Test]
+        public void ShouldGetGetCategoryRelationChildren()
+        {
+            _repoMock.Setup(r => r.GetAll()).Returns(CategorySeeder.SeedMany(10, 15).AsQueryable());
+
+            var result = new CategoryService(_repoMock.Object).GetCategoryRelationChildren(1, 5).ToList();
+
+            //Assert
+            Assert.IsInstanceOf<List<CategoryRelationChildren>>(result);
+            Assert.AreEqual(5, result.Count);
+        }
+
     }
 }
