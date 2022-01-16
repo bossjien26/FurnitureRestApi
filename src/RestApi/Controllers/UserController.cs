@@ -94,6 +94,16 @@ namespace RestApi.src.Controllers
             });
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("info")]
+        public IActionResult GetUserInfo(string token)
+        {
+            var myself = (User)_httpContextAccessor.HttpContext.Items["User"];
+
+            return Ok(myself);
+        }
+
         [AllowAnonymous]
         [HttpPost]
         [Route("registration")]
