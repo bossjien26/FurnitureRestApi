@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Services;
+using Services.Interface;
+using StackExchange.Redis;
 
 namespace Middlewares.Authentication
 {
@@ -18,12 +20,15 @@ namespace Middlewares.Authentication
     {
         private readonly RequestDelegate _next;
 
+        private IUserService _userService;
+
         public AuthenticationMiddleware(RequestDelegate next) => _next = next;
 
         //TODO:need refactor
         public async Task Invoke(HttpContext httpContext, DbContextEntity context,
-         AppSettings appSettings, ILogger<AuthenticationMiddleware> logger)
+         AppSettings appSettings, ILogger<AuthenticationMiddleware> logger, IConnectionMultiplexer redis)
         {
+            _userService = new UserService(context, redis);
             var token = httpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             if (string.IsNullOrWhiteSpace(token))
             {
@@ -43,8 +48,7 @@ namespace Middlewares.Authentication
             {
                 var jwtToken = GetVerifyTokenType(appSettings, token);
                 // attach user to context on successful jwt validation
-                httpContext.Items["User"] = new UserService(context).
-                GetVerifyUser(jwtToken.Mail, jwtToken.Password);
+                httpContext.Items["User"] = _userService.GetVerifyUser(jwtToken.Mail, jwtToken.Password);
             }
             catch (Exception exception)
             {

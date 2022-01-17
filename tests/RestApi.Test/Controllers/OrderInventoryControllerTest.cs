@@ -30,7 +30,7 @@ namespace RestApi.Test.Controllers
         {
             _cartService = new CartService(_redisConnect);
             _orderService = new OrderService(_context);
-            _userService = new UserService(_context);
+            _userService = new UserService(_context, _redisConnect);
             _orderProdcutService = new OrderInventoryService(_context);
             _productService = new ProductService(_context);
         }

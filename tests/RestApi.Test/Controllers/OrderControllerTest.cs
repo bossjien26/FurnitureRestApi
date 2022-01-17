@@ -11,6 +11,17 @@ namespace RestApi.Test.Controllers
     [TestFixture]
     public class OrderControllerTest : BaseController
     {
+        private readonly IOrderService _orderService;
+
+        private readonly IUserService _userService;
+
+        public OrderControllerTest()
+        {
+            _orderService = new OrderService(_context);
+
+            _userService = new UserService(_context, _redisConnect);
+        }
+
         [Test]
         public async Task ShouldStore()
         {
@@ -34,9 +45,7 @@ namespace RestApi.Test.Controllers
         [Test]
         public async Task ShouldGetUserOrder()
         {
-            IOrderService orderService = new OrderService(_context);
-            IUserService userService = new UserService(_context);
-            var orderId = orderService.GetUserOrderMany(userService.SearchUserMail("jan@example.com").Id, 1, 5).First().Id;
+            var orderId = _orderService.GetUserOrderMany(_userService.SearchUserMail("jan@example.com").Id, 1, 5).First().Id;
             var response = await _httpClient.GetAsync("/api/order/show/" + orderId);
 
             //Assert
@@ -46,7 +55,6 @@ namespace RestApi.Test.Controllers
         [Test]
         public async Task ShouldGetUserOrderMany()
         {
-            IUserService userService = new UserService(_context);
             var response = await _httpClient.GetAsync("/api/order/1");
 
             //Assert
@@ -56,9 +64,7 @@ namespace RestApi.Test.Controllers
         [Test]
         public async Task ShouldUpdate()
         {
-            IOrderService orderService = new OrderService(_context);
-            IUserService userService = new UserService(_context);
-            var orderId = orderService.GetUserOrderMany(userService.SearchUserMail("jan@example.com").Id, 1, 5).First().Id;
+            var orderId = _orderService.GetUserOrderMany(_userService.SearchUserMail("jan@example.com").Id, 1, 5).First().Id;
             //Act
             var request = new UpdateOrderRequest()
             {

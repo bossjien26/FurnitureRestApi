@@ -1,33 +1,21 @@
 using System.Threading.Tasks;
-using Helpers;
-using Microsoft.Extensions.Logging;
-using Moq;
 using NUnit.Framework;
 using RestApi.Models.Requests;
-using RestApi.src.Controllers;
 using RestApi.Test.DatabaseSeeders;
 using System.Net;
 using Services;
-using System.Linq;
-using Microsoft.AspNetCore.Http;
+using Services.Interface;
 
 namespace RestApi.Test.Controllers
 {
     [TestFixture]
     public class UserControllerTest : BaseController
     {
-        private readonly UserController _controller;
+        private readonly IUserService _userService;
 
         public UserControllerTest()
         {
-            _controller = new UserController(
-                _context,
-                new Mock<ILogger<UserController>>().Object,
-                new Mock<AppSettings>().Object,
-                new Mock<MailHelper>(new Mock<SmtpMailConfig>().Object,
-                new Mock<ILogger<MailHelper>>().Object).Object,
-                new Mock<IHttpContextAccessor>().Object
-            );
+            _userService = new UserService(_context, _redisConnect);
         }
 
         [Test]
@@ -54,8 +42,7 @@ namespace RestApi.Test.Controllers
         [Test]
         public async Task ShouldUpdateUser()
         {
-            var service = new UserService(_context);
-            var user = service.GetVerifyUser("jan@example.com", "aaaaaaa");
+            var user = _userService.GetVerifyUser("jan@example.com", "aaaaaaa");
 
             user.Name = "test";
             var response = await _httpClient.PutAsync("/api/user", PostType(user));

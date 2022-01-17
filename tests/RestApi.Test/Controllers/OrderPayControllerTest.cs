@@ -11,17 +11,25 @@ namespace RestApi.Test.Controllers
     [TestFixture]
     public class OrderPayControllerTest : BaseController
     {
+        private readonly OrderService _orderService;
+
+        private readonly IUserService _userService;
+
+        public OrderPayControllerTest()
+        {
+            _orderService = new OrderService(_context);
+
+            _userService = new UserService(_context, _redisConnect);
+        }
+
         [Test]
         public async Task ShouldInsertOrderPay()
         {
-            IOrderService orderService = new OrderService(_context);
-            IUserService userService = new UserService(_context);
-
             var order = new Entities.Order()
             {
-                UserId = userService.SearchUserMail("jan@example.com").Id
+                UserId = _userService.SearchUserMail("jan@example.com").Id
             };
-            await orderService.Insert(order);
+            await _orderService.Insert(order);
 
             var request = new CreateOrderPayRequest()
             {

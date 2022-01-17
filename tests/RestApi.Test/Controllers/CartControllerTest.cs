@@ -2,11 +2,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Enum;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Moq;
 using NUnit.Framework;
-using RestApi.Controllers;
 using RestApi.Models.Requests;
 using RestApi.Test.DatabaseSeeders;
 using Services;
@@ -20,9 +16,12 @@ namespace RestApi.Test.Controllers
     {
         private readonly IProductService _productService;
 
+        private readonly IUserService _userService;
+
         public CartControllerTest()
         {
             _productService = new ProductService(_context);
+            _userService = new UserService(_context, _redisConnect);
         }
 
         [Test]
@@ -47,8 +46,7 @@ namespace RestApi.Test.Controllers
         public async Task ShouldDelete()
         {
             var service = new CartService(_redisConnect);
-            var userService = new UserService(_context);
-            var user = userService.GetAll().Where(u => u.Mail == "jan@example.com").First();
+            var user = _userService.GetAll().Where(u => u.Mail == "jan@example.com").First();
             await service.Set(new Entities.Cart()
             {
                 UserId = user.Id.ToString(),

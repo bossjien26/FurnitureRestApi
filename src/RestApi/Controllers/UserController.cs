@@ -19,6 +19,7 @@ using Enum;
 using Microsoft.AspNetCore.Http;
 using RestApi.src.Models;
 using RestApi.Models.Response;
+using StackExchange.Redis;
 
 namespace RestApi.src.Controllers
 {
@@ -39,9 +40,9 @@ namespace RestApi.src.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserController(DbContextEntity context, ILogger<UserController> logger,
-         AppSettings appsetting, MailHelper mailHelper, IHttpContextAccessor httpContextAccessor)
+         AppSettings appsetting, MailHelper mailHelper, IHttpContextAccessor httpContextAccessor, IConnectionMultiplexer redis)
         {
-            _service = new UserService(context);
+            _service = new UserService(context, redis);
             _userDetailService = new UserDetailService(context);
             _logger = logger;
             _appSettings = appsetting;
@@ -181,7 +182,8 @@ namespace RestApi.src.Controllers
         [Route("authenticate")]
         public IActionResult Authenticate(GenerateAuthenticateRequest authenticateRequest)
         {
-            if (_service.GetVerifyUser(authenticateRequest.Mail, authenticateRequest.Password) == null)
+            var user = _service.GetVerifyUser(authenticateRequest.Mail, authenticateRequest.Password);
+            if (user == null)
             {
                 return NotFound(new AutResultResponse()
                 {
@@ -189,9 +191,11 @@ namespace RestApi.src.Controllers
                     Data = "Not Find"
                 });
             }
+            var token = generateJwtToken(authenticateRequest);
+            _service.Login(token, user.Id.ToString());
             return Ok(new AuthenticateResponse()
             {
-                Token = generateJwtToken(authenticateRequest)
+                Token = token
             });
         }
 
