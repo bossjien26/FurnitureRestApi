@@ -61,8 +61,8 @@ namespace Services
 
         public async Task Login(string token, string userId)
         {
-            await _redisDb.SetAddAsync(token, userId.ToString());
-            await _redisDb.KeyExpireAsync(token, DateTime.UtcNow.AddMilliseconds(2000));
+            await _redisDb.StringSetAsync(token, userId.ToString());
+            await _redisDb.KeyExpireAsync(token, DateTime.UtcNow.AddHours(1));
         }
 
         public async Task Logout(string token)
