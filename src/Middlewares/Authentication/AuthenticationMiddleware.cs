@@ -49,6 +49,7 @@ namespace Middlewares.Authentication
                 var jwtToken = GetVerifyTokenType(appSettings, token);
                 // attach user to context on successful jwt validation
                 httpContext.Items["User"] = _userService.GetVerifyUser(jwtToken.Mail, jwtToken.Password);
+                _userService.UserExpireDateTime(token, DateTime.UtcNow.AddHours(1));
             }
             catch (Exception exception)
             {
