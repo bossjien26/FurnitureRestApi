@@ -72,7 +72,7 @@ namespace RestApi.src.Controllers
         }
 
         [HttpPut]
-        [AllowAnonymous]
+        [Authorize()]
         [Route("")]
         public IActionResult UpdateUser(User user)
         {
@@ -95,15 +95,11 @@ namespace RestApi.src.Controllers
             });
         }
 
-        [HttpPost]
-        [AllowAnonymous]
+        [HttpGet]
+        [Authorize()]
         [Route("info")]
         public IActionResult GetUserInfo(string token)
-        {
-            var myself = (User)_httpContextAccessor.HttpContext.Items["User"];
-
-            return Ok(myself);
-        }
+        => Ok((User)_httpContextAccessor.HttpContext.Items["User"]);
 
         [AllowAnonymous]
         [HttpPost]
@@ -193,10 +189,22 @@ namespace RestApi.src.Controllers
             }
             var token = generateJwtToken(authenticateRequest);
             _service.Login(token, user.Id.ToString());
+            _service.UserExpireDateTime(token, DateTime.UtcNow.AddHours(1));
             return Ok(new AuthenticateResponse()
             {
                 Token = token
             });
+        }
+
+        [Authorize()]
+        [Route("logout")]
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            var token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            return Ok(token);
+
+            // _service.Logout(user)
         }
 
         /// <summary>
