@@ -6,6 +6,8 @@ using Entities;
 using Repositories.Interface;
 using Repositories;
 using Services.Interface;
+using StackExchange.Redis;
+using System;
 
 namespace Services
 {
@@ -13,9 +15,12 @@ namespace Services
     {
         private IUserRepository _repository;
 
-        public UserService(DbContextEntity dbContextEntity)
+        private readonly IDatabase _redisDb;
+
+        public UserService(DbContextEntity dbContextEntity, IConnectionMultiplexer redis)
         {
             _repository = new UserRepository(dbContextEntity);
+            _redisDb = redis.GetDatabase();
         }
 
         public UserService(IUserRepository genericRepository)
@@ -53,5 +58,17 @@ namespace Services
         {
             return _repository.GetAll().Where(User => User.Mail == mail).Take(1).OrderByDescending(x => x.Id).FirstOrDefault();
         }
+
+        public async Task Login(string token, string userId)
+        {
+            await _redisDb.SetAddAsync(token, userId.ToString());
+            await _redisDb.KeyExpireAsync(token, DateTime.UtcNow.AddMilliseconds(2000));
+        }
+
+        public async Task Logout(string token)
+        => await _redisDb.KeyDeleteAsync(token);
+
+        public async Task<RedisValue> GetRedisUserId(string token)
+        => await _redisDb.StringGetAsync(token);
     }
 }

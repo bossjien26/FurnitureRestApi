@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Entities;
+using StackExchange.Redis;
 
 namespace Services.Interface
 {
@@ -16,8 +17,14 @@ namespace Services.Interface
 
         Task<User> GetById(int userId);
 
-        User GetVerifyUser(string mail,string password);
+        User GetVerifyUser(string mail, string password);
 
         User SearchUserMail(string mail);
+
+        Task Login(string token, string userId);
+
+        Task Logout(string token);
+
+        Task<RedisValue> GetRedisUserId(string token);
     }
 }
