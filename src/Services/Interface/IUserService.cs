@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Entities;
@@ -22,6 +23,8 @@ namespace Services.Interface
         User SearchUserMail(string mail);
 
         Task Login(string token, string userId);
+
+        Task UserExpireDateTime(string token, DateTime dateTime);
 
         Task Logout(string token);
 

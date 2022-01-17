@@ -60,10 +60,10 @@ namespace Services
         }
 
         public async Task Login(string token, string userId)
-        {
-            await _redisDb.StringSetAsync(token, userId.ToString());
-            await _redisDb.KeyExpireAsync(token, DateTime.UtcNow.AddHours(1));
-        }
+        => await _redisDb.StringSetAsync(token, userId.ToString());
+
+        public async Task UserExpireDateTime(string token, DateTime dateTime)
+        => await _redisDb.KeyExpireAsync(token, dateTime);
 
         public async Task Logout(string token)
         => await _redisDb.KeyDeleteAsync(token);
