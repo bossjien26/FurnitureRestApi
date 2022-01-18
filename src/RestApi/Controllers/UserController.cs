@@ -202,9 +202,8 @@ namespace RestApi.src.Controllers
         public IActionResult Logout()
         {
             var token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            return Ok(token);
-
-            // _service.Logout(user)
+            _service.Logout(token);
+            return NoContent();
         }
 
         /// <summary>
