@@ -89,13 +89,13 @@ namespace RestApi.Controllers
             });
         }
 
-        [Route("")]
+        [Route("{cartAttribute}/{inventoryId}")]
         [HttpDelete]
         [Authorize()]
-        public IActionResult Delete(int productId, CartAttributeEnum cartAttribute)
+        public IActionResult Delete(int inventoryId, CartAttributeEnum cartAttribute)
         {
             var user = (User)_httpContextAccessor.HttpContext.Items["User"];
-            return _service.Delete(user.Id.ToString(), productId.ToString(), cartAttribute)
+            return _service.Delete(user.Id.ToString(), inventoryId.ToString(), cartAttribute)
             ? NoContent() : NotFound();
         }
 
