@@ -27,8 +27,26 @@ namespace RestApi.Test.Services
         }
 
         [Test]
-        public void ShouldInsert()
+        public void ShouldInsertCreditTest()
         {
+            _payment.Object.Title = "信用卡付費";
+            _payment.Object.Introduce = "信用卡";
+            _payment.Object.Content = "內容";
+            _payment.Object.Type = PaymentTypeEnum.Credit;
+
+            Assert.DoesNotThrowAsync(()
+                => new PaymentService(_context).Insert(_payment.Object));
+        }
+
+
+        [Test]
+        public void ShouldInsertBankTest()
+        {
+            _payment.Object.Title = "銀行轉帳";
+            _payment.Object.Introduce = "銀行代號：111 帳號：123456789 ";
+            _payment.Object.Content = "內容";
+            _payment.Object.Type = PaymentTypeEnum.Bank;
+
             Assert.DoesNotThrowAsync(()
                 => new PaymentService(_context).Insert(_payment.Object));
         }
