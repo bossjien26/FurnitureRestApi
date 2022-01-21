@@ -26,6 +26,14 @@ services:
       MYSQL_USER: newuser
       MYSQL_PASSWORD: Passwo!rd123!
       MYSQL_DATABASE: FurnitureRest
+  redis:
+    restart: always
+    container_name: redis
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - /data/redis-data:/data
   #Api  Service
   # api:
   #   build:
