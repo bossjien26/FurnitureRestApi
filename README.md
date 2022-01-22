@@ -22,6 +22,12 @@ Modify the `ConnectionStrings` in `DefaultConnection` at the following file
 
 > src/RestApi/appsettings.json
 
+## Redis
+
+need use docker or self env build one redis env.
+
+> docker-compose.yml
+
 ### Add Migration
 
 ```sh
