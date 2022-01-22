@@ -8,6 +8,8 @@ namespace Entities
 {
     [Table("User")]
     [Index(nameof(Id))]
+    [Index(nameof(Mail))]
+    [Index(nameof(Password))]
     public class User
     {
         [Key]
@@ -25,7 +27,9 @@ namespace Entities
 
         public RoleEnum Role { get; set; } = Enum.RoleEnum.Customer;
 
-        public DateTime CreateAt { get; set; } = DateTime.Now;
+        public DateTime CreateAt { get; set; }
+
+        public DateTime UpdateAt { get; set; }
 
         public bool IsDelete { get; set; } = false;
 

@@ -85,6 +85,9 @@ namespace DbEntity
                 .HasOne(x => x.ParentCategory)
                 .WithMany(x => x.ChildrenCategories)
                 .HasForeignKey(x => x.ParentId);
+
+            modelBuilder.Entity<User>().Property(d => d.CreateAt).ValueGeneratedOnAdd();
+            modelBuilder.Entity<User>().Property(d => d.UpdateAt).ValueGeneratedOnAddOrUpdate();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
