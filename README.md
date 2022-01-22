@@ -64,8 +64,13 @@ dotnet add package ServiceStack.Redis
 
 ```sh
 #switch to src/RestApi
+#use swagger api test
 dotnet run
 ```
+
+### Swagger api setting env
+
+> launchSettings.json
 
 ### How build project
 
