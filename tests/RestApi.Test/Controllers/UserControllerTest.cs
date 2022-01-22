@@ -42,7 +42,7 @@ namespace RestApi.Test.Controllers
         [Test]
         public async Task ShouldUpdateUser()
         {
-            var user = _userService.GetVerifyUser("jan@example.com", "aaaaaaa");
+            var user = await _userService.GetVerifyUser("jan@example.com", "aaaaaaa");
 
             user.Name = "test";
             var response = await _httpClient.PutAsync("/api/user", PostType(user));

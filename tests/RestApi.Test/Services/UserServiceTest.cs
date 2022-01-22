@@ -42,16 +42,16 @@ namespace RestApi.Test.Services
         public void ShouldGetMany()
         {
             //Arrange
-            var users = UserSeeder.SeedMany(10,15).AsQueryable();
+            var users = UserSeeder.SeedMany(10, 15).AsQueryable();
 
             _repoMock.Setup(u => u.GetAll()).Returns(users);
 
             //Atc
-            var result = new UserService(_repoMock.Object).GetMany(1,5).ToList();
+            var result = new UserService(_repoMock.Object).GetMany(1, 5).ToList();
 
             //Assert
             Assert.IsInstanceOf<List<User>>(result);
-            Assert.AreEqual(5,result.Count);
+            Assert.AreEqual(5, result.Count);
         }
 
         [Test]
@@ -73,37 +73,37 @@ namespace RestApi.Test.Services
             //Asset
             _repoMock.Setup(c => c.Get(x => x.Name == "jan"))
                 .Returns(Task.FromResult(_entityMock.Object));
-            
+
             _entityMock.Object.Name = "test";
 
-            Assert.DoesNotThrow(() => 
+            Assert.DoesNotThrow(() =>
                 new UserService(_repoMock.Object).Update(_entityMock.Object)
             );
         }
 
         [Test]
-        public void ShouldGetVerifyUser()
+        public async Task ShouldGetVerifyUser()
         {
             var mail = "example@mail.com";
             var password = "abc";
             _repoMock.Setup(c => c.Get(x => x.Mail == mail
                 && x.Password == password)).Returns(Task.FromResult(_entityMock.Object));
 
-            Assert.DoesNotThrow(() =>
-                new UserService(_repoMock.Object).GetVerifyUser(mail,password)
+            Assert.DoesNotThrowAsync(async () => await
+                new UserService(_repoMock.Object).GetVerifyUser(mail, password)
             );
+            await Task.CompletedTask;
         }
 
         [Test]
-        public void ShouldSearchUserMail()
+        public async Task ShouldSearchUserMail()
         {
             var mail = "example@mail.com";
             _repoMock.Setup(c => c.Get(x => x.Mail == mail))
                 .Returns(Task.FromResult(_entityMock.Object));
-            
-            Assert.DoesNotThrow(() =>
-                new UserService(_repoMock.Object).SearchUserMail(mail)
-            );
+            var service = new UserService(_repoMock.Object);
+            Assert.DoesNotThrow(async () => await service.SearchUserMail(mail));
+            await Task.CompletedTask;
         }
     }
 }

@@ -18,9 +18,9 @@ namespace Services.Interface
 
         Task<User> GetById(int userId);
 
-        User GetVerifyUser(string mail, string password);
+        Task<User> GetVerifyUser(string mail, string password);
 
-        User SearchUserMail(string mail);
+        Task<User> SearchUserMail(string mail);
 
         Task Login(string token, string userId);
 

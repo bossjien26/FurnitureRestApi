@@ -54,9 +54,7 @@ namespace RestApi.src.Controllers
         [HttpGet]
         [Route("{perPage}")]
         public IActionResult ShowUser(int perPage)
-        {
-            return Ok(_service.GetMany(perPage, 10).ToList());
-        }
+        => Ok(_service.GetMany(perPage, 10).ToList());
 
         /// <summary>
         /// identity user token verification
@@ -176,9 +174,9 @@ namespace RestApi.src.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("authenticate")]
-        public IActionResult Authenticate(GenerateAuthenticateRequest authenticateRequest)
+        public async Task<IActionResult> Authenticate(GenerateAuthenticateRequest authenticateRequest)
         {
-            var user = _service.GetVerifyUser(authenticateRequest.Mail, authenticateRequest.Password);
+            var user = await _service.GetVerifyUser(authenticateRequest.Mail, authenticateRequest.Password);
             if (user == null)
             {
                 return NotFound(new AutResultResponse()
@@ -188,8 +186,8 @@ namespace RestApi.src.Controllers
                 });
             }
             var token = generateJwtToken(authenticateRequest);
-            _service.Login(token, user.Id.ToString());
-            _service.UserExpireDateTime(token, DateTime.UtcNow.AddHours(1));
+            await _service.Login(token, user.Id.ToString());
+            await _service.UserExpireDateTime(token, DateTime.UtcNow.AddHours(1));
             return Ok(new AuthenticateResponse()
             {
                 Token = token

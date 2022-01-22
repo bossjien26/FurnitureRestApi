@@ -48,15 +48,15 @@ namespace Services
             return await _repository.Get(c => c.Id == userId);
         }
 
-        public User GetVerifyUser(string mail, string password)
+        public async Task<User> GetVerifyUser(string mail, string password)
         {
-            return _repository.GetAll().Where(user => user.Mail == mail
-            && user.Password == password).OrderByDescending(x => x.Id).Take(1).FirstOrDefault();
+            return await _repository.Get(user => user.Mail == mail
+            && user.Password == password);
         }
 
-        public User SearchUserMail(string mail)
+        public async Task<User> SearchUserMail(string mail)
         {
-            return _repository.GetAll().Where(User => User.Mail == mail).Take(1).OrderByDescending(x => x.Id).FirstOrDefault();
+            return await _repository.Get(user => user.Mail == mail);
         }
 
         public async Task Login(string token, string userId)
