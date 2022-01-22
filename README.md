@@ -40,6 +40,9 @@ dotnet ef migrations add InitialCreate --context DbContextEntity --startup-proje
 ```sh
 #switch to src/Repositories
 dotnet ef database update --context DbContextEntity --startup-project ../RestApi
+
+#When run project show Failed executing DbCommand , because sql run ALTER DATABASE CURRENT COLLATE Chinese_Taiwan_Stroke_CI_AS , so need repeat update database.
+dotnet ef database update -v --context DbContextEntity --startup-project ../RestApi
 ```
 
 ## Redis
