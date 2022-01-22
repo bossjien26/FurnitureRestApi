@@ -29,9 +29,7 @@ namespace RestApi.Controllers
         [HttpGet]
         [AllowAnonymous()]
         public IActionResult ShowMany()
-        {
-            return Ok(_service.GetMany());
-        }
+        => Ok(_service.GetMany());
 
         [Authorize(RoleEnum.Admin, RoleEnum.Staff)]
         [HttpPut]

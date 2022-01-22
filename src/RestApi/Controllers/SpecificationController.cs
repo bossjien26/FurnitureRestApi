@@ -100,9 +100,7 @@ namespace RestApi.Controllers
         [Route("{perPage}")]
         [HttpGet]
         public IActionResult ShowMany(int perPage)
-        {
-            return Ok(_service.GetMany(perPage, 10).ToList());
-        }
+        => Ok(_service.GetMany(perPage, 10).ToList());
 
 
         [HttpGet]
