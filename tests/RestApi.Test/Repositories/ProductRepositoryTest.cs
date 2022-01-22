@@ -52,7 +52,7 @@ namespace RestApi.Test.Repositories
         async public Task ShouldGetAll()
         {
             await _repository.InsertMany(ProductSeeder.SeedMany(5, 5));
-            var products = await _repository.GetAll().Take(5).ToListAsync();
+            var products = _repository.GetAll().Take(5).ToList();
             Assert.IsNotNull(products);
             Assert.AreEqual(5, products.Count);
         }

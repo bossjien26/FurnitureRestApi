@@ -40,7 +40,7 @@ namespace RestApi.Test.Repositories
             await _productRepository.Insert(product);
 
             await _repository.InsertMany(OrderSeeder.SeedMany(product.Inventories.First().Id, 5, 5));
-            var products = await _repository.GetAll().Take(5).ToListAsync();
+            var products = _repository.GetAll().Take(5).ToList();
             Assert.IsNotNull(products);
             Assert.AreEqual(5, products.Count);
         }

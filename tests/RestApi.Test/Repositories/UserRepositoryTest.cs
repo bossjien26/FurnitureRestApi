@@ -29,10 +29,10 @@ namespace RestApi.Test.Repositories
         [Test]
         async public Task ShouldGetAll()
         {
-            await _repository.InsertMany(UserSeeder.SeedMany(5,5));
-            var users = await _repository.GetAll().Take(5).ToListAsync();
+            await _repository.InsertMany(UserSeeder.SeedMany(5, 5));
+            var users =  _repository.GetAll().Take(5).ToList();
             Assert.NotNull(users);
-            Assert.AreEqual(5,users.Count);
+            Assert.AreEqual(5, users.Count);
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace RestApi.Test.Repositories
         {
             var data = UserSeeder.SeedOne();
             Assert.DoesNotThrowAsync(() => _repository.Insert(data));
-            Assert.AreNotEqual(0 , data.Id);
+            Assert.AreNotEqual(0, data.Id);
         }
 
         [Test]

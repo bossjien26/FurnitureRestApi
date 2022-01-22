@@ -29,7 +29,7 @@ namespace RestApi.Test.Repositories
         async public Task ShouldGetAll()
         {
             await _repository.InsertMany(SpecificationSeeder.SeedMany(5, 5));
-            var products = await _repository.GetAll().Take(5).ToListAsync();
+            var products = _repository.GetAll().Take(5).ToList();
             Assert.IsNotNull(products);
             Assert.AreEqual(5, products.Count);
         }
@@ -71,6 +71,5 @@ namespace RestApi.Test.Repositories
         {
             Assert.ThrowsAsync<ArgumentNullException>(() => _repository.Update(null));
         }
- 
     }
 }

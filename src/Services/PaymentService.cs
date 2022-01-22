@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using DbEntity;
 using Entities;
 using Enum;
-using Microsoft.EntityFrameworkCore;
 using Services.Dto;
 using Services.Interface;
 
@@ -49,9 +48,9 @@ namespace Services
 
         public List<Payment> GetMany()
         {
-            var deliveries = GetByCategory(MetadataCategoryEnum.Pay).ToListAsync();
+            var deliveries = GetByCategory(MetadataCategoryEnum.Pay).ToList();
             var result = new List<Payment>();
-            deliveries.Result.ForEach(r =>
+            deliveries.ForEach(r =>
             {
                 result.Add(JsonSerializer.Deserialize<Payment>(r.Value));
             });
