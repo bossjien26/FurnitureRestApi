@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Middlewares.Authentication;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using StackExchange.Redis;
 
 namespace RestApi
@@ -75,14 +76,29 @@ namespace RestApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RestApi", Version = "v1" });
             });
 
-            services.AddDbContext<DbContextEntity>(options =>
-                options.UseMySql(
-                    appSettings.ConnectionStrings.DefaultConnection,
-                    ServerVersion.AutoDetect(appSettings.ConnectionStrings.DefaultConnection)
-                )
-                .EnableSensitiveDataLogging()
-                .EnableDetailedErrors()
-            );
+            // services.AddDbContext<DbContextEntity>(options =>
+            //     options.UseMySql(
+            //         appSettings.ConnectionStrings.DefaultConnection,
+            //         ServerVersion.AutoDetect(appSettings.ConnectionStrings.DefaultConnection)
+            //     )
+            //     .EnableSensitiveDataLogging()
+            //     .EnableDetailedErrors()
+            //     .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+            // );
+            services.AddDbContextPool<DbContextEntity>(
+                 dbContextOptions => dbContextOptions
+                 .UseMySql(
+                        appSettings.ConnectionStrings.DefaultConnection,
+                    // ServerVersion.AutoDetect(appSettings.ConnectionStrings.DefaultConnection),
+                         new MySqlServerVersion(new Version(8, 0, 23)), // use MariaDbServerVersion for MariaDB
+                         mySqlOptions => mySqlOptions.SchemaBehavior(MySqlSchemaBehavior.Translate,
+                        (schemaName, objectName) => objectName)
+                        // .CharSet(CharSet.Ne)
+                        // .CharSetBehavior(CharSetBehavior.NeverAppend)
+                        )
+                     .EnableSensitiveDataLogging()
+                     .EnableDetailedErrors()
+             );
 
             services.AddAuthentication(options =>
             {
@@ -126,6 +142,7 @@ namespace RestApi
 
             app.UseCors();
 
+            app.UseMiddleware<AuthenticationMiddleware>();
 
             app.Use(async (context, next) =>
             {
@@ -155,7 +172,6 @@ namespace RestApi
             // app.UseCookiePolicy();
 
             // app.UseHttpsRedirection();
-            app.UseMiddleware<AuthenticationMiddleware>();
 
 
             app.UseAuthorization();
