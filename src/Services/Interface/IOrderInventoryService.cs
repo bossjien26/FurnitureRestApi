@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Entities;
 
@@ -8,6 +8,6 @@ namespace Services.Interface
     {
         Task Insert(OrderInventory OrderInventory);
 
-        IEnumerable<OrderInventory> GetUserOrderInventoryMany(int orderId);
+        IQueryable<OrderInventory> GetUserOrderInventoryMany(int orderId);
     }
 }

@@ -31,7 +31,7 @@ namespace Services
             return await _repository.Get(x => x.Id == id);
         }
 
-        public IEnumerable<SpecificationContent> GetMany(int index, int size)
+        public IQueryable<SpecificationContent> GetMany(int index, int size)
         {
             return _repository.GetAll().Skip((index - 1) * size).Take(size).OrderByDescending(x => x.Id);
         }

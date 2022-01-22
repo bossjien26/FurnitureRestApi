@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Entities;
 using Services.Dto;
@@ -11,9 +12,9 @@ namespace Services.Interface
 
         Task<Category> GetById(int id);
 
-        IEnumerable<Category> GetMany(int index, int size);
+        IQueryable<Category> GetMany(int index, int size);
 
-        IEnumerable<Category> GetChildren(int id);
+        IQueryable<Category> GetChildren(int id);
 
         List<CategoryRelationChildren> GetCategoryRelationChildren(int index, int size);
     }

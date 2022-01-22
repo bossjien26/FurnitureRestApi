@@ -30,12 +30,12 @@ namespace Services
 
         public void Update(User instance) => _repository.Update(instance);
 
-        public IEnumerable<User> GetAll()
+        public IQueryable<User> GetAll()
         {
             return _repository.GetAll();
         }
 
-        public IEnumerable<User> GetMany(int index, int size)
+        public IQueryable<User> GetMany(int index, int size)
         {
             return _repository.GetAll()
                 .Skip((index - 1) * size)

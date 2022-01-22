@@ -47,7 +47,7 @@ namespace Services
             return await _repository.Get(x => x.Id == id);
         }
 
-        public IEnumerable<InventorySpecification> GetMany(int index, int size)
+        public IQueryable<InventorySpecification> GetMany(int index, int size)
         {
             return _repository.GetAll()
                 .Skip((index - 1) * size)
@@ -58,7 +58,7 @@ namespace Services
         public async Task<bool> CheckInventoryAndInventorySpecificationIsExist(int inventoryId, int specificationContentId)
         => await _repository.Get(x => x.InventoryId == inventoryId && x.SpecificationContentId == specificationContentId) != null;
 
-        public IEnumerable<Inventory> GetInventory(int productId, int[] specificationContents)
+        public IQueryable<Inventory> GetInventory(int productId, int[] specificationContents)
         => _repository.GetAll().Where(x => specificationContents.Contains(x.SpecificationContentId)).
             Join(
                 _productSpecificationRepository.GetAll(),
@@ -75,7 +75,7 @@ namespace Services
             .Where(x => x.InventorySpecification.ProductSpecification.ProductId == productId)
             .Select(x => x.Inventory);
 
-        public IEnumerable<string> GetSpecificationContent(int inventoryId)
+        public IQueryable<string> GetSpecificationContent(int inventoryId)
         => _repository.GetAll().Where(r => r.InventoryId == inventoryId)
             .Join(
                 _specificationContentRepository.GetAll(),

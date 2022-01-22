@@ -23,7 +23,7 @@ namespace Services
 
         public async Task Insert(Order order) => await _repository.Insert(order);
 
-        public IEnumerable<Order> GetMany(int index, int size)
+        public IQueryable<Order> GetMany(int index, int size)
         => _repository.GetAll()
             .Skip((index - 1) * size)
             .Take(size)
@@ -34,7 +34,7 @@ namespace Services
         public async Task<Order> GetUserOrder(int orderId, int userId)
         => await _repository.Get(x => x.Id == orderId && x.UserId == userId);
 
-        public IEnumerable<Order> GetUserOrderMany(int userId, int index, int size)
+        public IQueryable<Order> GetUserOrderMany(int userId, int index, int size)
         => _repository.GetAll().Where(x => x.UserId == userId)
             .Skip((index - 1) * size)
             .Take(size)

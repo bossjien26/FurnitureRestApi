@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Entities;
 
@@ -10,12 +10,12 @@ namespace Services.Interface
 
         Task<InventorySpecification> GetById(int id);
 
-        IEnumerable<InventorySpecification> GetMany(int index, int size);
+        IQueryable<InventorySpecification> GetMany(int index, int size);
 
         Task<bool> CheckInventoryAndInventorySpecificationIsExist(int inventoryId, int specificationContentId);
 
-        IEnumerable<Inventory> GetInventory(int productId, int[] specificationContents);
+        IQueryable<Inventory> GetInventory(int productId, int[] specificationContents);
 
-        IEnumerable<string> GetSpecificationContent(int inventoryId);
+        IQueryable<string> GetSpecificationContent(int inventoryId);
     }
 }

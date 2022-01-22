@@ -38,16 +38,16 @@ namespace Services
         public async Task Insert(ProductSpecification instance)
         => await _repository.Insert(instance);
 
-        public IEnumerable<ProductSpecification> GetMany(int productId)
+        public IQueryable<ProductSpecification> GetMany(int productId)
         => _repository.GetAll().Where(x => x.ProductId == productId);
 
-        public IEnumerable<ProductSpecification> GetByNextSpecification(int productId, int? id)
+        public IQueryable<ProductSpecification> GetByNextSpecification(int productId, int? id)
         {
             return (id == null) ? _repository.GetAll().Where(x => x.ProductId == productId) 
             : _repository.GetAll().Where(x => x.ProductId == productId && x.Id > id);
         }
 
-        public IEnumerable<ProductSpecificationJoinSpecification> GetManyJoinSpecification(int productId)
+        public IQueryable<ProductSpecificationJoinSpecification> GetManyJoinSpecification(int productId)
         => _repository.GetAll().Where(x => x.ProductId == productId)
             .Join(
                 _specificationRepository.GetAll(),
@@ -66,7 +66,7 @@ namespace Services
 
         public IQueryable<int> GetOneJoinSpecificationByProductId(int productId, List<int> specificationContents)
         {
-            var iEnumerable = _repository.GetAll().Where(x => x.ProductId == productId)
+            var IQueryable = _repository.GetAll().Where(x => x.ProductId == productId)
             .Join(
                 _specificationRepository.GetAll(),
                 productSpecification => productSpecification.SpecificationId,
@@ -88,17 +88,17 @@ namespace Services
 
             if (specificationContents.Count() > 0)
             {
-                iEnumerable = iEnumerable.Where(x => specificationContents.Any(z => z == x.InventorySpecification.SpecificationContentId));
+                IQueryable = IQueryable.Where(x => specificationContents.Any(z => z == x.InventorySpecification.SpecificationContentId));
             }
 
-            return iEnumerable.Select(
+            return IQueryable.Select(
                 x => x.InventorySpecification.InventoryId
             );
         }
 
-        public IEnumerable<InventoryIdBySpecifications> GetBySpecificationContent(int productId, List<int> specifications)
+        public IQueryable<InventoryIdBySpecifications> GetBySpecificationContent(int productId, List<int> specifications)
         {
-            var iEnumerable = _repository.GetAll().Where(x => x.ProductId == productId)
+            var IQueryable = _repository.GetAll().Where(x => x.ProductId == productId)
             .Join(
                 _specificationRepository.GetAll(),
                 productSpecification => productSpecification.SpecificationId,
@@ -120,10 +120,10 @@ namespace Services
 
             if (specifications.Count() > 0)
             {
-                iEnumerable = iEnumerable.Where(x => specifications.Any(z => z == x.ProductSpecification.ProductSpecification.Specification.Id));
+                IQueryable = IQueryable.Where(x => specifications.Any(z => z == x.ProductSpecification.ProductSpecification.Specification.Id));
             }
 
-            return iEnumerable.Select(
+            return IQueryable.Select(
                 x => new InventoryIdBySpecifications()
                 {
                     Id = x.ProductSpecification.ProductSpecification.Specification.Id,
@@ -136,9 +136,9 @@ namespace Services
             );
         }
 
-        public IEnumerable<InventoryIdBySpecifications> GetByInventoryIds(List<int> inventoryIds, int productSpecificationId)
+        public IQueryable<InventoryIdBySpecifications> GetByInventoryIds(List<int> inventoryIds, int productSpecificationId)
         {
-            var iEnumerable = _repository.GetAll()
+            var IQueryable = _repository.GetAll()
             .Join(
                 _inventorySpecificationRepository.GetAll(),
                 productSpecification => productSpecification.Id,
@@ -157,10 +157,10 @@ namespace Services
             );
             
             if(inventoryIds.Count > 0){
-                iEnumerable = iEnumerable.Where(x => inventoryIds.Any(z => z == x.ProductSpecification.ProductSpecification.InventorySpecification.InventoryId));
+                IQueryable = IQueryable.Where(x => inventoryIds.Any(z => z == x.ProductSpecification.ProductSpecification.InventorySpecification.InventoryId));
             }
 
-            return iEnumerable.Where(x => x.ProductSpecification.ProductSpecification.InventorySpecification.ProductSpecificationId == productSpecificationId) 
+            return IQueryable.Where(x => x.ProductSpecification.ProductSpecification.InventorySpecification.ProductSpecificationId == productSpecificationId) 
             .Select(x => new InventoryIdBySpecifications()
             {
                 Id = x.ProductSpecification.Specification.Id,

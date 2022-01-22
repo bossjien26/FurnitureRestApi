@@ -16,13 +16,13 @@ namespace Services.Interface
 
         Task<Product> GetShowProdcutById(int id);
 
-        IEnumerable<Product> GetMany(int index, int size);
+        IQueryable<Product> GetMany(int index, int size);
 
         IQueryable<Product> GetProductByCategory(int index,int size,int categoryId);
 
-        IEnumerable<Product> GetShowProductMany(int index, int size);
+        IQueryable<Product> GetShowProductMany(int index, int size);
 
-        IEnumerable<Product> GetAll();
+        IQueryable<Product> GetAll();
 
         bool CheckProductToProductCategoryIsExist(int productId, int categoryId);
     }

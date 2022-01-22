@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Entities;
 using StackExchange.Redis;
@@ -12,9 +12,9 @@ namespace Services.Interface
 
         void Update(User instance);
 
-        IEnumerable<User> GetAll();
+        IQueryable<User> GetAll();
 
-        IEnumerable<User> GetMany(int index, int size);
+        IQueryable<User> GetMany(int index, int size);
 
         Task<User> GetById(int userId);
 

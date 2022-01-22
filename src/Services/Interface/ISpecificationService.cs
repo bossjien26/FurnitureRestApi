@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Entities;
 
@@ -10,6 +10,6 @@ namespace Services.Interface
 
         Task<Specification> GetById(int id);
 
-        IEnumerable<Specification> GetMany(int index, int size);
+        IQueryable<Specification> GetMany(int index, int size);
     }
 }

@@ -56,13 +56,13 @@ namespace Services
                 }
             );
 
-        public IEnumerable<Inventory> GetMany(int index, int size)
+        public IQueryable<Inventory> GetMany(int index, int size)
             => _repository.GetAll()
                 .Skip((index - 1) * size)
                 .Take(size)
                 .OrderByDescending(x => x.Id);
 
-        public IEnumerable<Inventory> GetShowMany(int index, int size)
+        public IQueryable<Inventory> GetShowMany(int index, int size)
             => _repository.GetAll()
                 .Where(x => x.IsDisplay == true && x.IsDelete == false)
                 .Skip((index - 1) * size)

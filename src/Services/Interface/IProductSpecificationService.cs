@@ -10,16 +10,16 @@ namespace Services.Interface
     {
         Task Insert(ProductSpecification instance);
 
-        IEnumerable<ProductSpecification> GetMany(int productIds);
+        IQueryable<ProductSpecification> GetMany(int productIds);
 
-        IEnumerable<ProductSpecification> GetByNextSpecification(int productId, int? id);
+        IQueryable<ProductSpecification> GetByNextSpecification(int productId, int? id);
 
-        IEnumerable<ProductSpecificationJoinSpecification> GetManyJoinSpecification(int productId);
+        IQueryable<ProductSpecificationJoinSpecification> GetManyJoinSpecification(int productId);
 
         IQueryable<int> GetOneJoinSpecificationByProductId(int productId, List<int> specificationContents);
 
-        IEnumerable<InventoryIdBySpecifications> GetByInventoryIds(List<int> inventoryIds, int productSpecificationId);
+        IQueryable<InventoryIdBySpecifications> GetByInventoryIds(List<int> inventoryIds, int productSpecificationId);
 
-        IEnumerable<InventoryIdBySpecifications> GetBySpecificationContent(int productId, List<int> specifications);
+        IQueryable<InventoryIdBySpecifications> GetBySpecificationContent(int productId, List<int> specifications);
     }
 }

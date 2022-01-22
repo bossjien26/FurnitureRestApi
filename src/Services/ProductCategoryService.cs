@@ -29,7 +29,7 @@ namespace Services
             return await _repository.Get(x => x.Id == id);
         }
 
-        public IEnumerable<ProductCategory> GetMany(int index, int size)
+        public IQueryable<ProductCategory> GetMany(int index, int size)
         {
             return _repository.GetAll()
                 .Skip((index - 1) * size)

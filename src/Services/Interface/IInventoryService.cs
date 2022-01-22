@@ -16,9 +16,9 @@ namespace Services.Interface
 
         IQueryable<ProductToInventory> GetJoinProduct(int id);
 
-        IEnumerable<Inventory> GetMany(int index, int size);
+        IQueryable<Inventory> GetMany(int index, int size);
 
-        IEnumerable<Inventory> GetShowMany(int index, int size);
+        IQueryable<Inventory> GetShowMany(int index, int size);
 
         void Update(Inventory instance);
 

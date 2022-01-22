@@ -32,7 +32,7 @@ namespace Services
         => _repository.GetAll().Where(x => x.Key == key
            && x.Category == category).FirstOrDefault();
 
-        public IEnumerable<Metadata> GetByCategory(MetadataCategoryEnum category)
+        public IQueryable<Metadata> GetByCategory(MetadataCategoryEnum category)
         => _repository.GetAll().Where(x => x.Category == category);
     }
 }

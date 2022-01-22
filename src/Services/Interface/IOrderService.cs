@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Entities;
 
@@ -8,7 +8,7 @@ namespace Services.Interface
     {
         Task<Order> GetById(int id);
 
-        IEnumerable<Order> GetMany(int index, int size);
+        IQueryable<Order> GetMany(int index, int size);
 
         Task Insert(Order order);
 
@@ -16,6 +16,6 @@ namespace Services.Interface
 
         Task<Order> GetUserOrder(int orderId,int userId);
 
-        IEnumerable<Order> GetUserOrderMany(int userId, int index, int size);
+        IQueryable<Order> GetUserOrderMany(int userId, int index, int size);
     }
 }

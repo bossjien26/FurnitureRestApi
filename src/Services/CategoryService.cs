@@ -31,14 +31,14 @@ namespace Services
         /// <summary>
         /// 獲得第一層分類
         /// </summary>
-        public IEnumerable<Category> GetMany(int index, int size)
+        public IQueryable<Category> GetMany(int index, int size)
         => _repository.GetAll()
                 .Where(r => r.ParentId == null)
                 .Skip((index - 1) * size)
                 .Take(size)
                 .OrderBy(x => x.Id);
 
-        public IEnumerable<Category> GetChildren(int id)
+        public IQueryable<Category> GetChildren(int id)
         => _repository.GetAll()
             .Where(r => r.ParentId == id)
             .OrderBy(x => x.Id);

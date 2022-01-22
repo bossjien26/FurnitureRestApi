@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Entities;
 using Enum;
@@ -15,6 +15,6 @@ namespace Services.Interface
 
         Metadata GetByCategoryDetail(MetadataCategoryEnum category, int key);
 
-        IEnumerable<Metadata> GetByCategory(MetadataCategoryEnum category);
+        IQueryable<Metadata> GetByCategory(MetadataCategoryEnum category);
     }
 }
