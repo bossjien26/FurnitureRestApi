@@ -89,7 +89,7 @@ namespace RestApi
                  dbContextOptions => dbContextOptions
                  .UseMySql(
                         appSettings.ConnectionStrings.DefaultConnection,
-                    // ServerVersion.AutoDetect(appSettings.ConnectionStrings.DefaultConnection),
+                         // ServerVersion.AutoDetect(appSettings.ConnectionStrings.DefaultConnection),
                          new MySqlServerVersion(new Version(8, 0, 23)), // use MariaDbServerVersion for MariaDB
                          mySqlOptions => mySqlOptions.SchemaBehavior(MySqlSchemaBehavior.Translate,
                         (schemaName, objectName) => objectName)
@@ -142,8 +142,6 @@ namespace RestApi
 
             app.UseCors();
 
-            app.UseMiddleware<AuthenticationMiddleware>();
-
             app.Use(async (context, next) =>
             {
                 // Add Header
@@ -153,8 +151,7 @@ namespace RestApi
                 await next.Invoke();
             });
 
-
-            // app.UseMiddleware<AuthenticationMiddleware>();
+            app.UseMiddleware<AuthenticationMiddleware>();
 
             if (env.IsDevelopment())
             {

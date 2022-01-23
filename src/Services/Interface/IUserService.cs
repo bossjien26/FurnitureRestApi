@@ -28,6 +28,6 @@ namespace Services.Interface
 
         Task Logout(string token);
 
-        Task<RedisValue> GetRedisUserId(string token);
+        Task<RedisValue> GetRedisUserInfo(string token);
     }
 }

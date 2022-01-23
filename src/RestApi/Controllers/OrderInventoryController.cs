@@ -14,7 +14,7 @@ using StackExchange.Redis;
 using Enum;
 using RestApi.Models.Requests;
 using System.Linq;
-using System.Text;
+using System;
 
 namespace RestApi.Controllers
 {
@@ -53,7 +53,8 @@ namespace RestApi.Controllers
         [Route("{perPage}")]
         public IActionResult ShowMany(int perPage)
         {
-            var user = (User)_httpContextAccessor.HttpContext.Items["User"];
+            var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
+            //TODO:get user order
             return Ok(_inventoryService.GetShowMany(perPage, 5).ToList<Inventory>());
         }
 
@@ -62,20 +63,20 @@ namespace RestApi.Controllers
         [Route("")]
         public async Task<IActionResult> Insert(CreateOrderInventoryRequest request)
         {
-            var user = (User)_httpContextAccessor.HttpContext.Items["User"];
-            if (await _orderService.GetUserOrder(request.orderId, user.Id) == null)
+            var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
+            if (await _orderService.GetUserOrder(request.orderId, Convert.ToInt32(userJWT)) == null)
             {
                 return NotFound();
             }
             var ids = new List<int>();
-            var carts = _cartService.GetMany(user.Id.ToString(), CartAttributeEnum.Shopping);
+            var carts = _cartService.GetMany(userJWT.Id, CartAttributeEnum.Shopping);
             foreach (var cart in carts)
             {
                 var OrderInventoryId = await InsertOrderInventory(request.orderId, cart);
                 if (OrderInventoryId != 0)
                 {
                     ids.Add(OrderInventoryId);
-                    _cartService.Delete(user.Id.ToString(), cart.Name, CartAttributeEnum.Shopping);
+                    _cartService.Delete(userJWT.Id, cart.Name, CartAttributeEnum.Shopping);
                 }
             }
             return Created("", ids);

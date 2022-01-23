@@ -26,6 +26,8 @@ namespace RestApi.Controllers
     {
         private readonly ICartService _service;
 
+        private readonly IUserService _userService;
+
         private readonly IInventoryService _inventoryService;
 
         private readonly IInventorySpecificationService _inventorySpecificationService;
@@ -38,6 +40,8 @@ namespace RestApi.Controllers
         IHttpContextAccessor httpContextAccessor, IConnectionMultiplexer redisDb)
         {
             _service = new CartService(redisDb);
+
+            _userService = new UserService(context, redisDb);
 
             _inventoryService = new InventoryService(context);
 
@@ -53,6 +57,7 @@ namespace RestApi.Controllers
         [Authorize()]
         public async Task<IActionResult> Store(CreateCartRequest requestCart)
         {
+            var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
             if (!await CheckProductIsExist(requestCart))
             {
                 return NotFound(new AutResultResponse()
@@ -62,7 +67,7 @@ namespace RestApi.Controllers
                 });
             }
 
-            await StoreCart(requestCart);
+            await StoreCart(requestCart, userJWT.Id);
 
             return Created("", new AutResultResponse()
             {
@@ -76,15 +81,13 @@ namespace RestApi.Controllers
             return (await _inventoryService.GetById(requestCart.InventoryId) != null) ? true : false;
         }
 
-        private async Task StoreCart(CreateCartRequest requestCart)
+        private async Task StoreCart(CreateCartRequest requestCart, string userId)
         {
-            var user = (User)_httpContextAccessor.HttpContext.Items["User"];
-
             await _service.Set(new Cart()
             {
-                UserId = user.Id.ToString(),
+                UserId = userId,
                 InventoryId = requestCart.InventoryId.ToString(),
-                Quantity = SumQuantity(user, requestCart).ToString(),
+                Quantity = SumQuantity(userId, requestCart).ToString(),
                 Attribute = requestCart.Attribute
             });
         }
@@ -92,10 +95,11 @@ namespace RestApi.Controllers
         [Route("{cartAttribute}/{inventoryId}")]
         [HttpDelete]
         [Authorize()]
-        public IActionResult Delete(int inventoryId, CartAttributeEnum cartAttribute)
+        public async Task<IActionResult> Delete(int inventoryId, CartAttributeEnum cartAttribute)
         {
-            var user = (User)_httpContextAccessor.HttpContext.Items["User"];
-            return _service.Delete(user.Id.ToString(), inventoryId.ToString(), cartAttribute)
+            var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
+            var user = await _userService.GetById(Convert.ToInt32(userJWT.Id));
+            return _service.Delete(userJWT.Id, inventoryId.ToString(), cartAttribute)
             ? NoContent() : NotFound();
         }
 
@@ -105,8 +109,8 @@ namespace RestApi.Controllers
         public IActionResult GetMany(CartAttributeEnum cartAttribute)
         {
             var cartList = new List<CartListResponse>();
-            var user = (User)_httpContextAccessor.HttpContext.Items["User"];
-            var carts = _service.GetMany(user.Id.ToString(), cartAttribute);
+            var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
+            var carts = _service.GetMany(userJWT.Id, cartAttribute);
             foreach (var cart in carts)
             {
                 var inventory = _inventoryService.GetJoinProduct((int)cart.Name).FirstOrDefault();
@@ -125,9 +129,9 @@ namespace RestApi.Controllers
             return Ok(cartList);
         }
 
-        private int SumQuantity(User user, CreateCartRequest requestCart)
+        private int SumQuantity(string userId, CreateCartRequest requestCart)
         {
-            var cart = _service.GetById(user.Id.ToString(), requestCart.InventoryId.ToString(), requestCart.Attribute);
+            var cart = _service.GetById(userId, requestCart.InventoryId.ToString(), requestCart.Attribute);
             var quantity = requestCart.Quantity;
             if (cart.Result.HasValue)
             {

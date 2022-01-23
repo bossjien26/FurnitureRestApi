@@ -35,46 +35,50 @@ namespace Middlewares.Authentication
                 await _next.Invoke(httpContext);
                 return;
             }
-            var path = httpContext.Request.Path;
-            attachUserToContext(httpContext, context, token, appSettings, logger);
+            httpContext = await attachUserToContext(httpContext, context, token, appSettings, logger);
             await _next.Invoke(httpContext);
             return;
         }
 
-        private void attachUserToContext(HttpContext httpContext, DbContextEntity context, string token,
+        private async Task<HttpContext> attachUserToContext(HttpContext httpContext, DbContextEntity context, string token,
         AppSettings appSettings, ILogger<AuthenticationMiddleware> logger)
         {
             try
             {
                 var jwtToken = GetVerifyTokenType(appSettings, token);
                 // attach user to context on successful jwt validation
-                httpContext.Items["User"] = _userService.GetVerifyUser(jwtToken.Mail, jwtToken.Password);
-                _userService.UserExpireDateTime(token, DateTime.UtcNow.AddHours(1));
+                httpContext.Items["httpContextUser"] = jwtToken;
+                await _userService.UserExpireDateTime(token, DateTime.UtcNow.AddHours(1));
+                return httpContext;
             }
             catch (Exception exception)
             {
                 logger.LogDebug(exception, "jwt validate is error");
+                return httpContext;
             }
         }
 
         private JwtToken GetVerifyTokenType(AppSettings appSettings, string token)
         {
             var jwtTokenValues = VerifyToken(appSettings, token).Claims.
-                    Where(x => x.Type == "mail" || x.Type == "password").Select(s => s.Value).ToList();
-            return CheckVerifyTokenType(jwtTokenValues);
+                    Where(x => x.Type == "mail" || x.Type == "password" || x.Type == "id")
+                    .Select(s => s.Value).ToList();
+            return CheckVerifyTokenType(jwtTokenValues, token);
         }
 
-        private JwtToken CheckVerifyTokenType(List<string> jwtTokenValues)
+        private JwtToken CheckVerifyTokenType(List<string> jwtTokenValues, string token)
         {
-            if (jwtTokenValues.Count() != 2)
+            if (jwtTokenValues.Count() != 3)
             {
                 return new JwtToken();
             }
 
             return new JwtToken()
             {
-                Mail = jwtTokenValues[0],
-                Password = jwtTokenValues[1]
+                Id = jwtTokenValues[0],
+                Mail = jwtTokenValues[1],
+                Password = jwtTokenValues[2],
+                Token = token
             };
         }
 

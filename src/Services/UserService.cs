@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DbEntity;
@@ -68,7 +67,7 @@ namespace Services
         public async Task Logout(string token)
         => await _redisDb.KeyDeleteAsync(token);
 
-        public async Task<RedisValue> GetRedisUserId(string token)
+        public async Task<RedisValue> GetRedisUserInfo(string token)
         => await _redisDb.StringGetAsync(token);
     }
 }

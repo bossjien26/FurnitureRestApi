@@ -2,7 +2,6 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using DbEntity;
-using Entities;
 using Enum;
 using Helpers;
 using Microsoft.AspNetCore.Http;
@@ -42,8 +41,8 @@ namespace RestApi.Controllers
         [Route("{perPage}")]
         public IActionResult GetUserOrderMany(int perPage)
         {
-            var user = (User)_httpContextAccessor.HttpContext.Items["User"];
-            return Ok(_service.GetUserOrderMany(user.Id, perPage, 5));
+            var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
+            return Ok(_service.GetUserOrderMany(Convert.ToInt32(userJWT.Id), perPage, 5));
         }
 
         [Authorize()]
@@ -51,8 +50,8 @@ namespace RestApi.Controllers
         [Route("show/{id}")]
         public async Task<IActionResult> GetUserOrder(int id)
         {
-            var user = (User)_httpContextAccessor.HttpContext.Items["User"];
-            return Ok(await _service.GetUserOrder(id, user.Id));
+            var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
+            return Ok(await _service.GetUserOrder(id, Convert.ToInt32(userJWT.Id)));
         }
 
         [Authorize()]
@@ -60,15 +59,15 @@ namespace RestApi.Controllers
         [Route("")]
         public async Task<IActionResult> Insert(CreateOrderRequest request)
         {
-            var user = (User)_httpContextAccessor.HttpContext.Items["User"];
-            var order = await InsertOrder(request, user.Id);
+            var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
+            var order = await InsertOrder(request, Convert.ToInt32(userJWT.Id));
             SendMail(order);
-            return Created(user.Id.ToString(), new AutResultResponse() { Status = true, Data = "Success" });
+            return Created(userJWT.Id, new AutResultResponse() { Status = true, Data = "Success" });
         }
 
-        private async Task<Order> InsertOrder(CreateOrderRequest request, int userId)
+        private async Task<Entities.Order> InsertOrder(CreateOrderRequest request, int userId)
         {
-            var order = new Order()
+            var order = new Entities.Order()
             {
                 Street = request.Street,
                 City = request.City,
@@ -84,7 +83,7 @@ namespace RestApi.Controllers
             return order;
         }
 
-        private void SendMail(Order order)
+        private void SendMail(Entities.Order order)
         {
             try
             {
@@ -109,7 +108,7 @@ namespace RestApi.Controllers
             return mailTitle.ToString();
         }
 
-        private string MailContent(Order order)
+        private string MailContent(Entities.Order order)
         {
             var mailContent = new StringBuilder();
             mailContent.Append("<h2>ＸＸＸ購物網站<h2>");
@@ -124,8 +123,8 @@ namespace RestApi.Controllers
         [Route("")]
         public async Task<IActionResult> Update(UpdateOrderRequest request)
         {
-            var user = (User)_httpContextAccessor.HttpContext.Items["User"];
-            var order = await _service.GetUserOrder(request.OrderId, user.Id);
+            var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
+            var order = await _service.GetUserOrder(request.OrderId, Convert.ToInt32(userJWT.Id));
             if (order == null)
             {
                 return NotFound();
@@ -134,7 +133,7 @@ namespace RestApi.Controllers
             return Ok();
         }
 
-        private void UpdateOrder(Order order, UpdateOrderRequest request)
+        private void UpdateOrder(Entities.Order order, UpdateOrderRequest request)
         {
             order.City = request.City;
             order.Country = request.Country;

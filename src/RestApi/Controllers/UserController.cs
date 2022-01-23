@@ -96,8 +96,12 @@ namespace RestApi.src.Controllers
         [HttpGet]
         [Authorize()]
         [Route("info")]
-        public IActionResult GetUserInfo(string token)
-        => Ok((User)_httpContextAccessor.HttpContext.Items["User"]);
+        public async Task<IActionResult> GetUserInfo(string token)
+        {
+            var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
+            var user = await _service.GetById(Convert.ToInt32(userJWT.Id));
+            return Ok(user);
+        }
 
         [AllowAnonymous]
         [HttpPost]
@@ -185,7 +189,7 @@ namespace RestApi.src.Controllers
                     Data = "Not Find"
                 });
             }
-            var token = generateJwtToken(authenticateRequest);
+            var token = generateJwtToken(user.Id, authenticateRequest);
             await _service.Login(token, user.Id.ToString());
             await _service.UserExpireDateTime(token, DateTime.UtcNow.AddHours(1));
             return Ok(new AuthenticateResponse()
@@ -199,8 +203,8 @@ namespace RestApi.src.Controllers
         [HttpGet]
         public IActionResult Logout()
         {
-            var token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            _service.Logout(token);
+            var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
+            _service.Logout(userJWT.Token);
             return NoContent();
         }
 
@@ -209,12 +213,13 @@ namespace RestApi.src.Controllers
         /// </summary>
         /// <param name="loginInfo"></param>
         /// <returns></returns>
-        private string generateJwtToken(GenerateAuthenticateRequest loginInfo)
+        private string generateJwtToken(int userId, GenerateAuthenticateRequest loginInfo)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] {
+                    new Claim("id", userId.ToString()),
                     new Claim("mail", loginInfo.Mail.ToString()),
                     new Claim("password", loginInfo.Password.ToString()),
                     }),
