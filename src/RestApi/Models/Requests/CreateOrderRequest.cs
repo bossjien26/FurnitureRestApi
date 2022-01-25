@@ -1,5 +1,3 @@
-using System;
-
 namespace RestApi.Models.Requests
 {
     public class CreateOrderRequest
