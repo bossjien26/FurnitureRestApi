@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using DbEntity;
@@ -42,8 +43,8 @@ namespace RestApi.Controllers
         [Route("")]
         public async Task<IActionResult> Insert(CreateOrderPayRequest request)
         {
-            var user = (User)_httpContextAccessor.HttpContext.Items["User"];
-            if (await _orderService.GetUserOrder(request.orderId, user.Id) == null)
+            var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
+            if (await _orderService.GetUserOrder(request.orderId, Convert.ToInt32(userJWT.Id)) == null)
             {
                 return NotFound();
             }

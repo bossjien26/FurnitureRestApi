@@ -74,9 +74,9 @@ namespace RestApi.src.Controllers
         [Route("")]
         public IActionResult UpdateUser(User user)
         {
-            var myself = (User)_httpContextAccessor.HttpContext.Items["User"];
+            var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
 
-            if (myself.Id != user.Id || _service.GetById(user.Id).Result == null)
+            if (Convert.ToInt32(userJWT.Id) != user.Id || _service.GetById(user.Id).Result == null)
             {
                 return NotFound(new AutResultResponse()
                 {
