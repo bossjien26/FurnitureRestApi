@@ -58,7 +58,7 @@ namespace RestApi.Controllers
         public async Task<IActionResult> Store(CreateCartRequest requestCart)
         {
             var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
-            if (!await CheckProductIsExist(requestCart))
+            if (!await CheckProductIsExist(requestCart.InventoryId))
             {
                 return NotFound(new AutResultResponse()
                 {
@@ -67,7 +67,14 @@ namespace RestApi.Controllers
                 });
             }
 
-            await StoreCart(requestCart, userJWT.Id);
+            await StoreCart(new Cart()
+            {
+                UserId = userJWT.Id,
+                InventoryId = requestCart.InventoryId.ToString(),
+                Quantity = SumQuantity(userJWT.Id, requestCart.InventoryId.ToString()
+                    , requestCart.Quantity).ToString(),
+                Attribute = requestCart.Attribute
+            });
 
             return Created("", new AutResultResponse()
             {
@@ -76,20 +83,44 @@ namespace RestApi.Controllers
             });
         }
 
-        private async Task<bool> CheckProductIsExist(CreateCartRequest requestCart)
+        [Route("change/quantity")]
+        [HttpPost]
+        [Authorize()]
+        public async Task<IActionResult> ChangeQuantity(UpdateCartQuantity request)
         {
-            return (await _inventoryService.GetById(requestCart.InventoryId) != null) ? true : false;
+            var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
+            if (!await CheckProductIsExist(request.InventoryId))
+            {
+                return NotFound(new AutResultResponse()
+                {
+                    Status = false,
+                    Data = "Fail"
+                });
+            }
+
+            await StoreCart(new Cart()
+            {
+                UserId = userJWT.Id,
+                InventoryId = request.InventoryId.ToString(),
+                Quantity = request.Quantity.ToString(),
+                Attribute = CartAttributeEnum.Shopping
+            });
+
+            return Created("", new AutResultResponse()
+            {
+                Status = true,
+                Data = "Success"
+            });
         }
 
-        private async Task StoreCart(CreateCartRequest requestCart, string userId)
+        private async Task<bool> CheckProductIsExist(int inventoryId)
         {
-            await _service.Set(new Cart()
-            {
-                UserId = userId,
-                InventoryId = requestCart.InventoryId.ToString(),
-                Quantity = SumQuantity(userId, requestCart).ToString(),
-                Attribute = requestCart.Attribute
-            });
+            return (await _inventoryService.GetById(inventoryId) != null) ? true : false;
+        }
+
+        private async Task StoreCart(Cart cart)
+        {
+            await _service.Set(cart);
         }
 
         [Route("{cartAttribute}/{inventoryId}")]
@@ -129,10 +160,9 @@ namespace RestApi.Controllers
             return Ok(cartList);
         }
 
-        private int SumQuantity(string userId, CreateCartRequest requestCart)
+        private int SumQuantity(string userId, string inventoryId, int quantity)
         {
-            var cart = _service.GetById(userId, requestCart.InventoryId.ToString(), requestCart.Attribute);
-            var quantity = requestCart.Quantity;
+            var cart = _service.GetById(userId, inventoryId, CartAttributeEnum.Shopping);
             if (cart.Result.HasValue)
             {
                 quantity += Convert.ToInt32(cart.Result.ToString());
