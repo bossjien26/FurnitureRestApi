@@ -64,7 +64,7 @@ namespace RestApi.Controllers
         public async Task<IActionResult> Insert(CreateOrderInventoryRequest request)
         {
             var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
-            if (await _orderService.GetUserOrder(request.orderId, Convert.ToInt32(userJWT)) == null)
+            if (await _orderService.GetUserOrder(request.orderId, Convert.ToInt32(userJWT.Id)) == null)
             {
                 return NotFound();
             }
