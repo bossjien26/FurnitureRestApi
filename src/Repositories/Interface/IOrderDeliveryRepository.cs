@@ -2,7 +2,7 @@ using Entities;
 
 namespace Repositories.Interface
 {
-    interface IOrderDeliveryRepository : IGenericRepository<OrderDelivery>
+    public interface IOrderDeliveryRepository : IGenericRepository<OrderDelivery>
     {
 
     }
