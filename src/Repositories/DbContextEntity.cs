@@ -22,6 +22,8 @@ namespace DbEntity
 
         public DbSet<OrderPay> OrderPays { get; set; }
 
+        public DbSet<OrderDelivery> OrderDeliveries { get; set; }
+
         public DbSet<OrderInventory> OrderInventories { get; set; }
 
         #endregion
