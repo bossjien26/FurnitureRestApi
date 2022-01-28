@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Enum;
 
 namespace Entities
 {
@@ -13,8 +12,6 @@ namespace Entities
         public int Id { get; set; }
 
         public int UserId { get; set; }
-
-        public OrderStatusEnum Status { get; set; } = OrderStatusEnum.Processing;
 
         [Column(TypeName = "Varchar")]
         [StringLength(150)]
@@ -45,6 +42,8 @@ namespace Entities
         [StringLength(150)]
         public string Sender { get; set; }
 
+        public string Remark { get; set; }
+
         public DateTime CreateAt { get; set; } = DateTime.Now;
 
         public DateTime UpdateAt { get; set; } = DateTime.Now;
@@ -56,6 +55,8 @@ namespace Entities
 
         public virtual ICollection<OrderInventory> OrderInventories { get; set; }
 
-        public virtual ICollection<OrderDelivery> OrderDeliveries { get; set; }
+        public virtual OrderDelivery OrderDeliveries { get; set; }
+
+        public virtual ICollection<OrderStatuses> OrderStatuses { get; set; }
     }
 }
