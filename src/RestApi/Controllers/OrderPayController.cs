@@ -22,9 +22,11 @@ namespace RestApi.Controllers
 
         private readonly IOrderService _orderService;
 
-        private readonly IOrderInventoryService _OrderInventoryService;
+        private readonly IOrderInventoryService _orderInventoryService;
 
         private readonly IOrderPayService _orderPayService;
+
+        private readonly IPaymentService _paymentService;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -33,7 +35,8 @@ namespace RestApi.Controllers
         {
             _orderPayService = new OrderPayService(context);
             _orderService = new OrderService(context);
-            _OrderInventoryService = new OrderInventoryService(context);
+            _orderInventoryService = new OrderInventoryService(context);
+            _paymentService = new PaymentService(context);
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -52,13 +55,27 @@ namespace RestApi.Controllers
             return Created("", new AutResultResponse() { Status = true, Data = "" });
         }
 
+        [Authorize()]
+        [HttpGet]
+        [Route("show/{id}")]
+        public async Task<IActionResult> GetByOrderId(int id)
+        {
+            var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
+            if (await _orderService.GetUserOrder(id, Convert.ToInt32(userJWT.Id)) == null)
+            {
+                return NotFound();
+            }
+            var orderPay = await _orderPayService.GetByOrderId(id);
+            return Ok(await _paymentService.GetPayment(orderPay.Terms));
+        }
+
         private async Task<OrderPay> InsertOrderPay(CreateOrderPayRequest request)
         {
             var orderPay = new OrderPay();
             orderPay.OrderId = request.orderId;
             orderPay.IsPaid = false;
             orderPay.Terms = request.Terms;
-            orderPay.TotalPrice = _OrderInventoryService.GetUserOrderInventoryMany(request.orderId)
+            orderPay.TotalPrice = _orderInventoryService.GetUserOrderInventoryMany(request.orderId)
             .Sum(x => x.Price * x.Quality);
             await _orderPayService.Insert(orderPay);
 
