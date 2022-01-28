@@ -26,6 +26,8 @@ namespace DbEntity
 
         public DbSet<OrderInventory> OrderInventories { get; set; }
 
+        public DbSet<OrderStatuses> OrderStatuses { get; set; }
+
         #endregion
 
         #region Product
