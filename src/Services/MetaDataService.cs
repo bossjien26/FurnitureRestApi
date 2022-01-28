@@ -23,14 +23,13 @@ namespace Services
         public async Task Insert(Metadata instance)
         => await _repository.Insert(instance);
 
-        public void Update(Metadata instance) => _repository.Update(instance);
+        public async Task Update(Metadata instance) => await _repository.Update(instance);
 
         public async Task<Metadata> GetById(int id)
         => await _repository.Get(x => x.Id == id);
 
-        public Metadata GetByCategoryDetail(MetadataCategoryEnum category, int key)
-        => _repository.GetAll().Where(x => x.Key == key
-           && x.Category == category).FirstOrDefault();
+        public async Task<Metadata> GetByCategoryDetail(MetadataCategoryEnum category, int key)
+        => await _repository.Get(x => x.Key == key && x.Category == category);
 
         public IQueryable<Metadata> GetByCategory(MetadataCategoryEnum category)
         => _repository.GetAll().Where(x => x.Category == category);

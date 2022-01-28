@@ -59,7 +59,7 @@ namespace RestApi.Test.Services
 
             _entityMock.Object.Value = "cart";
 
-            Assert.DoesNotThrow(() =>
+            Assert.DoesNotThrowAsync(() =>
                 new PaymentService(_context).Update(_payment.Object)
             );
         }
@@ -71,7 +71,7 @@ namespace RestApi.Test.Services
             && x.Category == MetadataCategoryEnum.Pay))
             .Returns(Task.FromResult(_entityMock.Object));
 
-            Assert.DoesNotThrow(() =>
+            Assert.DoesNotThrowAsync(() =>
                 new PaymentService(_context)
                 .GetPayment(PaymentTypeEnum.Bank)
             );

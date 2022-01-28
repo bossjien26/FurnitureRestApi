@@ -34,7 +34,7 @@ namespace RestApi.Test.Services
 
             _entityMock.Object.Value = "test";
 
-            Assert.DoesNotThrow(() =>
+            Assert.DoesNotThrowAsync(() =>
                 new DeliveryService(_context).Update(_delivery.Object)
             );
         }
@@ -47,7 +47,7 @@ namespace RestApi.Test.Services
             .Returns(Task.FromResult(_entityMock.Object));
 
 
-            Assert.DoesNotThrow(() =>
+            Assert.DoesNotThrowAsync(() =>
                 new DeliveryService(_context)
                 .GetDelivery(DeliveryTypeEnum.DropShipping)
             );
@@ -74,7 +74,7 @@ namespace RestApi.Test.Services
                 new DeliveryService(_context)
                 .GetMany()
             );
-        
+
         }
     }
 }

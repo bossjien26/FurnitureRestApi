@@ -9,9 +9,9 @@ namespace Services.Interface
     {
         Task Insert(Delivery delivery);
 
-        void Update(Delivery delivery);
+        Task Update(Delivery delivery);
 
-        Delivery GetDelivery(DeliveryTypeEnum type);
+        Task<Delivery> GetDelivery(DeliveryTypeEnum type);
 
         List<Delivery> GetMany();
     }

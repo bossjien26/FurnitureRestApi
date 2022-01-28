@@ -9,9 +9,9 @@ namespace Services.Interface
     {
         Task Insert(Payment payment);
 
-        void Update(Payment payment);
+        Task Update(Payment payment);
 
-        Payment GetPayment(PaymentTypeEnum type);
+        Task<Payment> GetPayment(PaymentTypeEnum type);
 
         List<Payment> GetMany();
     }

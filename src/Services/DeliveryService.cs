@@ -29,19 +29,19 @@ namespace Services
             );
         }
 
-        public void Update(Delivery delivery)
+        public async Task Update(Delivery delivery)
         {
-            var Metadata = GetByCategoryDetail(MetadataCategoryEnum.Delivery, (int)delivery.Type);
+            var Metadata = await GetByCategoryDetail(MetadataCategoryEnum.Delivery, (int)delivery.Type);
             if (Metadata != null)
             {
                 Metadata.Value = JsonSerializer.Serialize(delivery);
-                Update(Metadata);
+                await Update(Metadata);
             }
         }
 
-        public Delivery GetDelivery(DeliveryTypeEnum type)
+        public async Task<Delivery> GetDelivery(DeliveryTypeEnum type)
         {
-            var delivery = GetByCategoryDetail(MetadataCategoryEnum.Delivery, (int)type);
+            var delivery = await GetByCategoryDetail(MetadataCategoryEnum.Delivery, (int)type);
 
             return delivery == null ? null
             : JsonSerializer.Deserialize<Delivery>(delivery.Value);

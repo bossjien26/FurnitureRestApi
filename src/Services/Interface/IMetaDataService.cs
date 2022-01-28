@@ -9,11 +9,11 @@ namespace Services.Interface
     {
         Task Insert(Metadata Metadata);
 
-        void Update(Metadata Metadata);
+        Task Update(Metadata Metadata);
 
         Task<Metadata> GetById(int id);
 
-        Metadata GetByCategoryDetail(MetadataCategoryEnum category, int key);
+        Task<Metadata> GetByCategoryDetail(MetadataCategoryEnum category, int key);
 
         IQueryable<Metadata> GetByCategory(MetadataCategoryEnum category);
     }

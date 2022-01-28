@@ -6,5 +6,7 @@ namespace Services.Interface
     public interface IOrderPayService
     {
         Task Insert(OrderPay orderPay);
+
+        Task<OrderPay> GetByOrderId(int orderId);
     }
 }

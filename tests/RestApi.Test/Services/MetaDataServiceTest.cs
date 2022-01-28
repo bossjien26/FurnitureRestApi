@@ -49,7 +49,7 @@ namespace RestApi.Test.Services
 
             _entityMock.Object.Key = 2;
 
-            Assert.DoesNotThrow(() =>
+            Assert.DoesNotThrowAsync(() =>
                 new MetadataService(_repoMock.Object).Update(_entityMock.Object)
             );
         }
@@ -62,7 +62,7 @@ namespace RestApi.Test.Services
             .Returns(Task.FromResult(_entityMock.Object));
 
 
-            Assert.DoesNotThrow(() =>
+            Assert.DoesNotThrowAsync(() =>
                 new MetadataService(_repoMock.Object)
             .GetByCategoryDetail(MetadataCategoryEnum.Pay, (int)PaymentTypeEnum.Bank)
             );
