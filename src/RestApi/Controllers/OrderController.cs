@@ -42,7 +42,7 @@ namespace RestApi.Controllers
         public IActionResult GetUserOrderMany(int perPage)
         {
             var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
-            return Ok(_service.GetUserOrderMany(Convert.ToInt32(userJWT.Id), perPage, 5));
+            return Ok(_service.GetUserOrderMany(Convert.ToInt32(userJWT.Id), perPage, 10));
         }
 
         [Authorize()]
