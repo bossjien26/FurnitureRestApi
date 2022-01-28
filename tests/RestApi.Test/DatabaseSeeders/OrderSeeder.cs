@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Bogus;
 using Bogus.Extensions;
 using Entities;
@@ -49,7 +48,7 @@ namespace RestApi.Test.DatabaseSeeders
                 .RuleFor(c => c.Price, (f) => f.Random.Number(10))
                 .RuleFor(c => c.InventoryId, (f) => inventoryId)
                 .RuleFor(c => c.ProductName, (f) => f.Random.AlphaNumeric(10))
-                .RuleFor(c => c.Quality, (f) => f.Random.Number(10))
+                .RuleFor(c => c.Quantity, (f) => f.Random.Number(10))
                 .RuleFor(c => c.Specification, (f) => f.Random.AlphaNumeric(10));
         }
     }

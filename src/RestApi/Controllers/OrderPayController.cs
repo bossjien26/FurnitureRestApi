@@ -76,7 +76,7 @@ namespace RestApi.Controllers
             orderPay.IsPaid = false;
             orderPay.Terms = request.Terms;
             orderPay.TotalPrice = _orderInventoryService.GetUserOrderInventoryMany(request.orderId)
-            .Sum(x => x.Price * x.Quality);
+            .Sum(x => x.Price * x.Quantity);
             await _orderPayService.Insert(orderPay);
 
             return orderPay;

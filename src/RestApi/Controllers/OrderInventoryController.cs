@@ -98,7 +98,7 @@ namespace RestApi.Controllers
                 Price = inventoryToOrderInventory.Price,
                 InventoryId = inventoryToOrderInventory.InventoryId,
                 ProductName = inventoryToOrderInventory.ProductName + " " + string.Join("-", specificationContents),
-                Quality = (int)cart.Value,
+                Quantity = (int)cart.Value,
             };
 
             await _OrderInventoryService.Insert(orderInventory);

@@ -21,7 +21,7 @@ namespace Entities
         [StringLength(256)]
         public string Specification { get; set; }
 
-        public int Quality { get; set; }
+        public int Quantity { get; set; }
 
         public int Price { get; set; }
 
