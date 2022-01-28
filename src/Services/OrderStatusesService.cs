@@ -21,10 +21,7 @@ namespace Services
         public async Task Insert(OrderStatuses orderStatuses)
         => await _repository.Insert(orderStatuses);
 
-        public async Task<OrderStatuses> GetByOrderId(int orderId)
-        => await _repository.Get(x => x.OrderId == orderId);
-
-        public IQueryable<OrderStatuses> GetManyByOrderId(int orderId)
+        public IQueryable<OrderStatuses> GetByOrderId(int orderId)
         => _repository.GetAll().Where(x => x.OrderId == orderId);
     }
 }

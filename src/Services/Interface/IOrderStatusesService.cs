@@ -8,8 +8,6 @@ namespace Services.Interface
     {
         Task Insert(OrderStatuses orderStatuses);
 
-        Task<OrderStatuses> GetByOrderId(int orderId);
-
-        IQueryable<OrderStatuses> GetManyByOrderId(int orderId);
+        IQueryable<OrderStatuses> GetByOrderId(int orderId);
     }
 }
