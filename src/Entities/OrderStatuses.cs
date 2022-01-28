@@ -9,6 +9,7 @@ namespace Entities
     {
         [Key]
         public int Id { get; set; }
+
         public int OrderId { get; set; }
 
         public OrderStatusEnum Status { get; set; } = OrderStatusEnum.Processing;
@@ -16,6 +17,7 @@ namespace Entities
         public DateTime CreateAt { get; set; }
 
         public DateTime UpdateAt { get; set; }
+        
 
         [ForeignKey(nameof(OrderId))]
         public virtual Order Order { get; set; }
