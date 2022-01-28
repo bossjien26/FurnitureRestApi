@@ -50,12 +50,12 @@ namespace RestApi.Controllers
 
         [Authorize()]
         [HttpGet]
-        [Route("{perPage}")]
-        public IActionResult ShowMany(int perPage)
+        [Route("show/{orderId}")]
+        public IActionResult ShowMany(int orderId)
         {
             var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
             //TODO:get user order
-            return Ok(_inventoryService.GetShowMany(perPage, 5).ToList<Inventory>());
+            return Ok(_OrderInventoryService.GetUserOrderInventoryMany(orderId).ToList());
         }
 
         [Authorize()]
