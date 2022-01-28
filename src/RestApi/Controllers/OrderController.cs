@@ -25,12 +25,15 @@ namespace RestApi.Controllers
 
         private readonly IOrderService _service;
 
+        private readonly IOrderStatusesService _orderStatusesService;
+
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public OrderController(DbContextEntity context, ILogger<OrderController> logger
         , IHttpContextAccessor httpContextAccessor, MailHelper mailHelper)
         {
             _service = new OrderService(context);
+            _orderStatusesService = new OrderStatusesService(context);
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _mailHelper = mailHelper;
@@ -61,6 +64,11 @@ namespace RestApi.Controllers
         {
             var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
             var order = await InsertOrder(request, Convert.ToInt32(userJWT.Id));
+            await _orderStatusesService.Insert(new Entities.OrderStatuses()
+            {
+                OrderId = order.Id,
+                Status = OrderStatusEnum.Processing
+            });
             SendMail(order);
             return Created(userJWT.Id, order);
         }
