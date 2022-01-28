@@ -92,6 +92,13 @@ namespace DbEntity
 
             modelBuilder.Entity<User>().Property(d => d.CreateAt).ValueGeneratedOnAdd();
             modelBuilder.Entity<User>().Property(d => d.UpdateAt).ValueGeneratedOnAddOrUpdate();
+            
+            modelBuilder.Entity<Order>().Property(d => d.CreateAt).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Order>().Property(d => d.UpdateAt).ValueGeneratedOnAddOrUpdate();
+            modelBuilder.Entity<Order>().Property(b => b.Remark).HasDefaultValue(null);
+
+            modelBuilder.Entity<OrderStatuses>().Property(d => d.CreateAt).ValueGeneratedOnAdd();
+            modelBuilder.Entity<OrderStatuses>().Property(d => d.UpdateAt).ValueGeneratedOnAddOrUpdate();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
