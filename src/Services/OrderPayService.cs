@@ -18,5 +18,8 @@ namespace Services
         => _repository = genericRepository;
 
         public async Task Insert(OrderPay orderPay) => await _repository.Insert(orderPay);
+
+        public async Task<OrderPay> GetByOrderId(int orderId)
+        => await _repository.Get(x => x.OrderId == orderId);
     }
 }
