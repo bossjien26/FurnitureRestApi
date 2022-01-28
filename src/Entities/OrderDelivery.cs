@@ -13,8 +13,6 @@ namespace Entities
 
         public DeliveryTypeEnum Type { get; set; }
 
-        public int TotalPrice { get; set; }
-
         [ForeignKey(nameof(OrderId))]
         public virtual Order Order { get; set; }
     }
