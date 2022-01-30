@@ -9,5 +9,7 @@ namespace Services.Interface
         Task Insert(OrderStatuses orderStatuses);
 
         IQueryable<OrderStatuses> GetByOrderId(int orderId);
+
+        Task InsertDefault(int orderId);
     }
 }

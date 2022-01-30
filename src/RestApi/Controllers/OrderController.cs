@@ -64,11 +64,7 @@ namespace RestApi.Controllers
         {
             var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
             var order = await InsertOrder(request, Convert.ToInt32(userJWT.Id));
-            await _orderStatusesService.Insert(new Entities.OrderStatuses()
-            {
-                OrderId = order.Id,
-                Status = OrderStatusEnum.Processing
-            });
+            await _orderStatusesService.InsertDefault(order.Id);
             SendMail(order);
             return Created(userJWT.Id, order);
         }
