@@ -59,7 +59,29 @@ namespace RestApi.Controllers
             {
                 return NotFound();
             }
-            return Ok(_orderStatusesService.GetByOrderId(orderId).ToList());
+
+            return Ok(_orderStatusesService.GetByOrderId(orderId).ToList().Select(x => new orderStatusesTimeLine
+            {
+                Content = getOrderStatus(x.Status),
+                Timestamp = x.CreateAt
+            }));
+        }
+
+        private string getOrderStatus(OrderStatusEnum orderStatus)
+        {
+            return orderStatus switch
+            {
+                OrderStatusEnum.Created => "Order Created",
+                OrderStatusEnum.Cancel => "Order Cancel",
+                OrderStatusEnum.Error => "Order Error",
+                OrderStatusEnum.Paid => "Order Paid",
+                OrderStatusEnum.Processing => "Order Processing",
+                OrderStatusEnum.Receiver => "Order Receiver",
+                OrderStatusEnum.Refund => "Order Refund",
+                OrderStatusEnum.Return => "Order Return",
+                OrderStatusEnum.Shipped => "Order Shipped",
+                _ => "",
+            };
         }
 
         private async Task InsertOrderStatus(int orderId, OrderStatusEnum status)
