@@ -34,7 +34,22 @@ namespace Middlewares.Authentication
             if (allowAnonymous)
                 return;
 
+            if (context.HttpContext.Items.ContainsKey("httpContextUser"))
+            {
+                context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
+                return;
+            }
             var httpContextUser = (JwtToken)context.HttpContext.Items["httpContextUser"];
+            if (httpContextUser == null)
+            {
+                context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
+            }else{
+                await verifyUserToken(context, httpContextUser);
+            }
+        }
+
+        private async Task verifyUserToken(AuthorizationFilterContext context, JwtToken httpContextUser)
+        {
             var token = context.HttpContext.Request.Headers["Authorization"];
             var dbContext = context.HttpContext.RequestServices.GetRequiredService<DbContextEntity>();
             var redis = context.HttpContext.RequestServices.GetRequiredService<IConnectionMultiplexer>();
@@ -42,7 +57,7 @@ namespace Middlewares.Authentication
             var redisUserInfo = await _userService.GetRedisUserInfo(token);
 
             var user = await _userService.GetVerifyUser(httpContextUser.Mail, httpContextUser.Password);
-            if (user == null || redisUserInfo.IsNullOrEmpty || (_roles.Any() && !_roles.Contains(user.Role)))
+            if (user == null || !redisUserInfo.HasValue || (_roles.Any() && !_roles.Contains(user.Role)))
             {
                 // not logged in
                 context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };

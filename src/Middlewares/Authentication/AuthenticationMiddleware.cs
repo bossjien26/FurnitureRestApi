@@ -35,9 +35,19 @@ namespace Middlewares.Authentication
                 await _next.Invoke(httpContext);
                 return;
             }
-            httpContext = await attachUserToContext(httpContext, context, token, appSettings, logger);
-            await _next.Invoke(httpContext);
-            return;
+
+            if (!CheckJwtTokenIsExpire(token))
+            {
+                httpContext.Items["httpContextUser"] = null;
+                await _next.Invoke(httpContext);
+                return;
+            }
+            else
+            {
+                httpContext = await attachUserToContext(httpContext, context, token, appSettings, logger);
+                await _next.Invoke(httpContext);
+                return;
+            }
         }
 
         private async Task<HttpContext> attachUserToContext(HttpContext httpContext, DbContextEntity context, string token,
@@ -99,6 +109,15 @@ namespace Middlewares.Authentication
             }, out SecurityToken validatedToken);
 
             return (JwtSecurityToken)validatedToken;
+        }
+
+        private bool CheckJwtTokenIsExpire(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadToken(token);
+
+            var expDate = jwtToken.ValidTo;
+            return expDate > DateTime.UtcNow.AddHours(8) ? true : false;
         }
     }
 
