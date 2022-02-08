@@ -67,12 +67,13 @@ namespace RestApi.Controllers
                 });
             }
 
+            var sumQuantity = await SumQuantity(userJWT.Id, requestCart.InventoryId.ToString()
+                    , requestCart.Quantity);
             await StoreCart(new Cart()
             {
                 UserId = userJWT.Id,
                 InventoryId = requestCart.InventoryId.ToString(),
-                Quantity = SumQuantity(userJWT.Id, requestCart.InventoryId.ToString()
-                    , requestCart.Quantity).ToString(),
+                Quantity = sumQuantity.ToString(),
                 Attribute = requestCart.Attribute
             });
 
@@ -160,12 +161,12 @@ namespace RestApi.Controllers
             return Ok(cartList);
         }
 
-        private int SumQuantity(string userId, string inventoryId, int quantity)
+        private async Task<int> SumQuantity(string userId, string inventoryId, int quantity)
         {
-            var cart = _service.GetById(userId, inventoryId, CartAttributeEnum.Shopping);
-            if (cart.Result.HasValue)
+            var cart = await _service.GetById(userId, inventoryId, CartAttributeEnum.Shopping);
+            if (cart.HasValue)
             {
-                quantity += Convert.ToInt32(cart.Result.ToString());
+                quantity += Convert.ToInt32(cart.ToString());
             }
             return quantity;
         }
