@@ -16,7 +16,7 @@ namespace Middlewares.Authentication
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     //, IAuthorizationFilter
-    public class AuthorizeAttribute : Attribute
+    public class AuthorizeAttribute : Attribute,IAsyncAuthorizationFilter
     {
         private IUserService _userService;
 
@@ -27,9 +27,9 @@ namespace Middlewares.Authentication
             _roles = roles ?? new RoleEnum[] { };
         }
 
-        public async Task OnAuthorization(AuthorizationFilterContext context)
+        public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
-            // skip authorization if action is decorated withp [AllowAnonymous] attribute
+            // skip authorization if action is decorated with [AllowAnonymous] attribute
             var allowAnonymous = context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
             if (allowAnonymous)
                 return;
