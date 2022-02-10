@@ -42,9 +42,10 @@ namespace Services
                 _inventoryRepository.GetAll(),
                 product => product.Id,
                 inventory => inventory.ProductId,
-                (x,y) => new {Product = x, Inventory = y}
+                (x, y) => new { Product = x, Inventory = y }
             ).Select(
-                x=> new ProductInventory{
+                x => new ProductInventory
+                {
                     Product = x.Product,
                     Inventory = new List<Inventory>(){
                         x.Inventory
@@ -88,7 +89,7 @@ namespace Services
                     inventory => inventory.ProductId,
                     (x, y) => new { Product = x, Inventory = y }
                 )
-                .Where(x => x.Product.ProductCategory.Id == categoryId
+                .Where(x => x.Product.ProductCategory.CategoryId == categoryId
                     && x.Inventory.IsDisplay == true && x.Inventory.IsDelete == false)
                 .Select(x => x.Product.Product)
                 .Skip((index - 1) * size)
