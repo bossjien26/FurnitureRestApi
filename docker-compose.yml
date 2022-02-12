@@ -7,6 +7,19 @@ volumes:
   datafiles:
 
 services:
+  restApi:
+    container_name: cart_rest_api
+    image: cart_rest_api
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./logs:/app/logs
+    build:
+      context: .
+      dockerfile: src/RestApi/Dockerfile
+    # environment:
+      # - ASPNETCORE_ENVIRONMENT=Development
+
   #DataBase Service
   database:
     platform: linux/amd64

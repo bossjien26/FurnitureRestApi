@@ -1,24 +1,30 @@
 FROM redis
+
 #COPY redis.conf /usr/local/etc/redis/redis.conf
 #CMD [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
-
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine AS base
+# EXPOSE 5000
 WORKDIR /app
-EXPOSE 80
-ENTRYPOINT ["dotnet", "RestApi.dll"]
+# ENTRYPOINT ["dotnet", "RestApi.dll"]
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+RUN apk add libgdiplus --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted && \
+    apk add terminus-font
+
+
+FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS build
+
 WORKDIR /src
-COPY ["../RestApi/RestApi.csproj","."]
-COPY ["../Services/Services.csproj","../Services/"]
-COPY ["../Entities/Entities.csproj","../Entities/"]
-COPY ["../Repositories/Repositories.csproj","../Repositories/"]
-COPY ["../Middlewares/Middlewares.csproj","../Middlewares/"]
-COPY ["../Helpers/Helpers.csproj","../Helpers/"]
-COPY ["../Enum/Enum.csproj","../Enum/"]
-RUN dotnet restore "RestApi.csproj"
+
+COPY ["src/RestApi/RestApi.csproj","src/RestApi/"]
+COPY ["src/Services/Services.csproj","src/Services/"]
+COPY ["src/Entities/Entities.csproj","src/Entities/"]
+COPY ["src/Repositories/Repositories.csproj","src/Repositories/"]
+COPY ["src/Middlewares/Middlewares.csproj","src/Middlewares/"]
+COPY ["src/Helpers/Helpers.csproj","src/Helpers/"]
+COPY ["src/Enum/Enum.csproj","src/Enum/"]
+RUN dotnet restore "src/RestApi/RestApi.csproj"
 COPY . .
-WORKDIR "/src/."
+WORKDIR "/src/src/RestApi"
 RUN dotnet build "RestApi.csproj" -c Release -o /app/build
 
 FROM build As publish
@@ -26,11 +32,12 @@ RUN dotnet publish "RestApi.csproj" -c Release -o /app/publish
 
 FROM base As final
 WORKDIR /app
-ENV TZ Asia/Taipei
 COPY --from=publish /app/publish .
-ENTRYPOINT [ "dotnet" ,"RestApi.dll"]
-
-#VOLUME ["RestApi.csproj","./" ]
+RUN apk add --no-cache tzdata
+ENV TZ Asia/Taipei
+# ENV ASPNETCORE_URLS=http://+:5000
+ENTRYPOINT ["dotnet", "RestApi.dll"]
+# RUN dotnet ef database update
 
 #RUN dotnet ef database update
 
