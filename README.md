@@ -9,7 +9,7 @@
 ### How to start a database locally
 
 ```sh
-docker compose up -d db
+docker compose up -d database
 ```
 
 ### How to setting allow connect in mysql
@@ -24,7 +24,9 @@ Flush Privileges;
 
 Modify the `ConnectionStrings` in `DefaultConnection` at the following file
 
-> src/RestApi/appsettings.json
+# development is use in develop env , production use in product env
+
+> src/RestApi/ appsettings-Development.json  or appsettings-Production.json
 
 ## Redis
 
@@ -53,12 +55,7 @@ dotnet ef database update -v --context DbContextEntity --startup-project ../Rest
 
 ```shell
 #install redis image
-docker build -f Dockerfile ..
-```
-
-```sh
-#run redis
-docker run -d --name redisDev -p 6379:6379 redis
+docker compose up -d redis
 ```
 
 ### Use Package
@@ -90,6 +87,13 @@ dotnet run
 ```sh
 #switch to root
 dotnet build
+```
+
+### How build project in docker
+
+```sh
+#switch to root 
+docker-compose up -d cart_rest_api
 ```
 
 ### How clean build outputs
