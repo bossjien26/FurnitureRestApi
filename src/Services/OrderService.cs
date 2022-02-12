@@ -37,6 +37,7 @@ namespace Services
         public IQueryable<Order> GetUserOrderMany(int userId, int index, int size)
         => _repository.GetAll().Where(x => x.UserId == userId)
             .Skip((index - 1) * size)
-            .Take(size);
+            .Take(size)
+            .OrderByDescending(x => x.Id);
     }
 }
