@@ -17,6 +17,8 @@ services:
     build:
       context: .
       dockerfile: src/RestApi/Dockerfile
+    
+    ## this line is settings development env
     # environment:
       # - ASPNETCORE_ENVIRONMENT=Development
 
