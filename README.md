@@ -24,11 +24,11 @@ Flush Privileges;
 
 Modify the `ConnectionStrings` in `DefaultConnection` at the following file
 
-# development is use in develop env , production use in product env
+### development is use in develop env , production use in product env
 
 > src/RestApi/ appsettings-Development.json  or appsettings-Production.json
 
-## Redis
+### Redis
 
 need use docker or self env build one redis env.
 
