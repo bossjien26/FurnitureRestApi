@@ -20,5 +20,7 @@ namespace Services
                 => _repository = genericRepository;
 
         public async Task Insert(UserDetail instance) => await _repository.Insert(instance);
+
+        public async Task<UserDetail> GetUserInfo(int id) => await _repository.Get(x => x.Id == id);
     }
 }

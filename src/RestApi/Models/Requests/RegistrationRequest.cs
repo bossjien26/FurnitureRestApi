@@ -12,11 +12,5 @@ namespace RestApi.Models.Requests
 
         [Required]
         public string Password { get; set; }
-
-        public string Country { get; set; }
-
-        public string City { get; set; }
-
-        public string Street { get; set; }
     }
 }

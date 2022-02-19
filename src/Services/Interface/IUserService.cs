@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Entities;
+using Services.Dto;
 using StackExchange.Redis;
 
 namespace Services.Interface
@@ -29,5 +30,7 @@ namespace Services.Interface
         Task Logout(string token);
 
         Task<RedisValue> GetRedisUserInfo(string token);
+
+        UserInfo MapShowUserInfo(User user);
     }
 }

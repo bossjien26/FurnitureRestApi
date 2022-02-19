@@ -7,6 +7,8 @@ using Repositories;
 using Services.Interface;
 using StackExchange.Redis;
 using System;
+using Enum;
+using Services.Dto;
 
 namespace Services
 {
@@ -69,5 +71,31 @@ namespace Services
 
         public async Task<RedisValue> GetRedisUserInfo(string token)
         => await _redisDb.StringGetAsync(token);
+
+        public UserInfo MapShowUserInfo(User user)
+        => new UserInfo()
+        {
+            Name = user.Name,
+            Mail = user.Mail,
+            Role = user.Role,
+            RoleName = GetUserRole(user.Role)
+        };
+
+        private string GetUserRole(RoleEnum role)
+        {
+            switch (role)
+            {
+                case RoleEnum.SuperAdmin:
+                    return "SuperAdmin";
+                case RoleEnum.Admin:
+                    return "Admin";
+                case RoleEnum.Staff:
+                    return "Staff";
+                case RoleEnum.Customer:
+                    return "Customer";
+                default:
+                    return "";
+            }
+        }
     }
 }

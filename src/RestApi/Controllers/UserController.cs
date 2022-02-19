@@ -100,7 +100,7 @@ namespace RestApi.src.Controllers
         {
             var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
             var user = await _service.GetById(Convert.ToInt32(userJWT.Id));
-            return Ok(user);
+            return Ok(_service.MapShowUserInfo(user));
         }
 
         [AllowAnonymous]
@@ -117,7 +117,7 @@ namespace RestApi.src.Controllers
                 });
             }
 
-            await CreateUserDetail(registration, await CreateUser(registration));
+            await CreateUser(registration);
 
             SendRegisterMail(registration);
             return Created("", new AutResultResponse()
@@ -143,19 +143,6 @@ namespace RestApi.src.Controllers
             {
                 _logger.LogError(ex.ToString());
             }
-        }
-
-        private async Task CreateUserDetail(RegistrationRequest registration, User user)
-        {
-            await _userDetailService.Insert(
-                new UserDetail()
-                {
-                    UserId = user.Id,
-                    City = registration.City,
-                    Country = registration.Country,
-                    Street = registration.Street
-                }
-            );
         }
 
         private async Task<User> CreateUser(RegistrationRequest registration)
