@@ -29,7 +29,7 @@ namespace Services
 
         public async Task Insert(User instance) => await _repository.Insert(instance);
 
-        public void Update(User instance) => _repository.Update(instance);
+        public async Task Update(User instance) => await _repository.Update(instance);
 
         public IQueryable<User> GetAll()
         {

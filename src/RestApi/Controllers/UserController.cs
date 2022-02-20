@@ -72,25 +72,14 @@ namespace RestApi.src.Controllers
         [HttpPut]
         [Authorize()]
         [Route("")]
-        public IActionResult UpdateUser(User user)
+        public async Task<IActionResult> UpdateUser(UpdateUserRequest request)
         {
             var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
+            var user = await _service.GetById(Convert.ToInt32(userJWT.Id));
+            user.Name = request.Name;
 
-            if (Convert.ToInt32(userJWT.Id) != user.Id || _service.GetById(user.Id).Result == null)
-            {
-                return NotFound(new AutResultResponse()
-                {
-                    Status = false,
-                    Data = "Not Find"
-                });
-            }
-
-            _service.Update(user);
-            return Ok(new AutResultResponse()
-            {
-                Status = true,
-                Data = "Update"
-            });
+            await _service.Update(user);
+            return Ok(_service.MapShowUserInfo(user));
         }
 
         [HttpGet]

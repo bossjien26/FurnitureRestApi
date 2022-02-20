@@ -11,7 +11,7 @@ namespace Services.Interface
     {
         Task Insert(User instance);
 
-        void Update(User instance);
+        Task Update(User instance);
 
         IQueryable<User> GetAll();
 

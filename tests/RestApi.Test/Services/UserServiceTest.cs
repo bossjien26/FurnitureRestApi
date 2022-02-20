@@ -76,7 +76,7 @@ namespace RestApi.Test.Services
 
             _entityMock.Object.Name = "test";
 
-            Assert.DoesNotThrow(() =>
+            Assert.DoesNotThrowAsync(() =>
                 new UserService(_repoMock.Object).Update(_entityMock.Object)
             );
         }
