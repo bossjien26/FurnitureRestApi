@@ -7,6 +7,8 @@ namespace Services.Interface
     {
         Task Insert(UserDetail instance);
 
+        Task Update(UserDetail instance);
+
         Task<UserDetail> GetUserInfo(int id);
     }
 }

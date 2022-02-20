@@ -52,6 +52,18 @@ namespace RestApi.Controllers
             return Ok(userDetail == null ? new UserDetail() : userDetail);
         }
 
+        [HttpPut]
+        [Authorize()]
+        [Route("")]
+        public async Task<IActionResult> Update(UpdateUserDetailRequest request)
+        {
+            var userJWT = (JwtToken)_httpContextAccessor.HttpContext.Items["httpContextUser"];
+            var userDetail = await _userDetailService.GetUserInfo(Convert.ToInt32(userJWT.Id));
+            await UpdateUserDetail(request, userDetail);
+
+            return Ok(userDetail);
+        }
+
         private async Task CreateUserDetail(CreateUserDetailRequest registration, int userId)
         {
             await _userDetailService.Insert(
@@ -63,6 +75,14 @@ namespace RestApi.Controllers
                     Street = registration.Street
                 }
             );
+        }
+
+        private async Task UpdateUserDetail(UpdateUserDetailRequest request, UserDetail userDetail)
+        {
+            userDetail.Country = request.Country;
+            userDetail.Street = request.Street;
+            userDetail.City = request.City;
+            await _userDetailService.Update(userDetail);
         }
     }
 }

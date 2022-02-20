@@ -21,6 +21,8 @@ namespace Services
 
         public async Task Insert(UserDetail instance) => await _repository.Insert(instance);
 
+        public async Task Update(UserDetail instance) => await _repository.Update(instance);
+ 
         public async Task<UserDetail> GetUserInfo(int id) => await _repository.Get(x => x.Id == id);
     }
 }
